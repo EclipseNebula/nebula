@@ -265,7 +265,7 @@ public class SimpleGroupStrategy extends AbstractGroupStrategy
      */
     public Rectangle computeTrim(int x, int y, int width, int height)
     {
-        Rectangle area = new Rectangle(x, y, width, height);
+        Rectangle area = new Rectangle(x, y, Math.max(0, width), Math.max(0, height));
         area.y -= titleHeight;
         area.height += titleHeight;
         return area;

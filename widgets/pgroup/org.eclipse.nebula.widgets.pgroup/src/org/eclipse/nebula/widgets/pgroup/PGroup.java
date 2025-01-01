@@ -612,16 +612,20 @@ public class PGroup extends Canvas
     /** 
      * @see org.eclipse.swt.widgets.Control#computeSize(int, int, boolean)
      */
-    public Point computeSize(int arg0, int arg1, boolean arg2)
-    {
-        checkWidget();
-        if (getExpanded())
-            return super.computeSize(arg0, arg1, arg2);
-
-        Rectangle trim = strategy.computeTrim(0, 0, 0, 0);
-        trim.width = super.computeSize(arg0, arg1, arg2).x;
-        return new Point(trim.width, Math.max(trim.height, arg1));
-    }
+    @Override
+	public Point computeSize(int wHint, int hHint, boolean changed) {
+		checkWidget();
+		if(changed) {
+			strategy.update();
+		}
+		Rectangle trim = strategy.computeTrim(0, 0, wHint, 0);
+		Point controlSize = super.computeSize(wHint, hHint, changed);
+		if(!getExpanded()) {
+			controlSize.y = Math.max(trim.height, hHint);
+		}
+		controlSize.x = Math.max(Math.max(controlSize.x, trim.width), wHint);
+		return controlSize;
+	}
 
     /**
      * Returns the expanded/collapsed state.

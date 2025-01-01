@@ -58,6 +58,7 @@ public class RectangleGroupStrategy extends AbstractGroupStrategy
     private Color g2;
 
     private int titleHeight;
+	private int titleWidth;
 
     private int fontHeight;
 
@@ -577,16 +578,27 @@ public class RectangleGroupStrategy extends AbstractGroupStrategy
      * @see org.eclipse.nebula.widgets.pgroup.AbstractGroupStrategy#computeTrim(int, int, int, int)
      */
     @Override
-	public Rectangle computeTrim(int x, int y, int width, int height)
+	public Rectangle computeTrim(int x, int y, int widthHint, int heightHint)
     {
-        Rectangle area = new Rectangle(x, y, width, height);
+
+		Rectangle area = new Rectangle(x, y, Math.max(0, widthHint), Math.max(0, heightHint));
         area.x -= margin;
         area.y -= titleHeight;
-        area.width += (2 * margin);
+		area.width += (2 * margin);
+		PGroup group = getGroup();
+		if(widthHint == SWT.DEFAULT) {
+			// This indicates the caller wants the preferred size to be computed so we should give a clue how much space the control will take up without hiding anything
+			area.width += titleWidth + 2 * hMargin + betweenSpacing;
+			AbstractRenderer toggleRenderer = group.getToggleRenderer();
+			if(toggleRenderer != null) {
+				Point p = toggleRenderer.getSize();
+				area.width += p.x;
+			}
+		}
         area.height += titleHeight;
-        if (getGroup().getExpanded())
+		if(group.getExpanded())
         {
-            if ((getGroup().getStyle() & SWT.SMOOTH) != 0)
+			if((group.getStyle() & SWT.SMOOTH) != 0)
             {
                 area.height += 5;
             }
@@ -762,44 +774,36 @@ public class RectangleGroupStrategy extends AbstractGroupStrategy
         this.borderColor = borderColor;
     }
 
-    @Override
-	public void update()
-    {
-        GC gc = new GC(getGroup());
+	@Override
+	public void update() {
 
-        titleHeight = 0;
-
-        int imageHeight = 0;
-        if (getGroup().getImage() != null) {
-			imageHeight = getGroup().getImage().getBounds().height;
+		PGroup group = getGroup();
+		GC gc = new GC(group);
+		try {
+			String text = group.getText();
+			Point extent = gc.stringExtent(text);
+			titleWidth = extent.x;
+			int imageHeight = 0;
+			if(group.getImage() != null) {
+				imageHeight = group.getImage().getBounds().height;
+			}
+			if((group.getImagePosition() & SWT.TOP) == 0) {
+				titleHeight = Math.max(gc.getFontMetrics().getHeight() + (2 * titleTextMargin), imageHeight);
+				titleHeight += (2 * vMargin);
+			} else {
+				titleHeight = Math.max(gc.getFontMetrics().getHeight() + (2 * titleTextMargin) + (2 * vMargin), imageHeight + 1);
+			}
+			if(group.getToggleRenderer() != null) {
+				int toggleHeight = group.getToggleRenderer().getSize().y;
+				titleHeight = Math.max(toggleHeight + (2 * vMargin), titleHeight);
+			}
+			fontHeight = gc.getFontMetrics().getHeight();
+			titleAreaHeight = fontHeight + (2 * titleTextMargin) + (2 * vMargin);
+			if(group.getToggleRenderer() != null) {
+				titleAreaHeight = Math.max(titleAreaHeight, group.getToggleRenderer().getSize().y + (2 * vMargin));
+			}
+		} finally {
+			gc.dispose();
 		}
-        if ((getGroup().getImagePosition() & SWT.TOP) == 0)
-        {
-            titleHeight = Math.max(gc.getFontMetrics().getHeight() + (2 * titleTextMargin),
-                                   imageHeight);
-            titleHeight += (2 * vMargin);
-        }
-        else
-        {
-            titleHeight = Math.max(gc.getFontMetrics().getHeight() + (2 * titleTextMargin)
-                                   + (2 * vMargin), imageHeight + 1);
-        }
-        if (getGroup().getToggleRenderer() != null)
-        {
-            int toggleHeight = getGroup().getToggleRenderer().getSize().y;
-            titleHeight = Math.max(toggleHeight + (2 * vMargin), titleHeight);
-        }
-
-        fontHeight = gc.getFontMetrics().getHeight();
-
-        titleAreaHeight = fontHeight + (2 * titleTextMargin) + (2 * vMargin);
-        if (getGroup().getToggleRenderer() != null)
-        {
-            titleAreaHeight = Math.max(titleAreaHeight, getGroup().getToggleRenderer()
-                .getSize().y
-                                                        + (2 * vMargin));
-        }
-
-        gc.dispose();
-    }
+	}
 }
