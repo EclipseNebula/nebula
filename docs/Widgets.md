@@ -13,7 +13,7 @@ Each image links to a page that will further describe the component and its func
 ### Nebula Released Widgets:
 
 ![CDateTime](images/cdatetime.png)  
-[CDateTime](https://eclipse.dev/nebula/widgets/cdatetime/cdatetime.html)
+[CDateTime](cdatetime.md)
 
 ![PShelf](images/pshelf.png)  
 [PShelf](https://eclipse.dev/nebula/widgets/pshelf/pshelf.html)

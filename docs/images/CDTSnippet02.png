@@ -1,0 +1,23 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+  <head>
+    <title>Not Found</title>
+    <link rel="stylesheet" href="/default_style.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  </head>
+  <body>
+    <h1> 404 file not found</h1>
+    <h2>We're sorry!</h2>
+    <p> The page you requested cannot be found.  You can
+    <a href="http://www.eclipse.org/search/search.cgi">Search</a> to find the correct url.</p>
+ 
+    <p>For software licensing,website <a href="http://www.eclipse.org/legal/privacy.php">privacy 
+      policy</a>, website <a href="http://www.eclipse.org/legal/termsofuse.php">terms 
+      of use</a>, and legal FAQs, please see our <a href="http://www.eclipse.org/legal/">legal 
+      stuff</a> page. Eclipse logos and graphics are found on our <a href="/artwork/">logos</a> 
+      page. For problems with the eclipse.org site, please contact the <a href="mailto:webmaster@eclipse.org">webmaster</a> 
+      or read the <a href="http://wiki.eclipse.org/index.php/Webmaster_FAQ">webmaster FAQ</a> for answers to 
+      common questions!
+    </p>
+  </body>
+</html>
