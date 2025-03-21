@@ -55,7 +55,6 @@ public class PaletteShelfRenderer extends AbstractRenderer {
 		return new Point(wHint,h);
 	}
 
-
 	/**
      * {@inheritDoc}
      */
@@ -63,6 +62,7 @@ public class PaletteShelfRenderer extends AbstractRenderer {
 	public void paint(GC gc, Object value)
     {
         PShelfItem item = (PShelfItem)value;
+		int fontHeight = gc.getFontMetrics().getHeight();
 
 		Color fore = parent.getForeground();
 
@@ -92,8 +92,8 @@ public class PaletteShelfRenderer extends AbstractRenderer {
 		}
 		gc.setForeground(fore);
 
-		int y2 = (getBounds().height - gc.getFontMetrics().getHeight())/2;
-		if ((getBounds().height - gc.getFontMetrics().getHeight()) % 2 != 0)
+		int y2 = (getBounds().height - fontHeight)/2;
+		if ((getBounds().height - fontHeight) % 2 != 0)
 			y2 ++;
 
         if (isHover() && !isSelected())
