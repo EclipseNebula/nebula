@@ -4,8 +4,9 @@ Bundle-Name: Nebula Opal Rounded Toolbar
 Bundle-SymbolicName: org.eclipse.nebula.widgets.opal.roundedtoolbar
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Eclipse Nebula
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.nebula.widgets.opal.commons;bundle-version="1.0.0";visibility:=reexport,
  org.eclipse.swt
 Export-Package: org.eclipse.nebula.widgets.opal.roundedtoolbar
 Automatic-Module-Name: org.eclipse.nebula.widgets.opal.roundedtoolbar
+Import-Package: org.eclipse.jface.action

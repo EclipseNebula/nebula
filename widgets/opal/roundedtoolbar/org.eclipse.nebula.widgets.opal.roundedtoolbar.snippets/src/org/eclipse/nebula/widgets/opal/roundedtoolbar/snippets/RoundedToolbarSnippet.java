@@ -13,15 +13,21 @@
  *******************************************************************************/
 package org.eclipse.nebula.widgets.opal.roundedtoolbar.snippets;
 
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.nebula.widgets.opal.roundedtoolbar.RoundedToolItem;
 import org.eclipse.nebula.widgets.opal.roundedtoolbar.RoundedToolbar;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -100,7 +106,10 @@ public class RoundedToolbarSnippet {
 
 		new Label(shell, SWT.NONE).setText("Radio button behaviour (no button drawned)");
 		createRadioButtons(shell, false, false);
-
+		
+		// MENU
+		new Label(shell, SWT.NONE).setText("Menu buttons");
+		createMenuBar(shell);
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
@@ -121,6 +130,61 @@ public class RoundedToolbarSnippet {
 
 		display.dispose();
 
+	}
+
+	private static RoundedToolbar createMenuBar(Shell shell) {
+
+		final RoundedToolbar roundedToolBar = new RoundedToolbar(shell, SWT.NONE);
+		final RoundedToolItem item1 = new RoundedToolItem(roundedToolBar, SWT.DROP_DOWN);
+		item1.setText("Menu Toolbar Item");
+		item1.setMenuCreator(new IMenuCreator() {
+
+			private Menu menu;
+
+			@Override
+			public void dispose() {
+
+				if(menu != null) {
+					menu.dispose();
+					menu = null;
+				}
+			}
+
+			@Override
+			public Menu getMenu(Control parent) {
+
+				if(menu == null) {
+					menu = new Menu(parent);
+					for(int i = 1; i <= 3; i++) {
+						MenuItem menuItem = new MenuItem(menu, SWT.NONE);
+						String string = "Item " + i;
+						menuItem.setText(string);
+						menuItem.addSelectionListener(new SelectionListener() {
+
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+
+								item1.setText(string);
+							}
+
+							@Override
+							public void widgetDefaultSelected(SelectionEvent e) {
+
+							}
+						});
+					}
+					parent.addDisposeListener(e -> dispose());
+				}
+				return menu;
+			}
+
+			@Override
+			public Menu getMenu(Menu parent) {
+
+				return null;
+			}
+		});
+		return roundedToolBar;
 	}
 
 	private static void createToggleButtons(final Shell shell) {

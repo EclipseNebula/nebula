@@ -16,10 +16,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.nebula.widgets.opal.commons.AdvancedPath;
 import org.eclipse.nebula.widgets.opal.commons.SWTGraphicUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -27,6 +30,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Widget;
 
 /**
@@ -151,7 +155,39 @@ public class RoundedToolbar extends Canvas {
 				return;
 			}
 			final RoundedToolItem item = pressedItem.get();
-			if (item.isPushButon()) {
+			if(item.isDropDown()) {
+				IMenuCreator creator = item.creator;
+				if(creator == null) {
+					return;
+				}
+				Menu menu = creator.getMenu(this);
+				if(menu == null) {
+					return;
+				}
+				Rectangle bounds = item.getBounds();
+				Point pt = toDisplay(bounds.x, bounds.y);
+				menu.setLocation(pt.x, pt.y + bounds.height);
+				menu.addMenuListener(new MenuListener() {
+
+					@Override
+					public void menuShown(MenuEvent e) {
+
+					}
+
+					@Override
+					public void menuHidden(MenuEvent e) {
+
+						if(!menu.isDisposed()) {
+							menu.removeMenuListener(this);
+						}
+						item.forceSelection(false);
+						redraw();
+						update();
+					}
+				});
+				item.forceSelection(true);
+				menu.setVisible(true);
+			} else if(item.isPushButon()) {
 				item.forceSelection(true);
 			} else {
 				if (item.isToogleButon()) {
