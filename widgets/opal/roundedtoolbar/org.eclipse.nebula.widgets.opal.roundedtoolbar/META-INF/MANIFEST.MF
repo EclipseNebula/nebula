@@ -9,3 +9,4 @@ Require-Bundle: org.eclipse.nebula.widgets.opal.commons;bundle-version="1.0.0";v
  org.eclipse.swt
 Export-Package: org.eclipse.nebula.widgets.opal.roundedtoolbar
 Automatic-Module-Name: org.eclipse.nebula.widgets.opal.roundedtoolbar
+Import-Package: org.eclipse.jface.action

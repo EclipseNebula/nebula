@@ -14,6 +14,7 @@ package org.eclipse.nebula.widgets.opal.roundedtoolbar;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.nebula.widgets.opal.commons.AdvancedPath;
 import org.eclipse.nebula.widgets.opal.commons.SWTGraphicUtil;
 import org.eclipse.swt.SWT;
@@ -72,6 +73,7 @@ public class RoundedToolItem extends Item {
 	private int toolbarHeight;
 	private boolean isLast;
 	private final boolean hideSelection;
+	IMenuCreator creator;
 
 	/**
 	 * Constructs a new instance of this class given its parent (which must be a
@@ -1069,6 +1071,11 @@ public class RoundedToolItem extends Item {
 
 	void forceSelection(boolean newSelection) {
 		selection = newSelection;
+	}
+	
+	public void setMenuCreator(IMenuCreator creator) {
+
+		this.creator = creator;
 	}
 
 }
