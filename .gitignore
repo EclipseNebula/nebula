@@ -12,3 +12,4 @@ class/
 .metadata/
 releng/org.eclipse.nebula.site/updates/
 build.log
+.tycho.*
