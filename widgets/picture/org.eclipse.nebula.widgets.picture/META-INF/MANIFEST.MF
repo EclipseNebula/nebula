@@ -7,10 +7,9 @@ Bundle-SymbolicName: org.eclipse.nebula.widgets.picture
 Bundle-Version: 1.0.0.qualifier
 Export-Package: org.eclipse.nebula.widgets.picture,
  org.eclipse.nebula.widgets.picture.forms
+Import-Package: org.eclipse.swt,
+ org.eclipse.swt.graphics,
+ org.eclipse.swt.layout,
+ org.eclipse.swt.widgets
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: org.eclipse.swt;resolution:=optional,
- org.eclipse.ui.forms;resolution:=optional,
- org.eclipse.rap.rwt;resolution:=optional,
- org.eclipse.rap.ui.forms;resolution:=optional,
- org.eclipse.rap.filedialog;resolution:=optional
 Automatic-Module-Name: org.eclipse.nebula.widgets.picture

@@ -4,8 +4,7 @@ Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: org.eclipse.nebula.widgets.grid.test
 Bundle-Version: 0.3.0.qualifier
-Require-Bundle: org.junit;bundle-version="4.8.2",
- org.eclipse.rap.rwt.testfixture;resolution:=optional
+Require-Bundle: org.junit;bundle-version="4.8.2"
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.nebula.widgets.grid

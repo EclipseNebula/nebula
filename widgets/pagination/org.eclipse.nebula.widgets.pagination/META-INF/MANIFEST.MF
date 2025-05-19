@@ -15,12 +15,13 @@ Export-Package: org.eclipse.nebula.widgets.pagination,
  org.eclipse.nebula.widgets.pagination.table.forms,
  org.eclipse.nebula.widgets.pagination.tree,
  org.eclipse.nebula.widgets.pagination.tree.forms
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.swt;resolution:=optional,
- org.eclipse.ui.forms;resolution:=optional,
- org.eclipse.rap.rwt;resolution:=optional,
- org.eclipse.rap.ui.forms;resolution:=optional,
- org.eclipse.jface;resolution:=optional,
- org.eclipse.rap.jface;resolution:=optional
+Import-Package: org.eclipse.jface.resource,
+ org.eclipse.jface.viewers,
+ org.eclipse.swt,
+ org.eclipse.swt.events,
+ org.eclipse.swt.graphics,
+ org.eclipse.swt.layout,
+ org.eclipse.swt.widgets
+Require-Bundle: org.eclipse.core.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.nebula.widgets.pagination

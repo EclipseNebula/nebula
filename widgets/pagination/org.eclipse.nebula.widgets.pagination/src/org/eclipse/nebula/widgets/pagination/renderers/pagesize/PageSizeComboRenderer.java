@@ -44,13 +44,7 @@ public class PageSizeComboRenderer extends
 		AbstractPageControllerComposite implements
 		SelectionListener {
 
-	private static class InternalLabelProvider extends LabelProvider {
-		private static final ILabelProvider INSTANCE = new InternalLabelProvider();
-
-		public static ILabelProvider getInstance() {
-			return INSTANCE;
-		}
-	}
+	private static final ILabelProvider INSTANCE = new LabelProvider();
 
 	private ComboViewer comboViewer;
 	private Label itemsPerPageLabel;
@@ -120,7 +114,7 @@ public class PageSizeComboRenderer extends
 
 		comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setLabelProvider(InternalLabelProvider.getInstance());
+		comboViewer.setLabelProvider(INSTANCE);
 		comboViewer.getCombo().setLayoutData(
 				new GridData(GridData.FILL_HORIZONTAL));
 		comboViewer.getCombo().addSelectionListener(this);

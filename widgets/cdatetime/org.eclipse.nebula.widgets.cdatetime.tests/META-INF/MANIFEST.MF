@@ -20,6 +20,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.nebula.widgets.cdatetime.css
 Import-Package: org.eclipse.e4.ui.css.core.engine,
  org.w3c.css.sac,
- org.w3c.dom;version="2.0.0",
- org.w3c.dom.css;version="2.0.0"
+ org.w3c.dom,
+ org.w3c.dom.css
 Automatic-Module-Name: org.eclipse.nebula.widgets.cdatetime.tests

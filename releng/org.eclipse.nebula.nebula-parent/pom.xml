@@ -26,13 +26,15 @@ Contributors:
 		<map-version>3.6.0</map-version>
 		<mjd-version>3.6.3</mjd-version>
 		<mrp-version>3.3.1</mrp-version>
-		<ejp-version>1.3.3</ejp-version>
+		<ejp-version>1.5.2</ejp-version>
 		<pmd-version>3.9.0</pmd-version>
 		<junit-version>4.13.2</junit-version>
 		<jacoco-version>0.8.9</jacoco-version>
 		<easymock-version>5.2.0</easymock-version>
 
-		<target-platform>https://download.eclipse.org/releases/2025-03</target-platform>
+		<target-platform-platform>https://download.eclipse.org/eclipse/updates/latest</target-platform-platform>
+		<target-platform-gef>https://download.eclipse.org/tools/gef/classic/releases/latest</target-platform-gef>
+		<target-platform-swtbot>https://download.eclipse.org/technology/swtbot/releases/latest</target-platform-swtbot>
 
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
@@ -267,9 +269,19 @@ Contributors:
 
 	<repositories>
 		<repository>
-			<id>projects</id>
+			<id>target-platform-platform</id>
 			<layout>p2</layout>
-			<url>${target-platform}</url>
+			<url>${target-platform-platform}</url>
+		</repository>
+		<repository>
+			<id>target-platform-gef</id>
+			<layout>p2</layout>
+			<url>${target-platform-gef}</url>
+		</repository>
+		<repository>
+			<id>target-platform-swtbot</id>
+			<layout>p2</layout>
+			<url>${target-platform-swtbot}</url>
 		</repository>
 	</repositories>
 

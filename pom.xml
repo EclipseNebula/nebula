@@ -19,33 +19,4 @@ http://www.eclipse.org/legal/epl-v10.html -->
 		<module>releng/org.eclipse.nebula.nebula-parent</module>
 	</modules>
 
-<!-- 
-	<modules>
-		<module>releng/org.eclipse.nebula.site</module>
-	</modules>
-
-	<profiles>
-		<profile>
-			<id>release</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<modules>
-				<module>releng/org.eclipse.nebula.nebula-release</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>incubation</id>
-			<modules>
-				<module>releng/org.eclipse.nebula.nebula-incubation</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>promote</id>
-			<modules>
-				<module>releng/org.eclipse.nebula.site/promotion</module>
-			</modules>
-		</profile>
-	</profiles>
--->
 </project>
