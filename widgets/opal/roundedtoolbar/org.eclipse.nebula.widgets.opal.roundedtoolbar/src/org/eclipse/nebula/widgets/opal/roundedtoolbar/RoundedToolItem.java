@@ -366,7 +366,7 @@ public class RoundedToolItem extends Item {
 	}
 
 	private void drawRightLine(final int x) {
-		gc.setForeground(RoundedToolbar.BORDER_COLOR);
+		gc.setForeground(parentToolbar.borderColor);
 		gc.drawLine(x + getWidth(), 0, x + getWidth(), toolbarHeight);
 	}
 
@@ -796,7 +796,7 @@ public class RoundedToolItem extends Item {
 	 * number will cause that value to be set to zero instead.
 	 * </p>
 	 *
-	 * @param rect the new bounds for the receiver
+	 * @param rectangle the new bounds for the receiver
 	 *
 	 * @exception SWTException
 	 *                <ul>
@@ -1012,7 +1012,7 @@ public class RoundedToolItem extends Item {
 	 * Controls how text will be displayed in the receiver. The argument should
 	 * be one of <code>TOP</code>, <code>BOTTOM</code> or <code>CENTER</code>.
 	 *
-	 * @param alignment the new alignment
+	 * @param verticalAlignment the new alignment
 	 *
 	 * @exception SWTException
 	 *                <ul>
