@@ -14,7 +14,6 @@ package org.eclipse.nebula.widgets.pgroup.internal;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * @author chris
@@ -60,20 +59,23 @@ public class GraphicUtils
         {
             if (i == 0)
             {
-                if (outerColor == null)
-                    continue;
+                if (outerColor == null) {
+					continue;
+				}
                 gc.setForeground(outerColor);
             }
             if (i == 1)
             {
-                if (borderColor == null)
-                    continue;
+                if (borderColor == null) {
+					continue;
+				}
                 gc.setForeground(borderColor);
             }
             if (i == 2)
             {
-                if (innerColor == null)
-                    continue;
+                if (innerColor == null) {
+					continue;
+				}
                 gc.setForeground(innerColor);
             }
 
@@ -81,8 +83,9 @@ public class GraphicUtils
             {
                 for (int x2 = 0; x2 < 5; x2++)
                 {
-                    if (corner[line][x2] == i)
-                        gc.drawPoint(x + x2, y + line);
+                    if (corner[line][x2] == i) {
+						gc.drawPoint(x + x2, y + line);
+					}
                 }
             }
         }
@@ -103,23 +106,26 @@ public class GraphicUtils
         final Color oldBackground = gc.getBackground();
         if (gradientColors.length == 1)
         {
-            if (gradientColors[0] != null)
-                gc.setBackground(gradientColors[0]);
+            if (gradientColors[0] != null) {
+				gc.setBackground(gradientColors[0]);
+			}
             gc.fillRectangle(x, y, width, height);
         }
         else
         {
             final Color oldForeground = gc.getForeground();
             Color lastColor = gradientColors[0];
-            if (lastColor == null)
-                lastColor = oldBackground;
+            if (lastColor == null) {
+				lastColor = oldBackground;
+			}
             int pos = 0;
             for (int i = 0; i < gradientPercents.length; ++i)
             {
                 gc.setForeground(lastColor);
                 lastColor = gradientColors[i + 1];
-                if (lastColor == null)
-                    lastColor = oldBackground;
+                if (lastColor == null) {
+					lastColor = oldBackground;
+				}
                 gc.setBackground(lastColor);
                 if (vertical)
                 {
@@ -225,21 +231,23 @@ public class GraphicUtils
 
     public static Color createNewBlendedColor(RGB rgb1, RGB rgb2, int ratio)
     {
-        Color newColor = new Color(Display.getCurrent(), blend(rgb1, rgb2, ratio));
+
+		Color newColor = new Color(blend(rgb1, rgb2, ratio));
         return newColor;
     }
 
     public static Color createNewBlendedColor(Color c1, Color c2, int ratio)
     {
-        Color newColor = new Color(Display.getCurrent(), blend(c1.getRGB(), c2.getRGB(), ratio));
+
+		Color newColor = new Color(blend(c1.getRGB(), c2.getRGB(), ratio));
         return newColor;
     }
 
     public static Color createNewReverseColor(Color c)
     {
-        Color newColor = new Color(Display.getCurrent(), 255 - c.getRed(), 255 - c.getGreen(),
+
+		return new Color(255 - c.getRed(), 255 - c.getGreen(),
                                    255 - c.getBlue());
-        return newColor;
     }
 
     public static RGB saturate(RGB rgb, float saturation)
@@ -247,17 +255,21 @@ public class GraphicUtils
         float[] hsb = java.awt.Color.RGBtoHSB(rgb.red, rgb.green, rgb.blue, null);
 
         hsb[1] += saturation;
-        if (hsb[1] > 1.0f)
-            hsb[1] = 1.0f;
-        if (hsb[1] < 0f)
-            hsb[1] = 0f;
+        if (hsb[1] > 1.0f) {
+			hsb[1] = 1.0f;
+		}
+        if (hsb[1] < 0f) {
+			hsb[1] = 0f;
+		}
 
         hsb[0] += saturation;
-        if (hsb[0] > 1.0f)
-            hsb[0] = 1.0f;
+        if (hsb[0] > 1.0f) {
+			hsb[0] = 1.0f;
+		}
 
-        if (hsb[0] < 0f)
-            hsb[0] = 0f;
+        if (hsb[0] < 0f) {
+			hsb[0] = 0f;
+		}
 
         java.awt.Color awtColor = new java.awt.Color(java.awt.Color
             .HSBtoRGB(hsb[0], hsb[1], hsb[2]));
@@ -267,6 +279,6 @@ public class GraphicUtils
     public static Color createNewSaturatedColor(Color c, float saturation)
     {
         RGB newRGB = saturate(c.getRGB(), saturation);
-        return new Color(Display.getCurrent(), newRGB);
+		return new Color(newRGB);
     }
 }

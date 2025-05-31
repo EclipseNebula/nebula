@@ -132,8 +132,8 @@ public class Grid extends Canvas {
 	 * Object holding the visible range
 	 */
 	public static class GridVisibleRange {
-		private GridItem[] items = new GridItem[0];
-		private GridColumn[] columns = new GridColumn[0];
+		private GridItem[] items = {};
+		private GridColumn[] columns = {};
 
 		/**
 		 * @return the current items shown
@@ -310,7 +310,7 @@ public class Grid extends Canvas {
 	 */
 	private final List<GridColumn> displayOrderedColumns = new ArrayList<>();
 
-	private GridColumnGroup[] columnGroups = new GridColumnGroup[0];
+	private GridColumnGroup[] columnGroups = {};
 
 	/**
 	 * Renderer to paint the top left area when both column and row headers are
@@ -866,7 +866,7 @@ public class Grid extends Canvas {
 
 		final RGB cellSel = blend(sel, white, 50);
 
-		cellHeaderSelectionBackground = new Color(getDisplay(), cellSel);
+		cellHeaderSelectionBackground = new Color(cellSel);
 
 		setDragDetect(false);
 	}
