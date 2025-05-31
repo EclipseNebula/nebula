@@ -89,14 +89,8 @@ public class SWTGraphicUtil {
 	 * @return the color
 	 */
 	public static Color getColorSafely(final int r, final int g, final int b) {
-		final Display display = Display.getCurrent();
-		final Color color = new Color(display, r, g, b);
-		display.addListener(SWT.Dispose, e -> {
-			if (!color.isDisposed()) {
-				color.dispose();
-			}
-		});
-		return color;
+
+		return new Color(r, g, b);
 	}
 
 	/**
@@ -552,9 +546,8 @@ public class SWTGraphicUtil {
 	 * @return a color that will be disposed when <code>control</code> is disposed
 	 */
 	public static Color getDefaultColor(final Control control, final int red, final int green, final int blue) {
-		final Color defaultColor = new Color(control.getDisplay(), red, green, blue);
-		addDisposer(control, defaultColor);
-		return defaultColor;
+
+		return new Color(red, green, blue);
 	}
 
 	/**

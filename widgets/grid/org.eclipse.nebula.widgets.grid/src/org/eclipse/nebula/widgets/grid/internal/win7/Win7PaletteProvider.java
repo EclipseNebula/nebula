@@ -20,7 +20,7 @@ public class Win7PaletteProvider {
 	 */
 	public static final Integer NORMAL_GRID_COLUMN_HEADER = new Integer(0);
 
-	private static final Object[] NORMAL_GRID_COLUMN_HEADER_RGB = new Object[]{
+	private static final Object[] NORMAL_GRID_COLUMN_HEADER_RGB = {
 		new Integer(SWT.COLOR_WHITE),
 		new Integer(SWT.COLOR_WHITE),
 		new Integer(SWT.COLOR_WHITE),
@@ -44,7 +44,7 @@ public class Win7PaletteProvider {
 	 */
 	public static final Integer HOVER_GRID_COLUMN_HEADER = new Integer(1);
 
-	private static final Object[] HOVER_GRID_COLUMN_HEADER_RGB = new Object[]{
+	private static final Object[] HOVER_GRID_COLUMN_HEADER_RGB = {
 		new Integer(SWT.COLOR_WHITE),
         new RGB(136,203,235),
         new RGB(227,247,255),
@@ -68,7 +68,7 @@ public class Win7PaletteProvider {
 	 */
 	public static final Integer MOUSEDOWN_GRID_COLUMN_HEADER = new Integer(3);
 
-	private static final Object[] MOUSEDOWN_GRID_COLUMN_HEADER_RGB = new Object[]{
+	private static final Object[] MOUSEDOWN_GRID_COLUMN_HEADER_RGB = {
 		new Integer(SWT.COLOR_WHITE),
         new RGB(122,158,177),
         new RGB(188,228,249),
@@ -93,7 +93,7 @@ public class Win7PaletteProvider {
 	 */
 	public static final Integer SELECTED_GRID_COLUMN_HEADER = new Integer(3);
 
-	private static final Object[] SELECTED_GRID_COLUMN_HEADER_RGB = new Object[]{
+	private static final Object[] SELECTED_GRID_COLUMN_HEADER_RGB = {
 		new Integer(SWT.COLOR_WHITE),
         new RGB(150,217,249),
         new RGB(242,249,252),
@@ -118,7 +118,7 @@ public class Win7PaletteProvider {
 	 */
 	public static final Integer SHADOW_GRID_COLUMN_HEADER = new Integer(4);
 
-	private static final Object[] SHADOW_GRID_COLUMN_HEADER_RGB = new Object[]{
+	private static final Object[] SHADOW_GRID_COLUMN_HEADER_RGB = {
         new RGB(134,163,178),
         new RGB(170,206,225)
 	};
@@ -126,7 +126,7 @@ public class Win7PaletteProvider {
 	/**
 	 * Pool of palettes
 	 */
-    private Map<Integer, Palette> palettes = new HashMap<>();
+    private final Map<Integer, Palette> palettes = new HashMap<>();
 
     /**
      * Dispose the
@@ -153,8 +153,9 @@ public class Win7PaletteProvider {
      */
     public Palette getPalette(Display display, Integer type){
     	Palette palette = palettes.get(type);
-        if ( palette != null )
-            return palette;
+        if ( palette != null ) {
+			return palette;
+		}
 
         //create the palette
         if ( type == NORMAL_GRID_COLUMN_HEADER ){
@@ -186,7 +187,7 @@ public class Win7PaletteProvider {
     		} else if ( def[i] instanceof Integer ){
     			colors[i] = (display==null?Display.getCurrent():display).getSystemColor(((Integer)def[i]).intValue());
     		} else {
-    			colors[i] = new Color(display, (RGB)def[i]);
+				colors[i] = new Color((RGB)def[i]);
     		}
     	}
     	return new Palette(type, colors);
@@ -198,8 +199,8 @@ public class Win7PaletteProvider {
      */
     public class Palette {
 
-    	private Integer type;
-    	private Color[] colors = new Color[]{};
+    	private final Integer type;
+    	private Color[] colors = {};
 
     	/**
     	 * @param type
@@ -230,8 +231,9 @@ public class Win7PaletteProvider {
     	public void dispose(){
     		if ( colors != null ){
 	    		for ( int i = 0 ; i < colors.length ; i++ ){
-	    			if ( colors[i] != null )
-	    				colors[i].dispose();
+	    			if ( colors[i] != null ) {
+						colors[i].dispose();
+					}
 	    		}
     		}
     	}

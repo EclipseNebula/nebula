@@ -57,8 +57,8 @@ public class RoundedToolbarSnippet {
 		gridLayout.horizontalSpacing = 20;
 		shell.setLayout(gridLayout);
 
-		grey1 = new Color(display, 211, 211, 211);
-		grey2 = new Color(display, 255, 250, 250);
+		grey1 = new Color(211, 211, 211);
+		grey2 = new Color(255, 250, 250);
 
 		iconBubble1b = new Image(display, RoundedToolbarSnippet.class.getResourceAsStream("icons/bubble1_b.png"));
 		iconBubble1w = new Image(display, RoundedToolbarSnippet.class.getResourceAsStream("icons/bubble1_w.png"));

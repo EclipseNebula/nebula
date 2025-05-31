@@ -51,14 +51,14 @@ public class HTMLStyledTextParser {
 	 */
 	HTMLStyledTextParser(final StyledText styledText) {
 		this.styledText = styledText;
-		listOfStyles = new ArrayList<StyleRange>();
-		stack = new LinkedList<StyleRange>();
+		listOfStyles = new ArrayList<>();
+		stack = new LinkedList<>();
 		final FontData data = styledText.getFont().getFontData()[0];
 		defaultHeight = data.getHeight();
 	}
 
 	private static Map<String, Integer[]> initHTMLCode() {
-		final Map<String, Integer[]> map = new HashMap<String, Integer[]>();
+		final Map<String, Integer[]> map = new HashMap<>();
 
 		map.put("aliceblue", new Integer[] { 240, 248, 255 });
 		map.put("antiquewhite", new Integer[] { 250, 235, 215 });
@@ -320,7 +320,7 @@ public class HTMLStyledTextParser {
 			return;
 		}
 
-		final String[] acceptedClosingTags = new String[] { "/b", "/i", "/u", "/size", "/color", "/backgroundcolor" };
+		final String[] acceptedClosingTags = { "/b", "/i", "/u", "/size", "/color", "/backgroundcolor" };
 		for (final String closingTag : acceptedClosingTags) {
 			if (closingTag.equals(tag)) {
 				processEndTag(closingTag);
@@ -468,11 +468,7 @@ public class HTMLStyledTextParser {
 				blue = rgb[2];
 			}
 		}
-		final Color color = new Color(styledText.getDisplay(), red, green, blue);
-		styledText.addListener(SWT.Dispose, e -> {
-			color.dispose();
-		});
-		return color;
+		return new Color(red, green, blue);
 	}
 
 	private void processBeginBackgroundColor() {

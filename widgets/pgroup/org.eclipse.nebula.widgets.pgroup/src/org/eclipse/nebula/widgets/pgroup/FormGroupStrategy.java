@@ -37,15 +37,15 @@ public class FormGroupStrategy extends AbstractGroupStrategy
 
     private Color initialBorderColor;
 
-    private int titleTextMargin = 2;
+    private final int titleTextMargin = 2;
 
-    private int betweenSpacing = 6;
+    private final int betweenSpacing = 6;
 
-    private int margin = 0;
+    private final int margin = 0;
 
-    private int vMargin = 2;
+    private final int vMargin = 2;
 
-    private int hMargin = 6;
+    private final int hMargin = 6;
 
     private Color borderColor;
 
@@ -60,27 +60,29 @@ public class FormGroupStrategy extends AbstractGroupStrategy
     /** 
      * @see org.eclipse.nebula.widgets.pgroup.AbstractGroupStrategy#initialize()
      */
-    public void initialize()
+    @Override
+	public void initialize()
     {
         super.initialize();
 
         RGB borderRGB = GraphicUtils.blend(getGroup().getDisplay()
             .getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT).getRGB(), getGroup()
             .getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND).getRGB(), 100);
-        initialBorderColor = new Color(getGroup().getDisplay(), borderRGB);
+		initialBorderColor = new Color(borderRGB);
         borderColor = initialBorderColor;
 
         RGB backRGB = GraphicUtils.blend(getGroup().getDisplay()
             .getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT).getRGB(), getGroup().getDisplay()
             .getSystemColor(SWT.COLOR_LIST_BACKGROUND).getRGB(), 40);
-        initialBackColor = new Color(getGroup().getDisplay(), backRGB);
+		initialBackColor = new Color(backRGB);
 
     }
 
     /**
      * @deprecated use constructor with PGroup element instead
      */
-    public FormGroupStrategy() {
+    @Deprecated
+	public FormGroupStrategy() {
     	this(null);
     }
     
@@ -98,7 +100,8 @@ public class FormGroupStrategy extends AbstractGroupStrategy
     /** 
      * @see org.eclipse.nebula.widgets.pgroup.AbstractGroupStrategy#paint(org.eclipse.swt.graphics.GC)
      */
-    public void paint(GC gc)
+    @Override
+	public void paint(GC gc)
     {
         Color back = getGroup().internalGetBackground();
         if (back != null)
@@ -282,25 +285,30 @@ public class FormGroupStrategy extends AbstractGroupStrategy
 
     }
 
-    public Rectangle getToolItemArea() {
+    @Override
+	public Rectangle getToolItemArea() {
     	return toolItemArea;
     }
 
     /** 
      * @see org.eclipse.nebula.widgets.pgroup.AbstractGroupStrategy#isToggleLocation(int, int)
      */
-    public boolean isToggleLocation(int x, int y)
+    @Override
+	public boolean isToggleLocation(int x, int y)
     {
-        if (super.isToggleLocation(x, y))
-            return true;
+        if (super.isToggleLocation(x, y)) {
+			return true;
+		}
 
-        if (getGroup().getToggleRenderer() == null)
-            return false;
+        if (getGroup().getToggleRenderer() == null) {
+			return false;
+		}
 
         Rectangle textBounds = getTextBounds();
         textBounds.width = Math.min(textWidth,textBounds.width);
-        if (textBounds.contains(x, y))
-            return true;
+        if (textBounds.contains(x, y)) {
+			return true;
+		}
 
         return false;
     }
@@ -345,7 +353,8 @@ public class FormGroupStrategy extends AbstractGroupStrategy
     /** 
      * @see org.eclipse.nebula.widgets.pgroup.AbstractGroupStrategy#getClientArea()
      */
-    public Rectangle getClientArea()
+    @Override
+	public Rectangle getClientArea()
     {
         Rectangle area = getGroup().getBounds();
         area.x = margin;
@@ -358,7 +367,8 @@ public class FormGroupStrategy extends AbstractGroupStrategy
     /**
      * {@inheritDoc}
      */
-    public Rectangle computeTrim(int x, int y, int width, int height)
+    @Override
+	public Rectangle computeTrim(int x, int y, int width, int height)
     {
         Rectangle area = new Rectangle(x, y, Math.max(0, width), Math.max(0, height));
         area.x -= margin;
@@ -371,12 +381,15 @@ public class FormGroupStrategy extends AbstractGroupStrategy
     /** 
      * @see org.eclipse.nebula.widgets.pgroup.AbstractGroupStrategy#dispose()
      */
-    public void dispose()
+    @Override
+	public void dispose()
     {
-        if (initialBackColor != null)
-            initialBackColor.dispose();
-        if (initialBorderColor != null)
-            initialBorderColor.dispose();
+        if (initialBackColor != null) {
+			initialBackColor.dispose();
+		}
+        if (initialBorderColor != null) {
+			initialBorderColor.dispose();
+		}
     }
 
     /**
@@ -395,14 +408,16 @@ public class FormGroupStrategy extends AbstractGroupStrategy
         this.borderColor = borderColor;
     }
 
-    public void update()
+    @Override
+	public void update()
     {
         GC gc = new GC(getGroup());
 
         titleHeight = 0;
 
-        if (getGroup().getImage() != null)
-            titleHeight = getGroup().getImage().getBounds().height + (2 * vMargin);
+        if (getGroup().getImage() != null) {
+			titleHeight = getGroup().getImage().getBounds().height + (2 * vMargin);
+		}
 
         if (getGroup().getToggleRenderer() != null)
         {
