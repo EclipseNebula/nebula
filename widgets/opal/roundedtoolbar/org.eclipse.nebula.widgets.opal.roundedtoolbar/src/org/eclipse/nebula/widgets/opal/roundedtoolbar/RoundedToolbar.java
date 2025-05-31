@@ -60,10 +60,10 @@ public class RoundedToolbar extends Canvas {
 	private int cornerRadius;
 	private static Color START_GRADIENT_COLOR_DEFAULT = SWTGraphicUtil.getColorSafely(245, 245, 245);
 	private static Color END_GRADIENT_COLOR_DEFAULT = SWTGraphicUtil.getColorSafely(185, 185, 185);
-	static Color BORDER_COLOR = SWTGraphicUtil.getColorSafely(66, 66, 66);
 
 	private Color START_GRADIENT_COLOR = START_GRADIENT_COLOR_DEFAULT;
 	private Color END_GRADIENT_COLOR = END_GRADIENT_COLOR_DEFAULT;
+	Color borderColor = new Color(66, 66, 66);
 
 	/**
 	 * Constructs a new instance of this class given its parent and a style
@@ -97,7 +97,7 @@ public class RoundedToolbar extends Canvas {
 	 */
 	public RoundedToolbar(final Composite parent, final int style) {
 		super(parent, style | SWT.DOUBLE_BUFFERED);
-		items = new ArrayList<RoundedToolItem>();
+		items = new ArrayList<>();
 		cornerRadius = 2;
 		addListeners();
 	}
@@ -135,7 +135,7 @@ public class RoundedToolbar extends Canvas {
 	 */
 	public RoundedToolbar(final Composite parent, final int style, Color startGradientColor, Color endGradientColor) {
 		super(parent, style | SWT.DOUBLE_BUFFERED);
-		items = new ArrayList<RoundedToolItem>();
+		items = new ArrayList<>();
 		cornerRadius = 2;
 		addListeners();
 		START_GRADIENT_COLOR = startGradientColor;
@@ -181,8 +181,7 @@ public class RoundedToolbar extends Canvas {
 							menu.removeMenuListener(this);
 						}
 						item.forceSelection(false);
-						redraw();
-						update();
+						repaint();
 					}
 				});
 				item.forceSelection(true);
@@ -197,8 +196,7 @@ public class RoundedToolbar extends Canvas {
 				item.setSelection(!item.getSelection());
 			}
 
-			redraw();
-			update();
+			repaint();
 		});
 
 		addListener(SWT.MouseUp, event -> {
@@ -220,8 +218,7 @@ public class RoundedToolbar extends Canvas {
 					final Boolean value = (Boolean) getData(LAST_TOGGLE_BUTTON_SELECTED_STATE);
 					lastToggleButtonSelected.forceSelection(value);
 					clearLastToggleButtonInfo();
-					redraw();
-					update();
+					repaint();
 					return;
 				}
 
@@ -239,8 +236,7 @@ public class RoundedToolbar extends Canvas {
 					}
 				}
 			}
-			redraw();
-			update();
+			repaint();
 		});
 		addListener(SWT.MouseHover, event -> {
 			final Optional<RoundedToolItem> previouslySelectedItem = items.stream()//
@@ -274,8 +270,7 @@ public class RoundedToolbar extends Canvas {
 			}
 			clearLastToggleButtonInfo();
 			if (needRedraw) {
-				redraw();
-				update();
+				repaint();
 			}
 		});
 
@@ -477,7 +472,7 @@ public class RoundedToolbar extends Canvas {
 		gc.setBackground(END_GRADIENT_COLOR);
 		gc.fillGradientRectangle(0, 0, width, height, true);
 
-		gc.setForeground(BORDER_COLOR);
+		gc.setForeground(borderColor);
 		gc.drawRoundRectangle(0, 0, width - 1, height - 1, cornerRadius, cornerRadius);
 
 		gc.setClipping((Rectangle) null);
@@ -494,12 +489,38 @@ public class RoundedToolbar extends Canvas {
 		items.remove(roundedToolItem);
 	}
 
+	private void repaint() {
+		redraw();
+		update();
+	}
+
 	/**
 	 * @param cornerRadius new corner radius
 	 */
 	public void setCornerRadius(final int cornerRadius) {
 		checkWidget();
 		this.cornerRadius = cornerRadius;
+	}
+
+	/**
+	 * 
+	 * @return the color used to draw borders in the toolbar
+	 */
+	public Color getBorderColor() {
+		checkWidget();
+		return borderColor;
+	}
+
+	/**
+	 * Set the color used to draw borders on the toolbar
+	 * 
+	 * @param borderColor
+	 *                        the new border color
+	 */
+	public void setBorderColor(Color borderColor) {
+		checkWidget();
+		this.borderColor = borderColor;
+		repaint();
 	}
 
 }

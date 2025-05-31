@@ -109,7 +109,9 @@ public class RoundedToolbarSnippet {
 		
 		// MENU
 		new Label(shell, SWT.NONE).setText("Menu buttons");
-		createMenuBar(shell);
+		RoundedToolbar menuBar = createMenuBar(shell);
+		menuBar.setBorderColor(new Color(255, 0, 0));
+		menuBar.setCornerRadius(15);
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
@@ -184,6 +186,8 @@ public class RoundedToolbarSnippet {
 				return null;
 			}
 		});
+		final RoundedToolItem item2 = new RoundedToolItem(roundedToolBar, SWT.TOGGLE);
+		item2.setText("Toggle Item");
 		return roundedToolBar;
 	}
 
