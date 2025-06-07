@@ -22,6 +22,7 @@
 package org.eclipse.nebula.widgets.grid;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import org.eclipse.nebula.widgets.grid.internal.DefaultColumnFooterRenderer;
 import org.eclipse.nebula.widgets.grid.internal.DefaultColumnHeaderRenderer;
@@ -634,6 +635,23 @@ public class GridColumn extends Item {
 
 			parent.redraw();
 		}
+	}
+
+	/**
+	 * Update the text of the grid column
+	 * 
+	 * @param text
+	 *                 the new text
+	 */
+	@Override
+	public void setText(String text) {
+
+		if(Objects.equals(getText(), text)) {
+			return;
+		}
+		super.setText(text);
+		Rectangle bounds = getBounds();
+		parent.redraw(bounds.x, bounds.y, bounds.width, bounds.height, false);
 	}
 
 	/**
@@ -1490,6 +1508,7 @@ public class GridColumn extends Item {
 	 * Sets the Font to be used when displaying the Header text.
 	 *
 	 * @param font
+	 *                 the new font
 	 */
 	public void setHeaderFont(final Font font) {
 		checkWidget();
@@ -1522,6 +1541,7 @@ public class GridColumn extends Item {
 	 * Sets the Font to be used when displaying the Footer text.
 	 *
 	 * @param font
+	 *                 the new font
 	 */
 	public void setFooterFont(final Font font) {
 		checkWidget();
