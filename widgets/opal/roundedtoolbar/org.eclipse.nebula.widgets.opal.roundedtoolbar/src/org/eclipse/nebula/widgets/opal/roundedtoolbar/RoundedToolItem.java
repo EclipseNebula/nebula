@@ -16,7 +16,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.nebula.widgets.opal.commons.AdvancedPath;
-import org.eclipse.nebula.widgets.opal.commons.SWTGraphicUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -52,9 +51,6 @@ import org.eclipse.swt.widgets.Widget;
 public class RoundedToolItem extends Item {
 
 	private static final int MARGIN = 4;
-	private static Color START_GRADIENT_COLOR = SWTGraphicUtil.getColorSafely(70, 70, 70);
-	private static Color END_GRADIENT_COLOR = SWTGraphicUtil.getColorSafely(116, 116, 116);
-
 	private final RoundedToolbar parentToolbar;
 	private final List<SelectionListener> selectionListeners;
 	private Rectangle bounds;
@@ -151,7 +147,7 @@ public class RoundedToolItem extends Item {
 		enabled = true;
 		alignment = SWT.CENTER;
 		verticalAlignment = SWT.CENTER;
-		selectionListeners = new CopyOnWriteArrayList<SelectionListener>();
+		selectionListeners = new CopyOnWriteArrayList<>();
 		width = -1;
 		height = -1;
 		hideSelection = (parent.getStyle() & SWT.HIDE_SELECTION) == SWT.HIDE_SELECTION;
@@ -357,8 +353,8 @@ public class RoundedToolItem extends Item {
 
 		gc.setClipping(path);
 
-		gc.setForeground(START_GRADIENT_COLOR);
-		gc.setBackground(END_GRADIENT_COLOR);
+		gc.setForeground(parentToolbar.activeGradientColor.start());
+		gc.setBackground(parentToolbar.activeGradientColor.end());
 		gc.fillGradientRectangle(x, 0, width + parentToolbar.getCornerRadius(), toolbarHeight, true);
 
 		gc.setClipping((Rectangle) null);

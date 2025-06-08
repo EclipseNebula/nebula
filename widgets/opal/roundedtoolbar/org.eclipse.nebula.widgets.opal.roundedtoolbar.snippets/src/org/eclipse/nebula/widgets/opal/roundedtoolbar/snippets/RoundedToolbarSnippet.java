@@ -14,6 +14,7 @@
 package org.eclipse.nebula.widgets.opal.roundedtoolbar.snippets;
 
 import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.nebula.widgets.opal.roundedtoolbar.GradientColor;
 import org.eclipse.nebula.widgets.opal.roundedtoolbar.RoundedToolItem;
 import org.eclipse.nebula.widgets.opal.roundedtoolbar.RoundedToolbar;
 import org.eclipse.swt.SWT;
@@ -110,6 +111,7 @@ public class RoundedToolbarSnippet {
 		// MENU
 		new Label(shell, SWT.NONE).setText("Menu buttons");
 		RoundedToolbar menuBar = createMenuBar(shell);
+		menuBar.setActiveGradientColor(new GradientColor(display.getSystemColor(SWT.COLOR_CYAN), display.getSystemColor(SWT.COLOR_DARK_BLUE)));
 		menuBar.setBorderColor(new Color(255, 0, 0));
 		menuBar.setCornerRadius(15);
 		shell.open();

@@ -14,11 +14,11 @@ package org.eclipse.nebula.widgets.opal.roundedtoolbar;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.nebula.widgets.opal.commons.AdvancedPath;
-import org.eclipse.nebula.widgets.opal.commons.SWTGraphicUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.MenuEvent;
@@ -56,13 +56,15 @@ public class RoundedToolbar extends Canvas {
 	private static final String LAST_TOGGLE_BUTTON_SELECTED = RoundedToolbar.class.toString() + "_LAST_TOGGLE_BUTTON_SELECTED";
 	private static final String LAST_TOGGLE_BUTTON_SELECTED_STATE = RoundedToolbar.class.toString() + "_LAST_TOGGLE_BUTTON_SELECTED_STATE";
 
-	private final List<RoundedToolItem> items;
-	private int cornerRadius;
-	private static Color START_GRADIENT_COLOR_DEFAULT = SWTGraphicUtil.getColorSafely(245, 245, 245);
-	private static Color END_GRADIENT_COLOR_DEFAULT = SWTGraphicUtil.getColorSafely(185, 185, 185);
+	private final List<RoundedToolItem> items = new ArrayList<>();
+	private int cornerRadius = 2;
+	private static final GradientColor DEFAULT_GRADIENT_COLOR = new GradientColor(new Color(245, 245, 245),
+			new Color(185, 185, 185));
+	private static final GradientColor ACTIVE_GRADIENT_COLOR = new GradientColor(new Color(70, 70, 70),
+			new Color(116, 116, 116));
 
-	private Color START_GRADIENT_COLOR = START_GRADIENT_COLOR_DEFAULT;
-	private Color END_GRADIENT_COLOR = END_GRADIENT_COLOR_DEFAULT;
+	GradientColor defaultGradientColor;
+	GradientColor activeGradientColor = ACTIVE_GRADIENT_COLOR;
 	Color borderColor = new Color(66, 66, 66);
 
 	/**
@@ -97,8 +99,7 @@ public class RoundedToolbar extends Canvas {
 	 */
 	public RoundedToolbar(final Composite parent, final int style) {
 		super(parent, style | SWT.DOUBLE_BUFFERED);
-		items = new ArrayList<>();
-		cornerRadius = 2;
+		defaultGradientColor = DEFAULT_GRADIENT_COLOR;
 		addListeners();
 	}
 
@@ -130,16 +131,14 @@ public class RoundedToolbar extends Canvas {
 	 *                <li>ERROR_INVALID_SUBCLASS - if this class is not an
 	 *                allowed subclass</li>
 	 *                </ul>
-	 *
+	 *@deprecated use default swt-style constructor and setters instead
 	 * @see Widget#getStyle()
 	 */
+	@Deprecated
 	public RoundedToolbar(final Composite parent, final int style, Color startGradientColor, Color endGradientColor) {
 		super(parent, style | SWT.DOUBLE_BUFFERED);
-		items = new ArrayList<>();
-		cornerRadius = 2;
+		defaultGradientColor = new GradientColor(startGradientColor, endGradientColor);
 		addListeners();
-		START_GRADIENT_COLOR = startGradientColor;
-		END_GRADIENT_COLOR = endGradientColor;
 	}
 
 	private void addListeners() {
@@ -468,8 +467,8 @@ public class RoundedToolbar extends Canvas {
 		path.addRoundRectangle(0, 0, width, height, cornerRadius, cornerRadius);
 		gc.setClipping(path);
 
-		gc.setForeground(START_GRADIENT_COLOR);
-		gc.setBackground(END_GRADIENT_COLOR);
+		gc.setForeground(defaultGradientColor.start());
+		gc.setBackground(defaultGradientColor.end());
 		gc.fillGradientRectangle(0, 0, width, height, true);
 
 		gc.setForeground(borderColor);
@@ -477,6 +476,34 @@ public class RoundedToolbar extends Canvas {
 
 		gc.setClipping((Rectangle) null);
 		path.dispose();
+	}
+
+	/**
+	 * Sets the default {@link GradientColor} for this {@link RoundedToolbar}, the
+	 * color is used for the default button state
+	 * 
+	 * @param defaultGradientColor the gradient colors to use
+	 */
+	public void setDefaultGradientColor(GradientColor defaultGradientColor) {
+		checkWidget();
+		if (!Objects.equals(defaultGradientColor, this.defaultGradientColor)) {
+			this.defaultGradientColor = defaultGradientColor;
+			repaint();
+		}
+	}
+
+	/**
+	 * Sets the active {@link GradientColor} for this {@link RoundedToolbar}, the
+	 * color is used when a button is active (e.g. pressed)
+	 * 
+	 * @param activeGradientColor the gradient colors to use
+	 */
+	public void setActiveGradientColor(GradientColor activeGradientColor) {
+		checkWidget();
+		if (!Objects.equals(activeGradientColor, this.activeGradientColor)) {
+			this.activeGradientColor = activeGradientColor;
+			repaint();
+		}
 	}
 
 	/**
