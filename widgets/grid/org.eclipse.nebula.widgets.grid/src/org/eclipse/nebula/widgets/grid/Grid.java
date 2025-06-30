@@ -5161,31 +5161,28 @@ public class Grid extends Canvas {
 	/**
 	 * Paints.
 	 *
-	 * @param e
+	 * @param event
 	 *            paint event
 	 */
-	private void onPaint(final PaintEvent e) {
-		int insertMarkPosX1 = -1; // we will populate these values while drawing the cells
-		int insertMarkPosX2 = -1;
-		int insertMarkPosY = -1;
-		boolean insertMarkPosFound = false;
+	private void onPaint(final PaintEvent event) {
+		InsertMark insertMark = new InsertMark(); // we will populate these values while drawing the cells
 
 		final GridCellSpanManager cellSpanManager = new GridCellSpanManager();
-		final Rectangle originalClipping = e.gc.getClipping();
+		GC gc = event.gc;
+		final Rectangle originalClipping = gc.getClipping();
 
-		e.gc.setBackground(getBackground());
-		this.drawBackground(e.gc, 0, 0, getSize().x, getSize().y);
+		gc.setBackground(getBackground());
+		this.drawBackground(gc, 0, 0, getSize().x, getSize().y);
 
 		if (scrollValuesObsolete) {
 			updateScrollbars();
 			scrollValuesObsolete = false;
 		}
 
-		int x = 0;
 		int y = 0;
 
 		if (columnHeadersVisible) {
-			paintHeader(e.gc);
+			paintHeader(gc);
 			y += headerHeight;
 		}
 
@@ -5204,6 +5201,7 @@ public class Grid extends Canvas {
 		final int firstVisibleIndex = getTopIndex();
 		int firstItemToDraw = firstVisibleIndex;
 
+		List<GridColumn> cols = displayOrderedColumns;
 		if (hasSpanning) {
 			// We need to find the first Item to draw. An earlier item can row-span the
 			// first visible item.
@@ -5211,7 +5209,7 @@ public class Grid extends Canvas {
 				int colIndex = 0;
 
 				int maxRowSpanForItem = 0;
-				for (final GridColumn column : displayOrderedColumns) {
+				for (final GridColumn column : cols) {
 
 					if (!column.isVisible()) {
 						colIndex++;
@@ -5238,15 +5236,73 @@ public class Grid extends Canvas {
 				}
 			}
 		}
+		int hscroll = getHScrollSelectionInPixels();
+		paintRows(cols, firstItemToDraw, visibleRows, hscroll, cellSpanManager, gc, originalClipping, y, clientArea,
+				firstVisibleIndex, insertMark);
 
-		int row = firstItemToDraw;
+		// draw drop point
+		if (draggingColumn) {
+			if ((dragDropAfterColumn != null || dragDropBeforeColumn != null)
+					&& dragDropAfterColumn != columnBeingPushed && dragDropBeforeColumn != columnBeingPushed
+					&& dragDropPointValid) {
+				int x;
+				if (dragDropBeforeColumn != null) {
+					x = getColumnHeaderXPosition(dragDropBeforeColumn);
+				} else {
+					x = getColumnHeaderXPosition(dragDropAfterColumn) + dragDropAfterColumn.getWidth();
+				}
 
-		for (int i = 0; i < visibleRows + firstVisibleIndex - firstItemToDraw; i++) {
+				final Point size = dropPointRenderer.computeSize(gc, SWT.DEFAULT, SWT.DEFAULT, null);
+				x -= size.x / 2;
+				if (x < 0) {
+					x = 0;
+				}
+				dropPointRenderer.setBounds(x - 1, headerHeight + DROP_POINT_LOWER_OFFSET, size.x, size.y);
+				dropPointRenderer.paint(gc, null);
+			}
+		}
+		FixedGridColumns fixed = getFixedGridColumns();
+		if (fixed.hasColumns() && hscroll > fixed.offset()) {
+			paintRows(fixed.columns(), firstItemToDraw, visibleRows, 0, cellSpanManager, gc, originalClipping, y,
+					clientArea,
+					firstVisibleIndex, insertMark);
+		}
 
-			x = 0;
+		// draw insertion mark
+		if (insertMark.posFound) {
+			final Rectangle rect = new Rectangle(rowHeaderVisible ? rowHeaderWidth : 0, columnHeadersVisible ? headerHeight : 0,
+					clientArea.width, clientArea.height);
+			gc.setClipping(originalClipping.intersection(rect));
+			insertMarkRenderer.paint(gc,
+					new Rectangle(insertMark.posX1, insertMark.posY,
+							insertMark.posX2 - insertMark.posX1, 0));
+		}
 
-			x -= getHScrollSelectionInPixels();
+		if (columnFootersVisible) {
+			paintFooter(gc);
+		}
+	}
 
+	private FixedGridColumns getFixedGridColumns() {
+		List<GridColumn> fixedColumns = new ArrayList<>();
+		int fixedOffset = 0;
+		for (GridColumn gridColumn : displayOrderedColumns) {
+			if (gridColumn.isFixed()) {
+				fixedColumns.add(gridColumn);
+			} else if (fixedColumns.isEmpty()) {
+				fixedOffset += gridColumn.getWidth();
+			}
+		}
+		return new FixedGridColumns(fixedColumns, fixedOffset);
+	}
+
+	private void paintRows(List<GridColumn> cols, int firstRow, int visibleRows, int hScroll,
+			final GridCellSpanManager cellSpanManager, GC gc, final Rectangle originalClipping, int y,
+			final Rectangle clientArea, final int firstVisibleIndex, InsertMark insertMark) {
+		int row = firstRow;
+		for (int i = 0; i < visibleRows + firstVisibleIndex - firstRow; i++) {
+
+			int x = -hScroll;
 			// get the item to draw
 			GridItem item = null;
 			if (row < items.size()) {
@@ -5261,6 +5317,7 @@ public class Grid extends Canvas {
 				item = null;
 			}
 
+			int columnCount = cols.size();
 			if (item != null) {
 				boolean cellInRowSelected = false;
 
@@ -5275,7 +5332,7 @@ public class Grid extends Canvas {
 				int colIndex = 0;
 
 				// draw regular cells for each column
-				for (final GridColumn column : displayOrderedColumns) {
+				for (final GridColumn column : cols) {
 
 					final boolean skipCell = cellSpanManager.skipCell(colIndex, row);
 					final int indexOfColumn = column.index;
@@ -5307,10 +5364,10 @@ public class Grid extends Canvas {
 							if (cellInHeaderDelta > 0) {
 								final Rectangle cellRect = new Rectangle(x - 1, y + cellInHeaderDelta, width + 1,
 										sizeOfColumn.y + 2 - cellInHeaderDelta);
-								e.gc.setClipping(originalClipping.intersection(cellRect));
+								gc.setClipping(originalClipping.intersection(cellRect));
 							} else {
 								final Rectangle cellRect = new Rectangle(x - 1, y - 1, width + 1, sizeOfColumn.y + 2);
-								e.gc.setClipping(originalClipping.intersection(cellRect));
+								gc.setClipping(originalClipping.intersection(cellRect));
 							}
 
 							column.getCellRenderer().setRow(i + 1);
@@ -5339,33 +5396,33 @@ public class Grid extends Canvas {
 								column.getCellRenderer().setHoverDetail("");
 							}
 
-							column.getCellRenderer().paint(e.gc, item);
+							column.getCellRenderer().paint(gc, item);
 
-							e.gc.setClipping((Rectangle) null);
+							gc.setClipping((Rectangle) null);
 
 							// collect the insertMark position
-							if (!insertMarkPosFound && insertMarkItem == item
+							if (!insertMark.posFound && insertMarkItem == item
 									&& (insertMarkColumn == null || insertMarkColumn == column)) {
 								// y-pos
-								insertMarkPosY = y - 1;
+								insertMark.posY = y - 1;
 								if (!insertMarkBefore) {
-									insertMarkPosY += item.getHeight() + 1;
+									insertMark.posY += item.getHeight() + 1;
 								}
 								// x1-pos
-								insertMarkPosX1 = x;
+								insertMark.posX1 = x;
 								if (column.isTree()) {
-									insertMarkPosX1 += Math.min(width,
+									insertMark.posX1 += Math.min(width,
 											column.getCellRenderer().getTextBounds(item, false).x);
 								}
 
 								// x2-pos
 								if (insertMarkColumn == null) {
-									insertMarkPosX2 = clientArea.x + clientArea.width;
+									insertMark.posX2 = clientArea.x + clientArea.width;
 								} else {
-									insertMarkPosX2 = x + width;
+									insertMark.posX2 = x + width;
 								}
 
-								insertMarkPosFound = true;
+								insertMark.posFound = true;
 							}
 						}
 					} else {
@@ -5381,16 +5438,16 @@ public class Grid extends Canvas {
 
 				if (x < clientArea.width) {
 					// insertMarkPos needs correction
-					if (insertMarkPosFound && insertMarkColumn == null) {
-						insertMarkPosX2 = x;
+					if (insertMark.posFound && insertMarkColumn == null) {
+						insertMark.posX2 = x;
 					}
 
 					emptyCellRenderer.setSelected(selectedItems.contains(item));
 					emptyCellRenderer.setFocus(isFocusControl());
 					emptyCellRenderer.setRow(i + 1);
 					emptyCellRenderer.setBounds(x, y, clientArea.width - x + 1, item.getHeight());
-					emptyCellRenderer.setColumn(getColumnCount());
-					emptyCellRenderer.paint(e.gc, item);
+					emptyCellRenderer.setColumn(columnCount);
+					emptyCellRenderer.paint(gc, item);
 				}
 
 				x = 0;
@@ -5404,7 +5461,7 @@ public class Grid extends Canvas {
 					}
 					if (!columnHeadersVisible || y >= headerHeight) {
 						rowHeaderRenderer.setBounds(0, y, rowHeaderWidth, item.getHeight() + 1);
-						rowHeaderRenderer.paint(e.gc, item);
+						rowHeaderRenderer.paint(gc, item);
 					}
 					x += rowHeaderWidth;
 				}
@@ -5419,7 +5476,7 @@ public class Grid extends Canvas {
 							}
 							focusRenderer.setBounds(focusX, focusY - 1, clientArea.width - focusX - 1,
 									item.getHeight() + 1);
-							focusRenderer.paint(e.gc, item);
+							focusRenderer.paint(gc, item);
 						}
 					}
 				}
@@ -5437,14 +5494,14 @@ public class Grid extends Canvas {
 				emptyCellRenderer.setSelected(false);
 				emptyCellRenderer.setRow(i + 1);
 
-				for (final GridColumn column : displayOrderedColumns) {
+				for (final GridColumn column : cols) {
 
 					if (column.isVisible()) {
 						final int width = column.width;
 						if(x + width >= 0) {
 							emptyCellRenderer.setBounds(x, y, width, itemHeight);
 							emptyCellRenderer.setColumn(column.index);
-							emptyCellRenderer.paint(e.gc, this);
+							emptyCellRenderer.paint(gc, this);
 						}
 						if(x > clientArea.width) {
 							break;
@@ -5455,15 +5512,15 @@ public class Grid extends Canvas {
 
 				if (x < clientArea.width) {
 					emptyCellRenderer.setBounds(x, y, clientArea.width - x + 1, itemHeight);
-					emptyCellRenderer.setColumn(getColumnCount());
-					emptyCellRenderer.paint(e.gc, this);
+					emptyCellRenderer.setColumn(columnCount);
+					emptyCellRenderer.paint(gc, this);
 				}
 
 				x = 0;
 
 				if (rowHeaderVisible) {
 					emptyRowHeaderRenderer.setBounds(x, y, rowHeaderWidth, itemHeight + 1);
-					emptyRowHeaderRenderer.paint(e.gc, this);
+					emptyRowHeaderRenderer.paint(gc, this);
 
 					x += rowHeaderWidth;
 				}
@@ -5472,40 +5529,6 @@ public class Grid extends Canvas {
 			}
 
 			row++;
-		}
-
-		// draw drop point
-		if (draggingColumn) {
-			if ((dragDropAfterColumn != null || dragDropBeforeColumn != null)
-					&& dragDropAfterColumn != columnBeingPushed && dragDropBeforeColumn != columnBeingPushed
-					&& dragDropPointValid) {
-				if (dragDropBeforeColumn != null) {
-					x = getColumnHeaderXPosition(dragDropBeforeColumn);
-				} else {
-					x = getColumnHeaderXPosition(dragDropAfterColumn) + dragDropAfterColumn.getWidth();
-				}
-
-				final Point size = dropPointRenderer.computeSize(e.gc, SWT.DEFAULT, SWT.DEFAULT, null);
-				x -= size.x / 2;
-				if (x < 0) {
-					x = 0;
-				}
-				dropPointRenderer.setBounds(x - 1, headerHeight + DROP_POINT_LOWER_OFFSET, size.x, size.y);
-				dropPointRenderer.paint(e.gc, null);
-			}
-		}
-
-		// draw insertion mark
-		if (insertMarkPosFound) {
-			final Rectangle rect = new Rectangle(rowHeaderVisible ? rowHeaderWidth : 0, columnHeadersVisible ? headerHeight : 0,
-					clientArea.width, clientArea.height);
-			e.gc.setClipping(originalClipping.intersection(rect));
-			insertMarkRenderer.paint(e.gc,
-					new Rectangle(insertMarkPosX1, insertMarkPosY, insertMarkPosX2 - insertMarkPosX1, 0));
-		}
-
-		if (columnFootersVisible) {
-			paintFooter(e.gc);
 		}
 	}
 
@@ -5583,9 +5606,11 @@ public class Grid extends Canvas {
 	 */
 	private void paintHeader(final GC gc) {
 		int x = 0;
-		int y = 0;
+		boolean hasFixedColumns = false;
+		int firstFixed = 0;
 
-		x -= getHScrollSelectionInPixels();
+		int hScroll = getHScrollSelectionInPixels();
+		x -= hScroll;
 
 		if (rowHeaderVisible) {
 			// paint left corner
@@ -5595,90 +5620,21 @@ public class Grid extends Canvas {
 		}
 
 		GridColumnGroup previousPaintedGroup = null;
-
 		for (final GridColumn column : displayOrderedColumns) {
 			if (x > getClientArea().width) {
 				break;
 			}
-
-			int height = 0;
-
 			if (!column.isVisible()) {
 				continue;
 			}
-
-			if (column.getColumnGroup() != null) {
-
-				if (column.getColumnGroup() != previousPaintedGroup) {
-					int width = column.getWidth();
-
-					GridColumn nextCol = null;
-					if (displayOrderedColumns.indexOf(column) + 1 < displayOrderedColumns.size()) {
-						nextCol = displayOrderedColumns.get(displayOrderedColumns.indexOf(column) + 1);
-					}
-
-					while (nextCol != null && nextCol.getColumnGroup() == column.getColumnGroup()) {
-
-						if (nextCol.getColumnGroup().getExpanded() && !nextCol.isDetail()
-								|| !nextCol.getColumnGroup().getExpanded() && !nextCol.isSummary()) {
-						} else if (nextCol.isVisible()) {
-							width += nextCol.getWidth();
-						}
-
-						if (displayOrderedColumns.indexOf(nextCol) + 1 < displayOrderedColumns.size()) {
-							nextCol = displayOrderedColumns.get(displayOrderedColumns.indexOf(nextCol) + 1);
-						} else {
-							nextCol = null;
-						}
-					}
-
-					boolean selected = true;
-
-					for (int i = 0; i < column.getColumnGroup().getColumns().length; i++) {
-						final GridColumn col = column.getColumnGroup().getColumns()[i];
-						if (col.isVisible() && (column.getMoveable() || !selectedColumns.contains(col))) {
-							selected = false;
-							break;
-						}
-					}
-
-					column.getColumnGroup().getHeaderRenderer().setSelected(selected);
-					column.getColumnGroup().getHeaderRenderer()
-					.setHover(hoverColumnGroupHeader == column.getColumnGroup());
-					column.getColumnGroup().getHeaderRenderer().setHoverDetail(hoveringDetail);
-
-					column.getColumnGroup().getHeaderRenderer().setBounds(x, 0, width, groupHeaderHeight);
-
-					column.getColumnGroup().getHeaderRenderer().paint(gc, column.getColumnGroup());
-
-					previousPaintedGroup = column.getColumnGroup();
+			if (!hasFixedColumns) {
+				if (column.isFixed()) {
+					hasFixedColumns = true;
+				} else {
+					firstFixed += column.getWidth();
 				}
-
-				height = headerHeight - groupHeaderHeight;
-				y = groupHeaderHeight;
-			} else {
-				height = headerHeight;
-				y = 0;
 			}
-
-			if (pushingColumn) {
-				column.getHeaderRenderer().setHover(columnBeingPushed == column && pushingAndHovering);
-			} else {
-				column.getHeaderRenderer().setHover(hoveringColumnHeader == column);
-			}
-
-			column.getHeaderRenderer().setHoverDetail(hoveringDetail);
-
-			column.getHeaderRenderer().setBounds(x, y, column.getWidth(), height);
-
-			if (cellSelectionEnabled) {
-				column.getHeaderRenderer().setSelected(selectedColumns.contains(column));
-			}
-
-			if (x + column.getWidth() >= 0) {
-				column.getHeaderRenderer().paint(gc, column);
-			}
-
+			previousPaintedGroup = paintColumnHeaderWithGroup(column, x, gc, previousPaintedGroup);
 			x += column.getWidth();
 		}
 
@@ -5703,7 +5659,7 @@ public class Grid extends Canvas {
 			columnBeingPushed.getHeaderRenderer().setSelected(false);
 
 			int height = 0;
-
+			int y;
 			if (columnBeingPushed.getColumnGroup() != null) {
 				height = headerHeight - groupHeaderHeight;
 				y = groupHeaderHeight;
@@ -5720,8 +5676,101 @@ public class Grid extends Canvas {
 
 			gc.setAlpha(-1);
 			gc.setAdvanced(false);
+		} else if (hasFixedColumns && hScroll > firstFixed) {
+			// Now paint all fixed columns without the horizontal scroll offset!
+			x = 0;
+			if (rowHeaderVisible) {
+				x += rowHeaderWidth;
+			}
+			previousPaintedGroup = null;
+			for (final GridColumn column : displayOrderedColumns) {
+				if (x > getClientArea().width) {
+					break;
+				}
+				if (!column.isVisible() || !column.isFixed()) {
+					continue;
+				}
+				previousPaintedGroup = paintColumnHeaderWithGroup(column, x, gc, previousPaintedGroup);
+				x += column.getWidth();
+			}
+		}
+	}
+
+	private GridColumnGroup paintColumnHeaderWithGroup(final GridColumn column, int x, final GC gc,
+			GridColumnGroup previousPaintedGroup) {
+		int height;
+		int y;
+		GridColumnGroup group = column.getColumnGroup();
+		if (group != null) {
+			if (group != previousPaintedGroup) {
+				int width = column.getWidth();
+
+				GridColumn nextCol = null;
+				if (displayOrderedColumns.indexOf(column) + 1 < displayOrderedColumns.size()) {
+					nextCol = displayOrderedColumns.get(displayOrderedColumns.indexOf(column) + 1);
+				}
+
+				while (nextCol != null && nextCol.getColumnGroup() == group) {
+
+					if (nextCol.getColumnGroup().getExpanded() && !nextCol.isDetail()
+							|| !nextCol.getColumnGroup().getExpanded() && !nextCol.isSummary()) {
+					} else if (nextCol.isVisible()) {
+						width += nextCol.getWidth();
+					}
+
+					if (displayOrderedColumns.indexOf(nextCol) + 1 < displayOrderedColumns.size()) {
+						nextCol = displayOrderedColumns.get(displayOrderedColumns.indexOf(nextCol) + 1);
+					} else {
+						nextCol = null;
+					}
+				}
+
+				boolean selected = true;
+
+				for (int i = 0; i < group.getColumns().length; i++) {
+					final GridColumn col = group.getColumns()[i];
+					if (col.isVisible() && (column.getMoveable() || !selectedColumns.contains(col))) {
+						selected = false;
+						break;
+					}
+				}
+
+				group.getHeaderRenderer().setSelected(selected);
+				group.getHeaderRenderer().setHover(hoverColumnGroupHeader == group);
+				group.getHeaderRenderer().setHoverDetail(hoveringDetail);
+
+				group.getHeaderRenderer().setBounds(x, 0, width, groupHeaderHeight);
+
+				group.getHeaderRenderer().paint(gc, group);
+
+				previousPaintedGroup = group;
+			}
+
+			height = headerHeight - groupHeaderHeight;
+			y = groupHeaderHeight;
+		} else {
+			height = headerHeight;
+			y = 0;
 		}
 
+		if (pushingColumn) {
+			column.getHeaderRenderer().setHover(columnBeingPushed == column && pushingAndHovering);
+		} else {
+			column.getHeaderRenderer().setHover(hoveringColumnHeader == column);
+		}
+
+		column.getHeaderRenderer().setHoverDetail(hoveringDetail);
+
+		column.getHeaderRenderer().setBounds(x, y, column.getWidth(), height);
+
+		if (cellSelectionEnabled) {
+			column.getHeaderRenderer().setSelected(selectedColumns.contains(column));
+		}
+
+		if (x + column.getWidth() >= 0) {
+			column.getHeaderRenderer().paint(gc, column);
+		}
+		return previousPaintedGroup;
 	}
 
 	private void paintFooter(final GC gc) {

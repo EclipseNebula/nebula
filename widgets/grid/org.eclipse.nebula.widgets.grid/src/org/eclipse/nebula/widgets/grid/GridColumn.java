@@ -170,6 +170,12 @@ public class GridColumn extends Item {
 
 	private boolean visible = true;
 
+	/**
+	 * If a column is fixed, it is always drawn at its inital position regardless of
+	 * scrolling
+	 */
+	private boolean fixed = false;
+
 	private boolean cellSelectionEnabled = true;
 
 	private GridColumnGroup group;
@@ -1566,5 +1572,25 @@ public class GridColumn extends Item {
 		if( minimumWidth > getWidth() ) {
 			setWidth(minimumWidth, true);
 		}
+	}
+
+	/**
+	 * @return if the column is fixed or not
+	 */
+	public boolean isFixed() {
+		return fixed;
+	}
+
+	/**
+	 * Set this column as a fixed column, fixed columns are always drawn at the
+	 * front of the grid regardless of other columns and the current scrolling
+	 * position.
+	 * 
+	 * @param fixed if the column should be fixed or not
+	 */
+	public void setFixed(boolean fixed) {
+		checkWidget();
+		this.fixed = fixed;
+		parent.redraw();
 	}
 }
