@@ -45,7 +45,7 @@ public class ChipsSnippet {
 		createCloseChipsArea();
 		createCloseImageChipsArea();
 		createCheckedChipsArea();
-		createPushChipsArea();
+		createToggleChipsArea();
 
 		shell.pack();
 		shell.open();
@@ -280,9 +280,9 @@ public class ChipsSnippet {
 
 	}
 
-	private static void createPushChipsArea() {
+	private static void createToggleChipsArea() {
 		final Label lbl = new Label(shell, SWT.CENTER);
-		lbl.setText("Push chips");
+		lbl.setText("Toggle chips");
 		lbl.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		final Composite cmp = new Composite(shell, SWT.NONE);
 		cmp.setLayoutData(new GridData(GridData.CENTER, GridData.FILL, false, false));
@@ -291,7 +291,7 @@ public class ChipsSnippet {
 
 		final Color checkColor = SWTGraphicUtil.getColorSafely(227, 22, 91);
 
-		final Chips chip1 = new Chips(cmp, SWT.PUSH);
+		final Chips chip1 = new Chips(cmp, SWT.TOGGLE);
 		chip1.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		chip1.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		chip1.setChipsBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -302,7 +302,7 @@ public class ChipsSnippet {
 		chip1.setPushImage(loadImage("icons/bubble1_w.png"));
 		chip1.setText("One");
 
-		final Chips chip2 = new Chips(cmp, SWT.PUSH);
+		final Chips chip2 = new Chips(cmp, SWT.TOGGLE);
 		chip2.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		chip2.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		chip2.setChipsBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -314,7 +314,7 @@ public class ChipsSnippet {
 
 		chip2.setText("Two");
 
-		final Chips chip3 = new Chips(cmp, SWT.PUSH);
+		final Chips chip3 = new Chips(cmp, SWT.TOGGLE);
 		chip3.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		chip3.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		chip3.setChipsBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -325,7 +325,7 @@ public class ChipsSnippet {
 		chip3.setBorderColor(checkColor);
 		chip3.setText("Three");
 
-		final Chips chip4 = new Chips(cmp, SWT.PUSH);
+		final Chips chip4 = new Chips(cmp, SWT.TOGGLE);
 		chip4.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		chip4.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		chip4.setChipsBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));

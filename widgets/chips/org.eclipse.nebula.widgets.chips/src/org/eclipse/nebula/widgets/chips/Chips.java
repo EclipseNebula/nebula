@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Listener;
  * <dt><b>Styles:</b></dt>
  * <dd>SWT.CLOSE</dd>
  * <dd>SWT.CHECK</dd>
- * <dd>SWT.PUSH</dd>
+ * <dd>SWT.TOGGLE</dd>
  * <dt><b>Events:</b></dt>
  * <dd>SWT.Close, SWT.Selection</dd>
  * </dl>
@@ -59,7 +59,7 @@ public class Chips extends Canvas {
 	private Image image, pushImage, hoverImage;
 	private boolean selection;
 	private final boolean isCheck;
-	private final boolean isPush;
+	private final boolean isToggle;
 	private final boolean isClose;
 	private final List<CloseListener> closeListeners = new ArrayList<>();
 	private boolean cursorInside;
@@ -98,7 +98,7 @@ public class Chips extends Canvas {
 		initDefaultColors();
 		text = "";
 		isCheck = (getStyle() & SWT.CHECK) != 0;
-		isPush = (getStyle() & SWT.PUSH) != 0;
+		isToggle = (getStyle() & SWT.TOGGLE) != 0 || (getStyle() & SWT.PUSH) != 0;
 		isClose = (getStyle() & SWT.CLOSE) != 0;
 
 		addListener(SWT.Paint, e -> {
@@ -133,7 +133,7 @@ public class Chips extends Canvas {
 		});
 
 		addListener(SWT.MouseEnter, e -> {
-			cursorInside = isPush || isCheck || isClose;
+			cursorInside = isToggle || isCheck || isClose;
 			if (cursorInside) {
 				setCursor(getDisplay().getSystemCursor(SWT.CURSOR_HAND));
 			}
@@ -141,13 +141,13 @@ public class Chips extends Canvas {
 		});
 		addListener(SWT.MouseExit, e -> {
 			cursorInside = false;
-			if (isPush || isCheck || isClose) {
+			if (isToggle || isCheck || isClose) {
 				setCursor(getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
 			}
 			redraw();
 		});
 		addListener(SWT.MouseUp, e -> {
-			if (!isClose && !isCheck && !isPush) {
+			if (!isClose && !isCheck && !isToggle) {
 				return;
 			}
 			if (isClose) {
@@ -171,7 +171,7 @@ public class Chips extends Canvas {
 	}
 
 	private static int checkStyle(final int style) {
-		final int mask = SWT.CLOSE | SWT.CHECK | SWT.PUSH;
+		final int mask = SWT.CLOSE | SWT.CHECK | SWT.TOGGLE | SWT.PUSH;
 		int newStyle = style & mask;
 		newStyle |= SWT.DOUBLE_BUFFERED;
 		return newStyle;
@@ -192,7 +192,7 @@ public class Chips extends Canvas {
 		Color color = borderColor;
 		if (cursorInside) {
 			color = hoverBorderColor;
-		} else if (isPush && selection) {
+		} else if (isToggle && selection) {
 			color = pushedStateBorderColor;
 		}
 
@@ -210,7 +210,7 @@ public class Chips extends Canvas {
 		if (cursorInside) {
 			return hoverBackground == null ? getBackground() : hoverBackground;
 		}
-		if (isPush && selection) {
+		if (isToggle && selection) {
 			return pushedStateBackground == null ? getBackground() : pushedStateBackground;
 		}
 		return getChipsBackground() == null ? getBackground() : getChipsBackground();
@@ -220,7 +220,7 @@ public class Chips extends Canvas {
 		Color foreground = null;
 		if (cursorInside) {
 			foreground = hoverForeground;
-		} else if (isPush && selection) {
+		} else if (isToggle && selection) {
 			foreground = pushedStateForeground;
 		}
 		foreground = foreground == null ? getForeground() : foreground;
@@ -241,7 +241,7 @@ public class Chips extends Canvas {
 		if (cursorInside) {
 			img = hoverImage == null ? img : hoverImage;
 		}
-		if (isPush && selection) {
+		if (isToggle && selection) {
 			img = pushImage == null ? img : pushImage;
 		}
 
@@ -256,7 +256,7 @@ public class Chips extends Canvas {
 		Color color = null;
 		if (cursorInside) {
 			color = hoverForeground;
-		} else if (isPush && selection) {
+		} else if (isToggle && selection) {
 			color = pushedStateForeground;
 		}
 		color = color == null ? getForeground() : color;
@@ -489,7 +489,8 @@ public class Chips extends Canvas {
 	/**
 	 * Returns the receiver's foreground color when mouse is hover the widget.
 	 * <p>
-	 * Note: This operation is only available if at least one the SWT.CHECK, SWT.PUSH and SWT.CLOSE flag is set.
+	 * Note: This operation is only available if at least one the SWT.CHECK,
+	 * SWT.TOGGLE and SWT.CLOSE flag is set.
 	 * </p>
 	 *
 	 * @return the foreground color
@@ -508,7 +509,8 @@ public class Chips extends Canvas {
 	/**
 	 * Returns the receiver's background color when mouse is hover the widget.
 	 * <p>
-	 * Note: This operation is only available if at least one the SWT.CHECK, SWT.PUSH and SWT.CLOSE flag is set.
+	 * Note: This operation is only available if at least one the SWT.CHECK,
+	 * SWT.TOGGLE and SWT.CLOSE flag is set.
 	 * </p>
 	 *
 	 * @return the background color
@@ -603,7 +605,7 @@ public class Chips extends Canvas {
 	/**
 	 * Returns the receiver's foreground color when the widget is "pushed" (selected).
 	 * <p>
-	 * Note: This operation is only available if the SWT.PUSH flag is set.
+	 * Note: This operation is only available if the SWT.TOGGLE flag is set.
 	 * </p>
 	 *
 	 * @return the foreground color
@@ -622,7 +624,7 @@ public class Chips extends Canvas {
 	/**
 	 * Returns the receiver's background color when the widget is "pushed" (selected).
 	 * <p>
-	 * Note: This operation is only available if the SWT.PUSH flag is set.
+	 * Note: This operation is only available if the SWT.TOGGLE flag is set.
 	 * </p>
 	 *
 	 * @return the background color
@@ -657,7 +659,8 @@ public class Chips extends Canvas {
 	/**
 	 * Returns the receiver's color for the border when the mouse is hover the widget
 	 * <p>
-	 * Note: This operation is only available if at least one the SWT.CHECK, SWT.PUSH and SWT.CLOSE flag is set.
+	 * Note: This operation is only available if at least one the SWT.CHECK,
+	 * SWT.TOGGLE and SWT.CLOSE flag is set.
 	 * </p>
 	 *
 	 * @return the border color
@@ -676,7 +679,7 @@ public class Chips extends Canvas {
 	/**
 	 * Returns the receiver's color for the border when the widget is "pushed" (selected)
 	 * <p>
-	 * Note: This operation is only available if the SWT.PUSH flag is set.
+	 * Note: This operation is only available if the SWT.TOGGLE flag is set.
 	 * </p>
 	 *
 	 * @return the border color
@@ -730,7 +733,7 @@ public class Chips extends Canvas {
 	 * Returns the receiver's image when the widget is pushed (selected) if it has one, or null
 	 * if it does not.
 	 * <p>
-	 * Note: This operation is only available if the SWT.PUSH flag is set.
+	 * Note: This operation is only available if the SWT.TOGGLE flag is set.
 	 * </p>
 	 *
 	 * @return the receiver's image
@@ -750,7 +753,8 @@ public class Chips extends Canvas {
 	 * Returns the receiver's image when the mouse is hover the widget if it has one, or null
 	 * if it does not.
 	 * <p>
-	 * Note: This operation is only available if at least one the SWT.CHECK, SWT.PUSH and SWT.CLOSE flag is set.
+	 * Note: This operation is only available if at least one the SWT.CHECK,
+	 * SWT.TOGGLE and SWT.CLOSE flag is set.
 	 * </p>
 	 *
 	 * @return the receiver's image
@@ -770,7 +774,8 @@ public class Chips extends Canvas {
 	 * Returns <code>true</code> if the receiver is selected,
 	 * and false otherwise.
 	 * <p>
-	 * Note: This operation is only available if the SWT.CHECK or the SWT.PUSH flag is set.
+	 * Note: This operation is only available if the SWT.CHECK or the SWT.TOGGLE
+	 * flag is set.
 	 * </p>
 	 *
 	 * @return the selection state
@@ -791,7 +796,7 @@ public class Chips extends Canvas {
 	 * by the argument, or to the default system color for the control
 	 * if the argument is null.
 	 *
-	 * @param color the new color (or null)
+	 * @param chipsBackground the new color (or null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -813,10 +818,11 @@ public class Chips extends Canvas {
 	 * by the argument, or to the default system color for the control
 	 * if the argument is null.
 	 * <p>
-	 * Note: This operation is only available if at least one the SWT.CHECK, SWT.PUSH and SWT.CLOSE flag is set.
+	 * Note: This operation is only available if at least one the SWT.CHECK,
+	 * SWT.TOGGLE and SWT.CLOSE flag is set.
 	 * </p>
 	 *
-	 * @param color the new color (or null)
+	 * @param hoverForeground the new color (or null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -838,10 +844,11 @@ public class Chips extends Canvas {
 	 * by the argument, or to the default system color for the control
 	 * if the argument is null.
 	 * <p>
-	 * Note: This operation is only available if at least one the SWT.CHECK, SWT.PUSH and SWT.CLOSE flag is set.
+	 * Note: This operation is only available if at least one the SWT.CHECK,
+	 * SWT.TOGGLE and SWT.CLOSE flag is set.
 	 * </p>
 	 *
-	 * @param color the new color (or null)
+	 * @param hoverBackground the new color (or null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -891,7 +898,7 @@ public class Chips extends Canvas {
 	 * Note: This operation is only available if the SWT.CLOSE flag is set.
 	 * </p>
 	 *
-	 * @param color the new color (or null)
+	 * @param closeButtonBackground the new color (or null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -941,7 +948,7 @@ public class Chips extends Canvas {
 	 * Note: This operation is only available if the SWT.CLOSE flag is set.
 	 * </p>
 	 *
-	 * @param color the new color (or null)
+	 * @param closeButtonHoverBackground the new color (or null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -963,10 +970,10 @@ public class Chips extends Canvas {
 	 * by the argument, or to the default system color for the control
 	 * if the argument is null.
 	 * <p>
-	 * Note: This operation is only available if the SWT.PUSH flag is set.
+	 * Note: This operation is only available if the SWT.TOGGLE flag is set.
 	 * </p>
 	 *
-	 * @param color the new color (or null)
+	 * @param pushedStateForeground the new color (or null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -988,10 +995,10 @@ public class Chips extends Canvas {
 	 * by the argument, or to the default system color for the control
 	 * if the argument is null.
 	 * <p>
-	 * Note: This operation is only available if the SWT.PUSH flag is set.
+	 * Note: This operation is only available if the SWT.TOGGLE flag is set.
 	 * </p>
 	 *
-	 * @param color the new color (or null)
+	 * @param pushedStateBackground the new color (or null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -1035,10 +1042,11 @@ public class Chips extends Canvas {
 	 * by the argument, or to the default system color for the control
 	 * if the argument is null.
 	 * <p>
-	 * Note: This operation is only available if at least one the SWT.CHECK, SWT.PUSH and SWT.CLOSE flag is set.
+	 * Note: This operation is only available if at least one the SWT.CHECK,
+	 * SWT.TOGGLE and SWT.CLOSE flag is set.
 	 * </p>
 	 *
-	 * @param color the new color (or null)
+	 * @param hoverBorderColor the new color (or null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -1129,10 +1137,10 @@ public class Chips extends Canvas {
 	 * Sets the receiver's image to the argument when the widget is "pushed" (=selected), which may be
 	 * null indicating that no image should be displayed.
 	 * <p>
-	 * Note: This operation is only available if the SWT.PUSH flag is set.
+	 * Note: This operation is only available if the SWT.TOGGLE flag is set.
 	 * </p>
 	 *
-	 * @param image the image to display on the receiver (may be null)
+	 * @param pushImage the image to display on the receiver (may be null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -1153,10 +1161,11 @@ public class Chips extends Canvas {
 	 * Sets the receiver's image to the argument when the mouse is hover the widget, which may be
 	 * null indicating that no image should be displayed.
 	 * <p>
-	 * Note: This operation is only available if at least one the SWT.CHECK, SWT.PUSH and SWT.CLOSE flag is set.
+	 * Note: This operation is only available if at least one the SWT.CHECK,
+	 * SWT.TOGGLE and SWT.CLOSE flag is set.
 	 * </p>
 	 *
-	 * @param image the image to display on the receiver (may be null)
+	 * @param hoverImage the image to display on the receiver (may be null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>

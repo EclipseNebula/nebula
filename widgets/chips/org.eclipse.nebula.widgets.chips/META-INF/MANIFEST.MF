@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nebula Chips widget
 Bundle-SymbolicName: org.eclipse.nebula.widgets.chips
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-Vendor: Eclipse Nebula
-Bundle-RequiredExecutionEnvironment: JavaSE-11
-Export-Package: org.eclipse.nebula.widgets.chips
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: org.eclipse.nebula.widgets.chips;version="1.0.0"
 Require-Bundle: org.eclipse.nebula.widgets.opal.commons;visibility:=reexport,
  org.eclipse.swt;bundle-version="[3.126.0,4.0.0)"
 Automatic-Module-Name: org.eclipse.nebula.widgets.chips

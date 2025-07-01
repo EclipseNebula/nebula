@@ -4,7 +4,7 @@ Bundle-Name: Nebula Chips Snippets
 Bundle-SymbolicName: org.eclipse.nebula.widgets.chips.snippets
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Eclipse Nebula
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.nebula.widgets.chips;bundle-version="1.0.0",
  org.eclipse.swt
 Automatic-Module-Name: org.eclipse.nebula.widgets.chips.snippets
