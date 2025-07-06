@@ -242,9 +242,9 @@ public class SwitchButton extends Canvas {
 		} else {
 			gc.drawRectangle(2, 2, buttonSize.x, buttonSize.y);
 		}
-
-		drawRightPart(buttonSize);
-		drawLeftPart(buttonSize);
+		boolean enabled = isEnabled();
+		drawRightPart(buttonSize, enabled);
+		drawLeftPart(buttonSize, enabled);
 		gc.setClipping(getClientArea());
 		drawToggleButton(buttonSize);
 	}
@@ -254,16 +254,26 @@ public class SwitchButton extends Canvas {
 	 *
 	 * @param buttonSize size of the button
 	 */
-	private void drawRightPart(final Point buttonSize) {
-		gc.setForeground(selectedBackgroundColor);
-		gc.setBackground(selectedBackgroundColor);
+	private void drawRightPart(final Point buttonSize, boolean enabled) {
+		if (enabled) {
+			gc.setForeground(selectedBackgroundColor);
+			gc.setBackground(selectedBackgroundColor);
+		} else {
+			Color disabled = gc.getDevice().getSystemColor(SWT.COLOR_TEXT_DISABLED_BACKGROUND);
+			gc.setForeground(disabled);
+			gc.setBackground(disabled);
+		}
 		gc.setClipping(3, 3, buttonSize.x / 2, buttonSize.y - 1);
 		if (round) {
 			gc.fillRoundRectangle(2, 2, buttonSize.x, buttonSize.y, arc, arc);
 		} else {
 			gc.fillRectangle(2, 2, buttonSize.x, buttonSize.y);
 		}
-		gc.setForeground(selectedForegroundColor);
+		if (enabled) {
+			gc.setForeground(selectedForegroundColor);
+		} else {
+			gc.setForeground(gc.getDevice().getSystemColor(SWT.COLOR_WIDGET_DISABLED_FOREGROUND));
+		}
 		final Point textSize = gc.textExtent(textForSelect);
 		gc.drawString(textForSelect, (buttonSize.x / 2 - textSize.x) / 2 + arc, (buttonSize.y - textSize.y) / 2 + arc);
 	}
@@ -273,16 +283,26 @@ public class SwitchButton extends Canvas {
 	 *
 	 * @param buttonSize size of the button
 	 */
-	private void drawLeftPart(final Point buttonSize) {
-		gc.setForeground(unselectedBackgroundColor);
-		gc.setBackground(unselectedBackgroundColor);
+	private void drawLeftPart(final Point buttonSize, boolean enabled) {
+		if (enabled) {
+			gc.setForeground(unselectedBackgroundColor);
+			gc.setBackground(unselectedBackgroundColor);
+		} else {
+			Color disabled = gc.getDevice().getSystemColor(SWT.COLOR_TEXT_DISABLED_BACKGROUND);
+			gc.setForeground(disabled);
+			gc.setBackground(disabled);
+		}
 		gc.setClipping(buttonSize.x / 2 + 3, 3, buttonSize.x / 2, buttonSize.y - 1);
 		if (round) {
 			gc.fillRoundRectangle(2, 2, buttonSize.x, buttonSize.y, arc, arc);
 		} else {
 			gc.fillRectangle(2, 2, buttonSize.x, buttonSize.y);
 		}
-		gc.setForeground(unselectedForegroundColor);
+		if (enabled) {
+			gc.setForeground(unselectedForegroundColor);
+		} else {
+			gc.setForeground(gc.getDevice().getSystemColor(SWT.COLOR_WIDGET_DISABLED_FOREGROUND));
+		}
 		final Point textSize = gc.textExtent(textForUnselect);
 
 		gc.drawString(textForUnselect, buttonSize.x / 2 + (buttonSize.x / 2 - textSize.x) / 2 + arc, //
@@ -571,7 +591,7 @@ public class SwitchButton extends Canvas {
 	}
 
 	/**
-	 * @param the text displayed in the widget
+	 * @param text the text displayed in the widget
 	 * @exception SWTException
 	 *                <ul>
 	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
@@ -698,8 +718,8 @@ public class SwitchButton extends Canvas {
 	}
 
 	/**
-	 * @param the foreground color of the left part of the widget (selection is
-	 *            on)
+	 * @param selectedForegroundColor the foreground color of the left part of the
+	 *                                widget (selection is on)
 	 * @exception SWTException
 	 *                <ul>
 	 *                <li>ERROR_WIDGET_DISPOSED - if the receiver has been
@@ -731,8 +751,8 @@ public class SwitchButton extends Canvas {
 	}
 
 	/**
-	 * @param the background color of the left part of the widget (selection is
-	 *            on)
+	 * @param selectedBackgroundColor the background color of the left part of the
+	 *                                widget (selection is on)
 	 */
 	public void setSelectedBackgroundColor(final Color selectedBackgroundColor) {
 		checkWidget();

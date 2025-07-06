@@ -51,9 +51,13 @@ public class SwitchButtonSnippet {
 		button2.setText("Default switchButton with border");
 
 		// Disabled
-		final SwitchButton button3 = new SwitchButton(shell, SWT.NONE);
-		button3.setEnabled(false);
-		button3.setText("Default switchButton disabled");
+		final SwitchButton button3Off = new SwitchButton(shell, SWT.NONE);
+		button3Off.setEnabled(false);
+		button3Off.setText("Default switchButton disabled (OFF State)");
+		final SwitchButton button3On = new SwitchButton(shell, SWT.NONE);
+		button3On.setSelection(true);
+		button3On.setEnabled(false);
+		button3On.setText("Default switchButton disabled (ON State)");
 
 		// Without glow effect
 		final SwitchButton button4 = new SwitchButton(shell, SWT.NONE);
