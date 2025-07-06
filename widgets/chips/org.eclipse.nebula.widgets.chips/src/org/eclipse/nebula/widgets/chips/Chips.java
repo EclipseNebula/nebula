@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.Listener;
  * <dd>SWT.CLOSE</dd>
  * <dd>SWT.CHECK</dd>
  * <dd>SWT.TOGGLE</dd>
+ * <dd>SWT.PUSH</dd>
  * <dt><b>Events:</b></dt>
  * <dd>SWT.Close, SWT.Selection</dd>
  * </dl>
@@ -60,9 +61,11 @@ public class Chips extends Canvas {
 	private boolean selection;
 	private final boolean isCheck;
 	private final boolean isToggle;
+	private final boolean isPush;
 	private final boolean isClose;
 	private final List<CloseListener> closeListeners = new ArrayList<>();
 	private boolean cursorInside;
+	private boolean mouseDown;
 	private Point closeCenter;
 
 	/**
@@ -98,7 +101,8 @@ public class Chips extends Canvas {
 		initDefaultColors();
 		text = "";
 		isCheck = (getStyle() & SWT.CHECK) != 0;
-		isToggle = (getStyle() & SWT.TOGGLE) != 0 || (getStyle() & SWT.PUSH) != 0;
+		isToggle = (getStyle() & SWT.TOGGLE) != 0;
+		isPush = (getStyle() & SWT.PUSH) != 0;
 		isClose = (getStyle() & SWT.CLOSE) != 0;
 
 		addListener(SWT.Paint, e -> {
@@ -133,7 +137,7 @@ public class Chips extends Canvas {
 		});
 
 		addListener(SWT.MouseEnter, e -> {
-			cursorInside = isToggle || isCheck || isClose;
+			cursorInside = isToggle || isCheck || isClose || isPush;
 			if (cursorInside) {
 				setCursor(getDisplay().getSystemCursor(SWT.CURSOR_HAND));
 			}
@@ -141,13 +145,21 @@ public class Chips extends Canvas {
 		});
 		addListener(SWT.MouseExit, e -> {
 			cursorInside = false;
-			if (isToggle || isCheck || isClose) {
+			mouseDown = false;
+			if (isToggle || isCheck || isClose || isPush) {
 				setCursor(getDisplay().getSystemCursor(SWT.CURSOR_ARROW));
 			}
 			redraw();
 		});
+		addListener(SWT.MouseDown, e -> {
+			mouseDown = true;
+			if (isPush) {
+				redraw();
+			}
+		});
 		addListener(SWT.MouseUp, e -> {
-			if (!isClose && !isCheck && !isToggle) {
+			mouseDown = false;
+			if (!isClose && !isCheck && !isToggle && !isPush) {
 				return;
 			}
 			if (isClose) {
@@ -165,7 +177,12 @@ public class Chips extends Canvas {
 			if (isDisposed()) {
 				return;
 			}
-			setSelection(!selection);
+			if (isCheck || isToggle) {
+				setSelection(!selection);
+			}
+			if (isPush) {
+				redraw();
+			}
 			SelectionListenerUtil.fireSelectionListeners(this, e);
 		});
 	}
@@ -190,7 +207,9 @@ public class Chips extends Canvas {
 	private void drawWidgetBorder(final GC gc) {
 		final Rectangle rect = getClientArea();
 		Color color = borderColor;
-		if (cursorInside) {
+		if (cursorInside && isPush && mouseDown) {
+			color = pushedStateBorderColor;
+		} else if (cursorInside) {
 			color = hoverBorderColor;
 		} else if (isToggle && selection) {
 			color = pushedStateBorderColor;
@@ -207,6 +226,9 @@ public class Chips extends Canvas {
 	}
 
 	private Color determineBackgroundColor() {
+		if (cursorInside && isPush && mouseDown) {
+			return pushedStateBackground == null ? getBackground() : pushedStateBackground;
+		}
 		if (cursorInside) {
 			return hoverBackground == null ? getBackground() : hoverBackground;
 		}
@@ -1020,7 +1042,7 @@ public class Chips extends Canvas {
 	 * by the argument, or to the default system color for the control
 	 * if the argument is null.
 	 *
-	 * @param color the new color (or null)
+	 * @param borderColor the new color (or null)
 	 *
 	 * @exception IllegalArgumentException
 	 *                <ul>
@@ -1201,11 +1223,13 @@ public class Chips extends Canvas {
 	 */
 	public void setSelection(final boolean selected) {
 		checkWidget();
-		selection = selected;
-		if (isCheck) {
-			getParent().layout(new Control[] { this });
+		if (selection != selected) {
+			selection = selected;
+			if (isCheck) {
+				getParent().layout(new Control[] { this });
+			}
+			redraw();
 		}
-		redraw();
 	}
 
 }
