@@ -5025,12 +5025,12 @@ public class Grid extends Canvas {
 			}
 
 			x2 -= getHScrollSelectionInPixels();
-
+			int extraFill = getExtraFill();
 			for (final GridColumn column : displayOrderedColumns) {
 				if (!column.isVisible()) {
 					continue;
 				}
-				x2 += column.getWidth();
+				x2 += column.getWidth(extraFill);
 
 				if (x2 >= x - COLUMN_RESIZER_THRESHOLD && x2 <= x + COLUMN_RESIZER_THRESHOLD) {
 					if (column.getResizeable()) {
@@ -5172,7 +5172,8 @@ public class Grid extends Canvas {
 		final Rectangle originalClipping = gc.getClipping();
 
 		gc.setBackground(getBackground());
-		this.drawBackground(gc, 0, 0, getSize().x, getSize().y);
+		Point controlSize = getSize();
+		this.drawBackground(gc, 0, 0, controlSize.x, controlSize.y);
 
 		if (scrollValuesObsolete) {
 			updateScrollbars();
@@ -5180,9 +5181,9 @@ public class Grid extends Canvas {
 		}
 
 		int y = 0;
-
+		int extraFill = getExtraFill(controlSize);
 		if (columnHeadersVisible) {
-			paintHeader(gc);
+			paintHeader(gc, extraFill);
 			y += headerHeight;
 		}
 
@@ -5239,7 +5240,7 @@ public class Grid extends Canvas {
 		int hscroll = getHScrollSelectionInPixels();
 		paintRows(cols, false, firstItemToDraw, visibleRows, hscroll, cellSpanManager, gc, originalClipping, y,
 				clientArea,
-				firstVisibleIndex, insertMark);
+				firstVisibleIndex, insertMark, extraFill);
 
 		// draw drop point
 		if (draggingColumn) {
@@ -5267,7 +5268,7 @@ public class Grid extends Canvas {
 			paintRows(fixed.columns(), true, firstItemToDraw, visibleRows, 0, cellSpanManager, gc,
 					originalClipping, y,
 					clientArea,
-					firstVisibleIndex, insertMark);
+					firstVisibleIndex, insertMark, extraFill);
 		}
 
 		// draw insertion mark
@@ -5300,7 +5301,7 @@ public class Grid extends Canvas {
 
 	private void paintRows(List<GridColumn> cols, boolean fixed, int firstRow, int visibleRows, int hScroll,
 			final GridCellSpanManager cellSpanManager, GC gc, final Rectangle originalClipping, int y,
-			final Rectangle clientArea, final int firstVisibleIndex, InsertMark insertMark) {
+			final Rectangle clientArea, final int firstVisibleIndex, InsertMark insertMark, int extraFill) {
 		int row = firstRow;
 		int columnCount = cols.size();
 		for (int i = 0; i < visibleRows + firstVisibleIndex - firstRow; i++) {
@@ -5347,7 +5348,8 @@ public class Grid extends Canvas {
 						continue;
 					}
 
-					final int width = item.getCellSize(indexOfColumn).x;
+					Point cellSize = item.getCellSize(indexOfColumn, extraFill);
+					final int width = cellSize.x;
 
 					if (skipCell == false) {
 
@@ -5359,7 +5361,7 @@ public class Grid extends Canvas {
 						}
 
 						if (x + width >= 0 && x < clientArea.width) {
-							final Point sizeOfColumn = item.getCellSize(indexOfColumn);
+							final Point sizeOfColumn = cellSize;
 
 							column.getCellRenderer().setBounds(x, y, width, sizeOfColumn.y);
 							final int cellInHeaderDelta = columnHeadersVisible ? headerHeight - y : 0;
@@ -5433,7 +5435,7 @@ public class Grid extends Canvas {
 					if(x > clientArea.width) {
 						break;
 					}
-					x += column.getWidth();
+					x += column.getWidth(extraFill);
 					colIndex++;
 
 				}
@@ -5502,7 +5504,7 @@ public class Grid extends Canvas {
 				for (final GridColumn column : cols) {
 
 					if (column.isVisible()) {
-						final int width = column.width;
+						final int width = column.getWidth(extraFill);
 						if (x + width >= 0 && !fixed) {
 							emptyCellRenderer.setBounds(x, y, width, itemHeight);
 							emptyCellRenderer.setColumn(column.index);
@@ -5608,10 +5610,10 @@ public class Grid extends Canvas {
 	/**
 	 * Paints the header.
 	 *
-	 * @param gc
-	 *            gc from paint event
+	 * @param gc        gc from paint event
+	 * @param extraFill the size of the control
 	 */
-	private void paintHeader(final GC gc) {
+	private void paintHeader(final GC gc, int extraFill) {
 		int x = 0;
 		boolean hasFixedColumns = false;
 		int firstFixed = 0;
@@ -5641,8 +5643,8 @@ public class Grid extends Canvas {
 					firstFixed += column.getWidth();
 				}
 			}
-			previousPaintedGroup = paintColumnHeaderWithGroup(column, x, gc, previousPaintedGroup);
-			x += column.getWidth();
+			previousPaintedGroup = paintColumnHeaderWithGroup(column, x, gc, previousPaintedGroup, extraFill);
+			x += column.getWidth(extraFill);
 		}
 
 		if (x < getClientArea().width) {
@@ -5697,21 +5699,42 @@ public class Grid extends Canvas {
 				if (!column.isVisible() || !column.isFixed()) {
 					continue;
 				}
-				previousPaintedGroup = paintColumnHeaderWithGroup(column, x, gc, previousPaintedGroup);
+				previousPaintedGroup = paintColumnHeaderWithGroup(column, x, gc, previousPaintedGroup, extraFill);
 				x += column.getWidth();
 			}
 		}
 	}
+	
+	int getExtraFill() {
+		return getExtraFill(getSize());
+	}
+
+	int getExtraFill(Point size) {
+		int totalWidth = rowHeaderVisible ? rowHeaderWidth : 0;
+		int fillColumns = 0;
+		for (final GridColumn column : displayOrderedColumns) {
+			if (!column.isVisible()) {
+				continue;
+			}
+			totalWidth += column.getWidth();
+			if (column.isFill()) {
+				fillColumns++;
+			}
+		}
+		if (fillColumns == 0) {
+			return 0;
+		}
+		return Math.max(size.x - totalWidth, 0) / fillColumns;
+	}
 
 	private GridColumnGroup paintColumnHeaderWithGroup(final GridColumn column, int x, final GC gc,
-			GridColumnGroup previousPaintedGroup) {
+			GridColumnGroup previousPaintedGroup, int extraFill) {
 		int height;
 		int y;
 		GridColumnGroup group = column.getColumnGroup();
+		int width = column.getWidth(extraFill);
 		if (group != null) {
 			if (group != previousPaintedGroup) {
-				int width = column.getWidth();
-
 				GridColumn nextCol = null;
 				if (displayOrderedColumns.indexOf(column) + 1 < displayOrderedColumns.size()) {
 					nextCol = displayOrderedColumns.get(displayOrderedColumns.indexOf(column) + 1);
@@ -5722,7 +5745,7 @@ public class Grid extends Canvas {
 					if (nextCol.getColumnGroup().getExpanded() && !nextCol.isDetail()
 							|| !nextCol.getColumnGroup().getExpanded() && !nextCol.isSummary()) {
 					} else if (nextCol.isVisible()) {
-						width += nextCol.getWidth();
+						width += nextCol.getWidth(extraFill);
 					}
 
 					if (displayOrderedColumns.indexOf(nextCol) + 1 < displayOrderedColumns.size()) {
@@ -5760,22 +5783,22 @@ public class Grid extends Canvas {
 			y = 0;
 		}
 
+		GridHeaderRenderer renderer = column.getHeaderRenderer();
 		if (pushingColumn) {
-			column.getHeaderRenderer().setHover(columnBeingPushed == column && pushingAndHovering);
+			renderer.setHover(columnBeingPushed == column && pushingAndHovering);
 		} else {
-			column.getHeaderRenderer().setHover(hoveringColumnHeader == column);
+			renderer.setHover(hoveringColumnHeader == column);
 		}
 
-		column.getHeaderRenderer().setHoverDetail(hoveringDetail);
-
-		column.getHeaderRenderer().setBounds(x, y, column.getWidth(), height);
+		renderer.setHoverDetail(hoveringDetail);
+		renderer.setBounds(x, y, width, height);
 
 		if (cellSelectionEnabled) {
-			column.getHeaderRenderer().setSelected(selectedColumns.contains(column));
+			renderer.setSelected(selectedColumns.contains(column));
 		}
 
-		if (x + column.getWidth() >= 0) {
-			column.getHeaderRenderer().paint(gc, column);
+		if (x + width >= 0) {
+			renderer.paint(gc, column);
 		}
 		return previousPaintedGroup;
 	}

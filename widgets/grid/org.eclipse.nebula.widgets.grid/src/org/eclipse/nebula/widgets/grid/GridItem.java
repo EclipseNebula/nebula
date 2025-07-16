@@ -495,7 +495,7 @@ public class GridItem extends Item {
 		checkWidget();
 
 		final Point origin = parent.getOrigin(parent.getColumn(columnIndex), this);
-		final Point cellSize = this.getCellSize(columnIndex);
+		final Point cellSize = this.getCellSize(columnIndex, parent.getExtraFill());
 		return new Rectangle(origin.x, origin.y, cellSize.x, cellSize.y);
 	}
 
@@ -541,17 +541,26 @@ public class GridItem extends Item {
 		if (origin.x < 0 && parent.isRowHeaderVisible())
 			return new Rectangle(-1000, -1000, 0, 0);
 
-		Point cellSize = this.getCellSize(columnIndex);
+		Point cellSize = this.getCellSize(columnIndex, parent.getExtraFill());
 
 		return new Rectangle(origin.x, origin.y, cellSize.x, cellSize.y);
 	}
 
 	/**
 	 *
-	 * @param columnIndex
+	 * @param columnIndex index of the column to get the cell size
 	 * @return width and height
 	 */
 	protected Point getCellSize(int columnIndex) {
+		return getCellSize(columnIndex, parent.getExtraFill());
+	}
+	/**
+	 *
+	 * @param columnIndex index of the column to get the cell size
+	 * @param extraFill any extra width that should be applied to columns that have fill property
+	 * @return width and height
+	 */
+	protected Point getCellSize(int columnIndex, int extraFill) {
 		/* width */
 		int width = 0;
 
@@ -571,7 +580,7 @@ public class GridItem extends Item {
 				break;
 			}
 			int nextColumnIndex = columnOrder[visualColumnIndex + i];
-			width += parent.getColumn(nextColumnIndex).getWidth();
+			width += parent.getColumn(nextColumnIndex).getWidth(extraFill);
 		}
 
 		/* height */
