@@ -49,7 +49,7 @@ import org.eclipse.swt.widgets.Item;
  * <p>
  * <dl>
  * <dt><b>Styles:</b></dt>
- * <dd>SWT.LEFT, SWT.RIGHT, SWT.CENTER, SWT.CHECK</dd>
+ * <dd>SWT.LEFT, SWT.RIGHT, SWT.CENTER, SWT.CHECK, SWT.FILL</dd>
  * <dt><b>Events:</b></dt>
  * <dd>Move, Resize, Selection, Show, Hide</dd>
  * </dl>
@@ -195,6 +195,8 @@ public class GridColumn extends Item {
 	private String headerTooltip = null;
 	int index;
 
+	private boolean fill;
+
 	/**
 	 * Constructs a new instance of this class given its parent (which must be a
 	 * <code>Grid</code>) and a style value describing its behavior and
@@ -297,6 +299,10 @@ public class GridColumn extends Item {
 			check = true;
 		}
 
+		if ((style & SWT.FILL) != 0) {
+			fill = true;
+		}
+
 		initHeaderRenderer();
 		initFooterRenderer();
 		initCellRenderer();
@@ -342,6 +348,10 @@ public class GridColumn extends Item {
 
 	private void initFooterRenderer() {
 		footerRenderer.setDisplay(getDisplay());
+	}
+
+	boolean isFill() {
+		return fill;
 	}
 
 	/**
@@ -400,6 +410,13 @@ public class GridColumn extends Item {
 	 */
 	public int getWidth() {
 		checkWidget();
+		return width;
+	}
+
+	int getWidth(int extra) {
+		if (fill) {
+			return width + extra;
+		}
 		return width;
 	}
 
