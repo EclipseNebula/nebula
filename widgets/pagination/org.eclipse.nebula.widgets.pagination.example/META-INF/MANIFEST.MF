@@ -7,6 +7,7 @@ Bundle-SymbolicName: org.eclipse.nebula.widgets.pagination.example;singleton:=tr
 Bundle-Version: 1.0.0.qualifier
 Import-Package: org.eclipse.jface.viewers,
  org.eclipse.swt,
+ org.eclipse.swt.events,
  org.eclipse.swt.layout,
  org.eclipse.swt.widgets
 Bundle-RequiredExecutionEnvironment: JavaSE-11
