@@ -25,7 +25,6 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.internal.DPIUtil;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
@@ -41,7 +40,6 @@ import org.eclipse.swt.widgets.Composite;
  * </dl>
  * </p>
  */
-@SuppressWarnings("restriction")
 public class SegmentedBar extends Canvas {
 
 	private static final int DEFAULT_SPACING = 3;
@@ -242,13 +240,6 @@ public class SegmentedBar extends Canvas {
 	 */
 	@Override
 	public Point computeSize(int wHint, int hHint, boolean changed) {
-		wHint = wHint != SWT.DEFAULT ? DPIUtil.autoScaleUp(wHint) : wHint;
-		hHint = hHint != SWT.DEFAULT ? DPIUtil.autoScaleUp(hHint) : hHint;
-		return DPIUtil.autoScaleDown(computeSizePixels(wHint, hHint, changed));
-	}
-
-	private Point computeSizePixels(int wHint, int hHint, boolean changed) {
-
 		int width = DEFAULT_WIDTH, height = 0;
 		for (Segment segment : segments) {
 			height = Math.max(height, segment.computeHeight());
