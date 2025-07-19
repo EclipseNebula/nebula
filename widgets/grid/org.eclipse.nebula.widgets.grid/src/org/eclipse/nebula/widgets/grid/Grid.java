@@ -5237,7 +5237,8 @@ public class Grid extends Canvas {
 			}
 		}
 		int hscroll = getHScrollSelectionInPixels();
-		paintRows(cols, firstItemToDraw, visibleRows, hscroll, cellSpanManager, gc, originalClipping, y, clientArea,
+		paintRows(cols, false, firstItemToDraw, visibleRows, hscroll, cellSpanManager, gc, originalClipping, y,
+				clientArea,
 				firstVisibleIndex, insertMark);
 
 		// draw drop point
@@ -5263,7 +5264,8 @@ public class Grid extends Canvas {
 		}
 		FixedGridColumns fixed = getFixedGridColumns();
 		if (fixed.hasColumns() && hscroll > fixed.offset()) {
-			paintRows(fixed.columns(), firstItemToDraw, visibleRows, 0, cellSpanManager, gc, originalClipping, y,
+			paintRows(fixed.columns(), true, firstItemToDraw, visibleRows, 0, cellSpanManager, gc,
+					originalClipping, y,
 					clientArea,
 					firstVisibleIndex, insertMark);
 		}
@@ -5296,10 +5298,11 @@ public class Grid extends Canvas {
 		return new FixedGridColumns(fixedColumns, fixedOffset);
 	}
 
-	private void paintRows(List<GridColumn> cols, int firstRow, int visibleRows, int hScroll,
+	private void paintRows(List<GridColumn> cols, boolean fixed, int firstRow, int visibleRows, int hScroll,
 			final GridCellSpanManager cellSpanManager, GC gc, final Rectangle originalClipping, int y,
 			final Rectangle clientArea, final int firstVisibleIndex, InsertMark insertMark) {
 		int row = firstRow;
+		int columnCount = cols.size();
 		for (int i = 0; i < visibleRows + firstVisibleIndex - firstRow; i++) {
 
 			int x = -hScroll;
@@ -5317,7 +5320,6 @@ public class Grid extends Canvas {
 				item = null;
 			}
 
-			int columnCount = cols.size();
 			if (item != null) {
 				boolean cellInRowSelected = false;
 
@@ -5442,12 +5444,14 @@ public class Grid extends Canvas {
 						insertMark.posX2 = x;
 					}
 
-					emptyCellRenderer.setSelected(selectedItems.contains(item));
-					emptyCellRenderer.setFocus(isFocusControl());
-					emptyCellRenderer.setRow(i + 1);
-					emptyCellRenderer.setBounds(x, y, clientArea.width - x + 1, item.getHeight());
-					emptyCellRenderer.setColumn(columnCount);
-					emptyCellRenderer.paint(gc, item);
+					if (!fixed) {
+						emptyCellRenderer.setSelected(selectedItems.contains(item));
+						emptyCellRenderer.setFocus(isFocusControl());
+						emptyCellRenderer.setRow(i + 1);
+						emptyCellRenderer.setBounds(x, y, clientArea.width - x + 1, item.getHeight());
+						emptyCellRenderer.setColumn(columnCount);
+						emptyCellRenderer.paint(gc, item);
+					}
 				}
 
 				x = 0;
@@ -5488,17 +5492,18 @@ public class Grid extends Canvas {
 					// row header is actually painted later
 					x += rowHeaderWidth;
 				}
-
-				emptyCellRenderer.setBounds(x, y, clientArea.width - x, itemHeight);
-				emptyCellRenderer.setFocus(false);
-				emptyCellRenderer.setSelected(false);
-				emptyCellRenderer.setRow(i + 1);
+				if (!fixed) {
+					emptyCellRenderer.setBounds(x, y, clientArea.width - x, itemHeight);
+					emptyCellRenderer.setFocus(false);
+					emptyCellRenderer.setSelected(false);
+					emptyCellRenderer.setRow(i + 1);
+				}
 
 				for (final GridColumn column : cols) {
 
 					if (column.isVisible()) {
 						final int width = column.width;
-						if(x + width >= 0) {
+						if (x + width >= 0 && !fixed) {
 							emptyCellRenderer.setBounds(x, y, width, itemHeight);
 							emptyCellRenderer.setColumn(column.index);
 							emptyCellRenderer.paint(gc, this);
@@ -5510,7 +5515,7 @@ public class Grid extends Canvas {
 					}
 				}
 
-				if (x < clientArea.width) {
+				if (x < clientArea.width && !fixed) {
 					emptyCellRenderer.setBounds(x, y, clientArea.width - x + 1, itemHeight);
 					emptyCellRenderer.setColumn(columnCount);
 					emptyCellRenderer.paint(gc, this);
@@ -5519,8 +5524,10 @@ public class Grid extends Canvas {
 				x = 0;
 
 				if (rowHeaderVisible) {
-					emptyRowHeaderRenderer.setBounds(x, y, rowHeaderWidth, itemHeight + 1);
-					emptyRowHeaderRenderer.paint(gc, this);
+					if (!fixed) {
+						emptyRowHeaderRenderer.setBounds(x, y, rowHeaderWidth, itemHeight + 1);
+						emptyRowHeaderRenderer.paint(gc, this);
+					}
 
 					x += rowHeaderWidth;
 				}
