@@ -7957,7 +7957,7 @@ public class Grid extends Canvas {
 				index = rootItems.get(index).getRowIndex();
 			}
 		} else if (!root) {
-			if (index >= item.getParentItem().getItemCount() || index == -1) {
+			if (index == -1 || index >= item.getParentItem().getItemCount()) {
 				GridItem rightMostDescendent = item.getParentItem();
 
 				while (rightMostDescendent.getItemCount() > 0) {
