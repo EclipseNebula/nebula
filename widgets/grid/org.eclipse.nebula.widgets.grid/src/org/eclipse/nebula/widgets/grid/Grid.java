@@ -7957,16 +7957,16 @@ public class Grid extends Canvas {
 				index = rootItems.get(index).getRowIndex();
 			}
 		} else if (!root) {
-			if (index >= item.getParentItem().getItems().length || index == -1) {
+			if (index >= item.getParentItem().getItemCount() || index == -1) {
 				GridItem rightMostDescendent = item.getParentItem();
 
-				while (rightMostDescendent.getItems().length > 0) {
-					rightMostDescendent = rightMostDescendent.getItems()[rightMostDescendent.getItems().length - 1];
+				while (rightMostDescendent.getItemCount() > 0) {
+					rightMostDescendent = rightMostDescendent.getItem(rightMostDescendent.getItemCount() - 1);
 				}
 
 				index = rightMostDescendent.getRowIndex() + 1;
 			} else {
-				index = item.getParentItem().getItems()[index].getRowIndex();
+				index = item.getParentItem().getItem(index).getRowIndex();
 			}
 		}
 
