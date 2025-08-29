@@ -248,40 +248,11 @@ public class RichTextEditor extends Composite {
 
 		browser.setUrl(templateURL.toString());
 
-		browserFunctions.add(new ModifyFunction(browser, "textModified"));
-		browserFunctions.add(new KeyPressedFunction(browser, "keyPressed"));
-		browserFunctions.add(new KeyReleasedFunction(browser, "keyReleased"));
-		browserFunctions.add(new FocusInFunction(browser, "focusIn"));
-		browserFunctions.add(new FocusOutFunction(browser, "focusOut"));
-		browserFunctions.add(new JavaExecutionStartedFunction(browser, "javaExecutionStarted"));
-		browserFunctions.add(new JavaExecutionFinishedFunction(browser, "javaExecutionFinished"));
-		browserFunctions.add(new BrowserFunction(browser, "customizeToolbar") {
-			@Override
-			public Object function(final Object[] arguments) {
-				RichTextEditor.this.editorConfig.customizeToolbar();
-				return super.function(arguments);
-			}
-		});
-		browserFunctions.add(new BrowserFunction(browser, "getAllOptions") {
-			@Override
-			public Object function(final Object[] arguments) {
-				// transform the configuration options map into an Object array
-				// necessary as map is not a supported return value
-				final Map<String, Object> options = RichTextEditor.this.editorConfig.getAllOptions();
-				final Object[] result = new Object[options.size()*2];
-				int i = 0;
-				for (final Map.Entry<String, Object> entry : options.entrySet()) {
-					result[i++] = entry.getKey();
-					result[i++] = entry.getValue() != null ? entry.getValue() : "";
-				}
-				return result;
-			}
-		});
-
 		browser.addProgressListener(new ProgressListener() {
 
 			@Override
 			public void completed(final ProgressEvent event) {
+				createBrowserFunctions();
 				browser.evaluate("initEditor();");
 
 				CKEDITOR_ALT = (Double) browser.evaluate("return getCKEditorALT()");
@@ -365,6 +336,38 @@ public class RichTextEditor extends Composite {
 
 			@Override
 			public void changed(final ProgressEvent event) {
+			}
+		});	
+	}
+
+	private void createBrowserFunctions() {
+		browserFunctions.add(new ModifyFunction(browser, "textModified"));
+		browserFunctions.add(new KeyPressedFunction(browser, "keyPressed"));
+		browserFunctions.add(new KeyReleasedFunction(browser, "keyReleased"));
+		browserFunctions.add(new FocusInFunction(browser, "focusIn"));
+		browserFunctions.add(new FocusOutFunction(browser, "focusOut"));
+		browserFunctions.add(new JavaExecutionStartedFunction(browser, "javaExecutionStarted"));
+		browserFunctions.add(new JavaExecutionFinishedFunction(browser, "javaExecutionFinished"));
+		browserFunctions.add(new BrowserFunction(browser, "customizeToolbar") {
+			@Override
+			public Object function(final Object[] arguments) {
+				RichTextEditor.this.editorConfig.customizeToolbar();
+				return super.function(arguments);
+			}
+		});
+		browserFunctions.add(new BrowserFunction(browser, "getAllOptions") {
+			@Override
+			public Object function(final Object[] arguments) {
+				// transform the configuration options map into an Object array
+				// necessary as map is not a supported return value
+				final Map<String, Object> options = RichTextEditor.this.editorConfig.getAllOptions();
+				final Object[] result = new Object[options.size()*2];
+				int i = 0;
+				for (final Map.Entry<String, Object> entry : options.entrySet()) {
+					result[i++] = entry.getKey();
+					result[i++] = entry.getValue() != null ? entry.getValue() : "";
+				}
+				return result;
 			}
 		});
 	}
