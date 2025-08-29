@@ -246,8 +246,6 @@ public class RichTextEditor extends Composite {
 			this.editorConfig.setResizeDirection("both");
 		}
 
-		browser.setUrl(templateURL.toString());
-
 		browserFunctions.add(new ModifyFunction(browser, "textModified"));
 		browserFunctions.add(new KeyPressedFunction(browser, "keyPressed"));
 		browserFunctions.add(new KeyReleasedFunction(browser, "keyReleased"));
@@ -277,6 +275,16 @@ public class RichTextEditor extends Composite {
 				return result;
 			}
 		});
+		
+		//Workaround for race condition in SWT Edge browser engine for registering BrowserFunctions 
+		//see also https://github.com/eclipse-platform/eclipse.platform.swt/issues/2449
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		browser.setUrl(templateURL.toString());
 
 		browser.addProgressListener(new ProgressListener() {
 
@@ -366,7 +374,7 @@ public class RichTextEditor extends Composite {
 			@Override
 			public void changed(final ProgressEvent event) {
 			}
-		});
+		});	
 	}
 
 	@Override
