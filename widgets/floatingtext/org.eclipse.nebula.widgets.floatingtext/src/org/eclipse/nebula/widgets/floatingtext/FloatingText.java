@@ -217,20 +217,23 @@ public class FloatingText extends Composite {
 		int fontSize = (label.getSize().y * 75) / 100;
 		Font font = getFont(label, fontSize);
 		GC gc = new GC(label);
-		gc.setFont(font);
-		while (fontSize > 2) {
-			int textHeight = gc.textExtent("PQR").y;
-			if (textHeight <= label.getBounds().height) {
-				return font; // Found a fitting font
-			}
-			// Cleanup and decrease font size
-			font.dispose();
-			fontSize--;
-			font = getFont(label, fontSize);
+		try {
 			gc.setFont(font);
+			while (fontSize > 2) {
+				int textHeight = gc.textExtent("PQR").y;
+				if (textHeight <= label.getBounds().height) {
+					return font; // Found a fitting font
+				}
+				// Cleanup and decrease font size
+				font.dispose();
+				fontSize--;
+				font = getFont(label, fontSize);
+				gc.setFont(font);
+			}
+			return font;
+		} finally {
+			gc.dispose();
 		}
-		gc.dispose();
-		return font;
 	}
 
 	private Font getFont(Label label, int fontSize) {
