@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nebula Floating Text Snippets
 Bundle-SymbolicName: org.eclipse.nebula.widgets.floatingtext.snippets
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-Vendor: Eclipse Nebula
 Automatic-Module-Name: org.eclipse.nebula.widgets.floatingtext.snippets
 Bundle-RequiredExecutionEnvironment: JavaSE-11
