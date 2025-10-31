@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nebula Table Combo
 Bundle-SymbolicName: org.eclipse.nebula.widgets.tablecombo
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 1.3.0.qualifier
 Export-Package: org.eclipse.nebula.jface.checktablecomboviewer,
  org.eclipse.nebula.jface.tablecomboviewer,
  org.eclipse.nebula.widgets.checktablecombo,

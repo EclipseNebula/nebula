@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nebula E4 Table Combo Example
 Bundle-SymbolicName: org.eclipse.nebula.widgets.tablecombo.example.e4;singleton:=true
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 1.3.0.qualifier
 Bundle-Vendor: Eclipse Nebula
 Bundle-Activator: org.eclipse.nebula.widgets.tablecombo.example.e4.Activator
 Require-Bundle: org.eclipse.swt;bundle-version="0.0.0",

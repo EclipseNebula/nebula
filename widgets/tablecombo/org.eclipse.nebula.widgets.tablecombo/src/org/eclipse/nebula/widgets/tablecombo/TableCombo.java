@@ -925,7 +925,8 @@ public class TableCombo extends Composite {
 		table.setParent(tempShell);
 
 		shellsToBeDisposed.add(tempShell);
-
+		
+		popup.setVisible(false);
 		popup = tempShell;
 	}
 
