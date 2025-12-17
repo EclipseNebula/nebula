@@ -35,8 +35,9 @@ public class GridDragSourceEffect extends DragSourceEffect {
 	Image dragSourceImage = null;
 
 	/**
+	 * Creates a new drag source effect for the given grid.
 	 *
-	 * @param grid
+	 * @param grid the grid control
 	 */
 	public GridDragSourceEffect(Grid grid) {
 		super(grid);

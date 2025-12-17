@@ -137,10 +137,11 @@ public class GridViewerEditor extends ColumnViewerEditor {
 	}
 
 	/**
-	 * FIXME
-	 * @param viewer
-	 * @param editorActivationStrategy
-	 * @param feature
+	 * Creates a grid viewer editor for the given table viewer.
+	 * 
+	 * @param viewer the grid table viewer
+	 * @param editorActivationStrategy the editor activation strategy
+	 * @param feature the feature flags for the editor
 	 */
 	public static void create(GridTableViewer viewer,
 			ColumnViewerEditorActivationStrategy editorActivationStrategy,
@@ -149,10 +150,11 @@ public class GridViewerEditor extends ColumnViewerEditor {
 	}
 
 	/**
-	 * FIXME
-	 * @param viewer
-	 * @param editorActivationStrategy
-	 * @param feature
+	 * Creates a grid viewer editor for the given tree viewer.
+	 * 
+	 * @param viewer the grid tree viewer
+	 * @param editorActivationStrategy the editor activation strategy
+	 * @param feature the feature flags for the editor
 	 */
 	public static void create(GridTreeViewer viewer,
 			ColumnViewerEditorActivationStrategy editorActivationStrategy,

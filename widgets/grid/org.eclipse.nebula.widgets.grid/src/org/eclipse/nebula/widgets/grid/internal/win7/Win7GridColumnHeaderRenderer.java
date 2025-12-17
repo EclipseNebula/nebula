@@ -41,7 +41,9 @@ public class Win7GridColumnHeaderRenderer extends DefaultColumnHeaderRenderer {
     private int truncationStyle = SWT.CENTER;
 
     /**
-     * @param palette
+     * Creates a new Windows 7 style column header renderer.
+     * 
+     * @param palette the palette provider for Windows 7 colors
      */
     public Win7GridColumnHeaderRenderer(Win7PaletteProvider palette) {
     	this.palette = palette;
@@ -160,9 +162,9 @@ public class Win7GridColumnHeaderRenderer extends DefaultColumnHeaderRenderer {
 
      /**
       * Draw an additional shadow for the selected column state
-      * @param graphics
-      * @param bounds
-      * @param colors
+      * @param graphics the graphics context
+      * @param bounds the bounds to draw within
+      * @param colors the color array to use for drawing
       */
      protected static void drawColumnSelectedTopShadow(GC graphics, Rectangle bounds, Color[] colors){
          int x = bounds.x;
@@ -177,9 +179,9 @@ public class Win7GridColumnHeaderRenderer extends DefaultColumnHeaderRenderer {
 
      /**
       * Draw the column header based on the given colors
-      * @param graphics
-      * @param bounds
-      * @param colors
+      * @param graphics the graphics context
+      * @param bounds the bounds to draw within
+      * @param colors the color array to use for drawing
       */
      protected static void drawColumnHeader(GC graphics, Rectangle bounds, Color[] colors){
          int x = bounds.x;
@@ -292,7 +294,7 @@ public class Win7GridColumnHeaderRenderer extends DefaultColumnHeaderRenderer {
 	 * @see SWT#LEFT
 	 * @see SWT#CENTER
 	 * @see SWT#RIGHT
- 	 * @param truncationStyle
+ 	 * @param truncationStyle the truncation style
  	 */
  	public void setTruncationStyle(int truncationStyle) {
  		this.truncationStyle = truncationStyle;

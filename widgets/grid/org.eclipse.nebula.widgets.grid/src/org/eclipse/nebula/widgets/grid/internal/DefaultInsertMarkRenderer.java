@@ -18,7 +18,7 @@ public class DefaultInsertMarkRenderer extends AbstractRenderer
      * Renders the insertion mark.  The bounds of the renderer
      * need not be set.
      * 
-     * @param gc
+     * @param gc the graphics context
      * @param value  must be a {@link Rectangle} with height == 0.
      */
     public void paint(GC gc, Object value)

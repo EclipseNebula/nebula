@@ -72,7 +72,7 @@ public class GridToolTip extends Widget
     /**
      * Paints the tooltip.
      *
-     * @param gc
+     * @param gc the graphics context
      */
     private void onPaint(GC gc)
     {
@@ -84,7 +84,7 @@ public class GridToolTip extends Widget
     /**
      * Sets the location of the tooltip.
      *
-     * @param location
+     * @param location the location point
      */
     public void setLocation(Point location)
     {
@@ -94,7 +94,7 @@ public class GridToolTip extends Widget
     /**
      * Shows or hides the tooltip.
      *
-     * @param visible
+     * @param visible true to show the tooltip, false to hide it
      */
     public void setVisible(boolean visible)
     {
@@ -109,7 +109,9 @@ public class GridToolTip extends Widget
     }
 
     /**
-     * @param font
+     * Sets the font for the tooltip text.
+     * 
+     * @param font the font to set
      */
     public void setFont(Font font)
     {

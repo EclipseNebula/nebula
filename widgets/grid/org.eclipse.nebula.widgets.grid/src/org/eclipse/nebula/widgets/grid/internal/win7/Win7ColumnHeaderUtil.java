@@ -15,14 +15,14 @@ public class Win7ColumnHeaderUtil {
 	 * Based on the provided state (hover/selected) generate the appropriate column
 	 * header rendering.
 	 *
-	 * @param graphics
-	 * @param bounds
-	 * @param palette
+	 * @param graphics the graphics context
+	 * @param bounds the bounds to draw within
+	 * @param palette the palette provider
 	 * @param hover
 	 *            indicates whether the mouse is hovering over the column header
 	 * @param selected
 	 *            indicates whether the column is selected (mousedown)
-	 * @param mousedown
+	 * @param mousedown indicates whether the mouse button is pressed
 	 */
 	public static void drawColumn(GC graphics, Rectangle bounds, Win7PaletteProvider palette, boolean hover,
 			boolean selected, boolean mousedown) {
@@ -46,9 +46,9 @@ public class Win7ColumnHeaderUtil {
 	/**
 	 * Draw an additional shadow for the selected column state
 	 *
-	 * @param graphics
-	 * @param bounds
-	 * @param palette
+	 * @param graphics the graphics context
+	 * @param bounds the bounds to draw within
+	 * @param palette the palette to use for colors
 	 */
 	protected static void drawColumnSelectedTopShadow(GC graphics, Rectangle bounds, Palette palette) {
 		int x = bounds.x;
@@ -63,9 +63,9 @@ public class Win7ColumnHeaderUtil {
 	/**
 	 * Draw the column header based on the given colors
 	 *
-	 * @param graphics
-	 * @param bounds
-	 * @param palette
+	 * @param graphics the graphics context
+	 * @param bounds the bounds to draw within
+	 * @param palette the palette to use for colors
 	 */
 	protected static void drawColumnHeader(GC graphics, Rectangle bounds, Palette palette) {
 		int x = bounds.x;

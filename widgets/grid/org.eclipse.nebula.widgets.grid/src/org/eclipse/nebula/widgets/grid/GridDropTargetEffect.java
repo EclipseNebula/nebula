@@ -78,7 +78,7 @@ public class GridDropTargetEffect extends DropTargetEffect {
 	 * be selected instead of cells and for {@link DND#FEEDBACK_INSERT_AFTER} and
 	 * {@link DND#FEEDBACK_INSERT_BEFORE} the insert mark will span all columns.
 	 * 
-	 * @param ignore
+	 * @param ignore true to ignore cell selection mode, false otherwise
 	 */
 	public void setIgnoreCellSelection(boolean ignore) {
 		ignoreCellSelection = ignore;

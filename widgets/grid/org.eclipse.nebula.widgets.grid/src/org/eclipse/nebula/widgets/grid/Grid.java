@@ -2042,9 +2042,10 @@ public class Grid extends Canvas {
 	}
 
 	/**
+	 * Returns the index of the given item in the grid.
 	 *
-	 * @param item
-	 * @return t
+	 * @param item the grid item
+	 * @return the index of the item
 	 */
 	public int getIndexOfItem(final GridItem item) {
 		checkWidget();
@@ -2300,10 +2301,10 @@ public class Grid extends Canvas {
 	}
 
 	/**
-	 * TODO: asl;fj
+	 * Returns the root item at the given index.
 	 *
-	 * @param index
-	 * @return asdf
+	 * @param index the index of the root item
+	 * @return the root item at the specified index
 	 */
 	public GridItem getRootItem(final int index) {
 		checkWidget();
@@ -3745,7 +3746,7 @@ public class Grid extends Canvas {
 	/**
 	 * Sets the tree line visibility.
 	 *
-	 * @param treeLinesVisible
+	 * @param treeLinesVisible true if tree lines should be visible, false otherwise
 	 * @throws org.eclipse.swt.SWTException
 	 *             <ul>
 	 *             <li>ERROR_WIDGET_DISPOSED - if the receiver has been
@@ -3938,7 +3939,7 @@ public class Grid extends Canvas {
 	 * Set optimizedColumnPack to <code>true</code> for column pack based only with
 	 * the visible lines.
 	 *
-	 * @param visibleLinesBasedColumnPack
+	 * @param visibleLinesBasedColumnPack true to pack based on visible lines only, false otherwise
 	 */
 	public void setVisibleLinesColumnPack(final boolean visibleLinesBasedColumnPack) {
 		this.visibleLinesBasedColumnPack = visibleLinesBasedColumnPack;
@@ -4249,7 +4250,7 @@ public class Grid extends Canvas {
 	 * means this method returns true also if some cells are horizontally scrolled
 	 * away.
 	 *
-	 * @param item
+	 * @param item the grid item to check
 	 * @return true if 'item' is shown
 	 * @throws org.eclipse.swt.SWTException
 	 *             <ul>
@@ -6285,8 +6286,8 @@ public class Grid extends Canvas {
 	 * Adds Point objects from the itemsToBeAdded list that do not currently exist
 	 * in the sourceList.
 	 *
-	 * @param sourceList
-	 * @param itemsToBeAdded
+	 * @param sourceList the source list to add items to
+	 * @param itemsToBeAdded the list of items to be added
 	 */
 	private void addCellstThatDoNotAlreadyExist(final List<Point> sourceList, final List<Point> itemsToBeAdded) {
 		if (itemsToBeAdded.size() > 0) {
@@ -7776,7 +7777,7 @@ public class Grid extends Canvas {
 	 * override this event and use this tooltip text in their own tooltip or just
 	 * override this method to prevent the SWT/OS tooltip from displaying.
 	 *
-	 * @param text
+	 * @param text the tooltip text to display
 	 */
 	protected void updateToolTipText(final String text) {
 		super.setToolTipText(text);
@@ -8289,9 +8290,9 @@ public class Grid extends Canvas {
 	 * the given column. If the given column and subsequent columns to the right are
 	 * either not visible or spanned, this method will return null.
 	 *
-	 * @param item
-	 * @param col
-	 * @return
+	 * @param item the grid item
+	 * @param col the grid column index
+	 * @return the first visible unspanned column, or null if none exists
 	 */
 	GridColumn getVisibleColumn_DegradeLeft(final GridItem item, final GridColumn col) {
 		int index = displayOrderedColumns.indexOf(col);
@@ -8332,9 +8333,9 @@ public class Grid extends Canvas {
 	 * the given column. If the given column and subsequent columns to the right are
 	 * either not visible or spanned, this method will return null.
 	 *
-	 * @param item
-	 * @param col
-	 * @return
+	 * @param item the grid item
+	 * @param col the grid column index
+	 * @return the first visible unspanned column, or null if none exists
 	 */
 	GridColumn getVisibleColumn_DegradeRight(final GridItem item, final GridColumn col) {
 		int index = displayOrderedColumns.indexOf(col);
@@ -8744,7 +8745,7 @@ public class Grid extends Canvas {
 	/**
 	 * Selects all cells in the given column in the receiver.
 	 *
-	 * @param col
+	 * @param col the column to select
 	 *
 	 * @throws org.eclipse.swt.SWTException
 	 *             <ul>
@@ -9075,11 +9076,11 @@ public class Grid extends Canvas {
 	 * Returns a point whose x and y values are the to and from column indexes of
 	 * the new selection range inclusive of all spanned columns.
 	 *
-	 * @param fromItem
-	 * @param fromColumn
-	 * @param toItem
-	 * @param toColumn
-	 * @return
+	 * @param fromItem the starting grid item
+	 * @param fromColumn the starting column
+	 * @param toItem the ending grid item
+	 * @param toColumn the ending column
+	 * @return a point representing the selection range
 	 */
 	private Point getSelectionRange(GridItem fromItem, GridColumn fromColumn, GridItem toItem, GridColumn toColumn) {
 		if (displayOrderedColumns.indexOf(fromColumn) > displayOrderedColumns.indexOf(toColumn)) {
@@ -9126,10 +9127,10 @@ public class Grid extends Canvas {
 	 * Returns a point whose x and y value are the to and from column indexes of the
 	 * new selection range inclusive of all spanned columns.
 	 *
-	 * @param item
-	 * @param fromColumn
-	 * @param toColumn
-	 * @return
+	 * @param item the grid item
+	 * @param fromColumn the starting column
+	 * @param toColumn the ending column
+	 * @return a point representing the row selection range
 	 */
 	private Point getRowSelectionRange(final GridItem item, final GridColumn fromColumn, final GridColumn toColumn) {
 
@@ -9187,9 +9188,9 @@ public class Grid extends Canvas {
 	 * Returns the column which is spanning the given column for the given item or
 	 * null if it is not being spanned.
 	 *
-	 * @param item
-	 * @param column
-	 * @return
+	 * @param item the grid item
+	 * @param column the grid column
+	 * @return the spanning column, or null if not spanned
 	 */
 	private GridColumn getSpanningColumn(final GridItem item, final GridColumn column) {
 		int span = 0;
@@ -9221,8 +9222,8 @@ public class Grid extends Canvas {
 	 * Returns true if the given cell's x and y values are valid column and item
 	 * indexes respectively.
 	 *
-	 * @param cell
-	 * @return
+	 * @param cell the cell point to validate
+	 * @return true if the cell is valid, false otherwise
 	 */
 	private boolean isValidCell(final Point cell) {
 		if (cell.x < 0 || cell.x >= columns.size()) {
@@ -9881,9 +9882,9 @@ public class Grid extends Canvas {
 	 * selection (i.e. anywhere on a selected cell). What area serves as drag area
 	 * is determined by {@link #setDragOnFullSelection(boolean)}.
 	 *
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x the x coordinate
+	 * @param y the y coordinate
+	 * @return true if the location is in the drag area, false otherwise
 	 * @see #setDragOnFullSelection(boolean)
 	 */
 	private boolean handleHoverOnSelectionDragArea(final int x, final int y) {
@@ -10023,7 +10024,7 @@ public class Grid extends Canvas {
 	/**
 	 * A helper method for {@link GridDropTargetEffect#dragOver(DropTargetEvent)}.
 	 *
-	 * @param point
+	 * @param point the point to check
 	 * @return true if point is near the top or bottom border of the visible grid
 	 *         area
 	 */

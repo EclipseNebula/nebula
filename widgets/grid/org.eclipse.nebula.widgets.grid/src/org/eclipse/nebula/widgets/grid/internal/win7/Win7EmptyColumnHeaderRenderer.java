@@ -17,7 +17,9 @@ public class Win7EmptyColumnHeaderRenderer extends AbstractRenderer {
 	private Win7PaletteProvider palette;
 
 	/**
-	 * @param palette
+	 * Creates a new Windows 7 style empty column header renderer.
+	 * 
+	 * @param palette the palette provider for Windows 7 colors
 	 */
 	public Win7EmptyColumnHeaderRenderer(Win7PaletteProvider palette) {
 		this.palette = palette;

@@ -41,9 +41,9 @@ public class GridItemDataVisualizer implements DataVisualizer {
 	/**
 	 * Create {@link GridItemDataVisualizer} with default value
 	 * 
-	 * @param defaultBackground
-	 * @param defaultForeground
-	 * @param defaultFont
+	 * @param defaultBackground the default background color
+	 * @param defaultForeground the default foreground color
+	 * @param defaultFont the default font
 	 */
 	public GridItemDataVisualizer(Color defaultBackground, Color defaultForeground, Font defaultFont) {
 		this.defaultBackground = defaultBackground;
@@ -102,10 +102,10 @@ public class GridItemDataVisualizer implements DataVisualizer {
 	/**
 	 * get value or default
 	 * 
-	 * @param map
-	 * @param gridItem
-	 * @param column
-	 * @param defaultValue
+	 * @param map the map to retrieve the value from
+	 * @param gridItem the grid item
+	 * @param column the column index
+	 * @param defaultValue the default value to return if not found
 	 * @return T
 	 */
 	protected <T> T getValueOrDefault(Map<GridItem, List<T>> map, GridItem gridItem, int column, T defaultValue) {
@@ -200,10 +200,10 @@ public class GridItemDataVisualizer implements DataVisualizer {
 	/**
 	 * put value on maps
 	 * 
-	 * @param map
-	 * @param gridItem
-	 * @param column
-	 * @param value
+	 * @param map the map to store the value in
+	 * @param gridItem the grid item
+	 * @param column the column index
+	 * @param value the value to store
 	 */
 	protected <T> void put(Map<GridItem, List<T>> map, GridItem gridItem, int column, T value) {
 		List<T> list = map.get(gridItem);
@@ -339,8 +339,8 @@ public class GridItemDataVisualizer implements DataVisualizer {
 	/**
 	 * Remove in revertIndex
 	 * 
-	 * @param map
-	 * @param column
+	 * @param map the map to remove from
+	 * @param column the column index
 	 */
 	protected <T> void removeInvertIndex(Map<GridItem, List<T>> map, int column) {
 		for (List<T> list : map.values()) {

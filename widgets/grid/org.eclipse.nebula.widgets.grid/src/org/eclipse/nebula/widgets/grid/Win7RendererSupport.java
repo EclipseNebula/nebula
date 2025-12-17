@@ -39,7 +39,7 @@ public class Win7RendererSupport {
 	}
 
 	/**
-	 * @param grid
+	 * @param grid the Grid to apply Windows 7 rendering support to
 	 * @return {@link Win7RendererSupport}
 	 */
 	public static Win7RendererSupport create(Grid grid) {
@@ -49,7 +49,7 @@ public class Win7RendererSupport {
 	/**
 	 * Decorate a single column header
 	 *
-	 * @param col
+	 * @param col the GridColumn to decorate
 	 * @return {@link Win7RendererSupport}
 	 */
 	public Win7RendererSupport decorateColumnHeader(GridColumn col) {
@@ -63,7 +63,7 @@ public class Win7RendererSupport {
 	/**
 	 * Decorate an array of column headers
 	 *
-	 * @param cols
+	 * @param cols the array of GridColumns to decorate
 	 * @return {@link Win7RendererSupport}
 	 */
 	public Win7RendererSupport decorateColumnHeaders(GridColumn[] cols) {
@@ -76,7 +76,7 @@ public class Win7RendererSupport {
 	/**
 	 * Decorate a single grid column group header
 	 *
-	 * @param group
+	 * @param group the GridColumnGroup to decorate
 	 * @return {@link Win7RendererSupport}
 	 */
 	public Win7RendererSupport decorateColumnGroupHeader(GridColumnGroup group) {
@@ -91,7 +91,7 @@ public class Win7RendererSupport {
 	/**
 	 * Decorate an array of grid column group headers
 	 *
-	 * @param groups
+	 * @param groups the array of GridColumnGroups to decorate
 	 * @return {@link Win7RendererSupport}
 	 */
 	public Win7RendererSupport decorateColumnGroupHeaders(GridColumnGroup[] groups) {

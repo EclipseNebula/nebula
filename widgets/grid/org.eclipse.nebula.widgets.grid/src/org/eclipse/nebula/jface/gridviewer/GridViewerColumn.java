@@ -183,7 +183,7 @@ public final class GridViewerColumn extends ViewerColumn
                         {
                             GridItem item = (GridItem)event.item;
                             Object element = item.getData();
-                            checkEditingSupport.setValue(element, new Boolean(item.getChecked(colIndex)));
+                            checkEditingSupport.setValue(element, Boolean.valueOf(item.getChecked(colIndex)));
                         }
                     }
                 });
