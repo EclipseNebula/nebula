@@ -72,12 +72,16 @@ public interface IScrollBarProxy
 
 
     /**
-     * @param e
+     * Handles mouse wheel events for scrolling.
+     * 
+     * @param e the mouse wheel event
      */
     public void handleMouseWheel(Event e);
 
     /**
-     * @param min
+     * Sets the minimum value.
+     * 
+     * @param min the minimum value
      */
     public void setMinimum(int min);
 
@@ -87,7 +91,9 @@ public interface IScrollBarProxy
     public int getMinimum();
 
     /**
-     * @param max
+     * Sets the maximum value.
+     * 
+     * @param max the maximum value
      */
     public void setMaximum(int max);
 
@@ -97,7 +103,9 @@ public interface IScrollBarProxy
     public int getMaximum();
 
     /**
-     * @param thumb
+     * Sets the thumb size.
+     * 
+     * @param thumb the thumb size
      */
     public void setThumb(int thumb);
 
@@ -107,7 +115,9 @@ public interface IScrollBarProxy
     public int getThumb();
 
     /**
-     * @param increment
+     * Sets the increment value.
+     * 
+     * @param increment the increment value
      */
     public void setIncrement(int increment);
 
@@ -117,7 +127,9 @@ public interface IScrollBarProxy
     public int getIncrement();
 
     /**
-     * @param page
+     * Sets the page increment value.
+     * 
+     * @param page the page increment value
      */
     public void setPageIncrement(int page);
 
@@ -127,12 +139,16 @@ public interface IScrollBarProxy
     public int getPageIncrement();
 
     /**
-     * @param listener
+     * Adds a selection listener.
+     * 
+     * @param listener the selection listener to add
      */
     public void addSelectionListener(SelectionListener listener);
 
     /**
-     * @param listener
+     * Removes a selection listener.
+     * 
+     * @param listener the selection listener to remove
      */
     public void removeSelectionListener(SelectionListener listener);
 

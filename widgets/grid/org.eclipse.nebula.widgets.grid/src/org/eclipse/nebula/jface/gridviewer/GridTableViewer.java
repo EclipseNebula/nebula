@@ -98,7 +98,7 @@ public class GridTableViewer extends AbstractTableViewer {
      * input, no content provider, a default label provider, no sorter, and no
      * filters.
      *
-     * @param dataVisualizer
+     * @param dataVisualizer the data visualizer for managing grid item data
      * @param parent
      *            the parent control
      * @param style
@@ -115,7 +115,7 @@ public class GridTableViewer extends AbstractTableViewer {
      * has no input, no content provider, a default label provider, no sorter, and
      * no filters.
      *
-     * @param dataVisualizer
+     * @param dataVisualizer the data visualizer for managing grid item data
      * @param parent
      *            the parent control
      */
@@ -392,7 +392,7 @@ public class GridTableViewer extends AbstractTableViewer {
      * height. Therefore it is suggested that this method be called before rows are
      * populated (i.e. before setInput).
      *
-     * @param autoPreferredHeight
+     * @param autoPreferredHeight true to enable automatic preferred height, false otherwise
      */
     public void setAutoPreferredHeight(boolean autoPreferredHeight) {
         this.autoPreferredHeight = autoPreferredHeight;
@@ -587,7 +587,7 @@ public class GridTableViewer extends AbstractTableViewer {
                 indiceLists.add(indiceList);
                 objectList.add(grid.getItem(curLine).getData());
             }
-            indiceList.add(new Integer(ps[i].x));
+            indiceList.add(Integer.valueOf(ps[i].x));
         }
 
         Object focusElement = null;

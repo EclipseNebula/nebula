@@ -16,15 +16,15 @@ import org.eclipse.swt.widgets.Display;
 public class Win7PaletteProvider {
 
 	/**
-	 *
+	 * Palette type for normal grid column header.
 	 */
-	public static final Integer NORMAL_GRID_COLUMN_HEADER = new Integer(0);
+	public static final Integer NORMAL_GRID_COLUMN_HEADER = Integer.valueOf(0);
 
 	private static final Object[] NORMAL_GRID_COLUMN_HEADER_RGB = {
-		new Integer(SWT.COLOR_WHITE),
-		new Integer(SWT.COLOR_WHITE),
-		new Integer(SWT.COLOR_WHITE),
-		new Integer(SWT.COLOR_WHITE),
+		Integer.valueOf(SWT.COLOR_WHITE),
+		Integer.valueOf(SWT.COLOR_WHITE),
+		Integer.valueOf(SWT.COLOR_WHITE),
+		Integer.valueOf(SWT.COLOR_WHITE),
 		new RGB(242,242,242),
         new RGB(239,239,239),
         new RGB(251,251,252),
@@ -40,12 +40,12 @@ public class Win7PaletteProvider {
 	};
 
 	/**
-	 *
+	 * Palette type for hover grid column header.
 	 */
-	public static final Integer HOVER_GRID_COLUMN_HEADER = new Integer(1);
+	public static final Integer HOVER_GRID_COLUMN_HEADER = Integer.valueOf(1);
 
 	private static final Object[] HOVER_GRID_COLUMN_HEADER_RGB = {
-		new Integer(SWT.COLOR_WHITE),
+		Integer.valueOf(SWT.COLOR_WHITE),
         new RGB(136,203,235),
         new RGB(227,247,255),
         new RGB(227,247,255),
@@ -64,12 +64,12 @@ public class Win7PaletteProvider {
 	};
 
 	/**
-	 *
+	 * Palette type for mousedown grid column header.
 	 */
-	public static final Integer MOUSEDOWN_GRID_COLUMN_HEADER = new Integer(3);
+	public static final Integer MOUSEDOWN_GRID_COLUMN_HEADER = Integer.valueOf(3);
 
 	private static final Object[] MOUSEDOWN_GRID_COLUMN_HEADER_RGB = {
-		new Integer(SWT.COLOR_WHITE),
+		Integer.valueOf(SWT.COLOR_WHITE),
         new RGB(122,158,177),
         new RGB(188,228,249),
         new RGB(162,203,224),
@@ -89,12 +89,12 @@ public class Win7PaletteProvider {
 
 
 	/**
-	 *
+	 * Palette type for selected grid column header.
 	 */
-	public static final Integer SELECTED_GRID_COLUMN_HEADER = new Integer(3);
+	public static final Integer SELECTED_GRID_COLUMN_HEADER = Integer.valueOf(3);
 
 	private static final Object[] SELECTED_GRID_COLUMN_HEADER_RGB = {
-		new Integer(SWT.COLOR_WHITE),
+		Integer.valueOf(SWT.COLOR_WHITE),
         new RGB(150,217,249),
         new RGB(242,249,252),
         new RGB(242,249,252),
@@ -109,14 +109,14 @@ public class Win7PaletteProvider {
         null,
         new RGB(150,217,249),
         new RGB(150,217,249),
-		new Integer(SWT.COLOR_WHITE)
+		Integer.valueOf(SWT.COLOR_WHITE)
 	};
 
 
 	/**
-	 *
+	 * Palette type for shadow grid column header.
 	 */
-	public static final Integer SHADOW_GRID_COLUMN_HEADER = new Integer(4);
+	public static final Integer SHADOW_GRID_COLUMN_HEADER = Integer.valueOf(4);
 
 	private static final Object[] SHADOW_GRID_COLUMN_HEADER_RGB = {
         new RGB(134,163,178),
@@ -138,8 +138,10 @@ public class Win7PaletteProvider {
     }
 
     /**
-     * @param display
-     * @param type
+     * Initializes the palette for the given display and type.
+     * 
+     * @param display the display
+     * @param type the palette type
      */
     public void initializePalette(Display display, Integer type){
     	getPalette(display, type);
@@ -147,8 +149,8 @@ public class Win7PaletteProvider {
 
     /**
      * Utility method to create/pool a Color
-     * @param display
-     * @param type
+     * @param display the display
+     * @param type the palette type
      * @return Color
      */
     public Palette getPalette(Display display, Integer type){
@@ -174,9 +176,11 @@ public class Win7PaletteProvider {
 
 
     /**
-     * @param display
-     * @param type
-     * @param def
+     * Creates a palette from the given definition.
+     * 
+     * @param display the display
+     * @param type the palette type
+     * @param def the palette definition
      * @return Palette
      */
     protected Palette createPalette(Display display, Integer type, Object[] def){
@@ -203,8 +207,10 @@ public class Win7PaletteProvider {
     	private Color[] colors = {};
 
     	/**
-    	 * @param type
-    	 * @param colors
+    	 * Creates a new palette.
+    	 * 
+    	 * @param type the palette type
+    	 * @param colors the array of colors
     	 */
     	public Palette(Integer type, Color[] colors) {
     		this.type = type;

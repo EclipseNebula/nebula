@@ -290,7 +290,7 @@ public abstract class GridCellRenderer extends AbstractInternalWidget {
 	 * @see SWT#LEFT
 	 * @see SWT#CENTER
 	 * @see SWT#RIGHT
-	 * @param truncationStyle
+	 * @param truncationStyle the truncation style
 	 */
 	public void setTruncationStyle(int truncationStyle) {
 		this.truncationStyle = truncationStyle;

@@ -61,8 +61,8 @@ public class GridUtils
 	 * 
 	 * @param grid the grid who will be export to xml.
 	 * @param outputStream used for the export.
-	 * @throws ParserConfigurationException
-	 * @throws TransformerException
+	 * @throws ParserConfigurationException if a parser configuration error occurs
+	 * @throws TransformerException if a transformation error occurs
 	 */
 	public static void gridToXml(Grid grid, OutputStream outputStream) throws ParserConfigurationException,
 			TransformerException

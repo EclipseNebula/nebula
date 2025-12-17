@@ -299,7 +299,7 @@ public class DefaultCellRenderer extends GridCellRenderer {
 
     /**
      * Calculates the sequence of branch lines which should be rendered for the provided item
-     * @param item
+     * @param item the grid item
      * @return an array of integers composed using the constants in {@link BranchRenderer}
      */
     private int[] getBranches(GridItem item) {

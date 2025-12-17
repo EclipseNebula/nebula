@@ -102,7 +102,7 @@ public class GridVisibleRangeSupport {
 	/**
 	 * Remove the listener from the ones informed when the range is changed
 	 *
-	 * @param listener
+	 * @param listener the listener to remove
 	 */
 	public void removeRangeChangeListener(VisibleRangeChangedListener listener) {
 		if (rangeChangeListener != null) {

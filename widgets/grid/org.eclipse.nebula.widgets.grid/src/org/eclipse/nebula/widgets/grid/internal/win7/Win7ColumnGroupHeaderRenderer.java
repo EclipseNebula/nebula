@@ -32,7 +32,9 @@ public class Win7ColumnGroupHeaderRenderer extends DefaultColumnGroupHeaderRende
 	private int truncationStyle = SWT.CENTER;
 
 	/**
-	 * @param palette
+	 * Creates a new Windows 7 style column group header renderer.
+	 * 
+	 * @param palette the palette provider for Windows 7 colors
 	 */
 	public Win7ColumnGroupHeaderRenderer(Win7PaletteProvider palette) {
 		this.palette = palette;
@@ -116,7 +118,7 @@ public class Win7ColumnGroupHeaderRenderer extends DefaultColumnGroupHeaderRende
 	 * @see SWT#LEFT
 	 * @see SWT#CENTER
 	 * @see SWT#RIGHT
-	 * @param truncationStyle
+	 * @param truncationStyle the truncation style
 	 */
 	public void setTruncationStyle(int truncationStyle) {
 		this.truncationStyle = truncationStyle;

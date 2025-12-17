@@ -31,7 +31,7 @@ public interface DataVisualizer {
 	/**
 	 * Inserts a column on DataVisualizer
 	 * 
-	 * @param columnIndex
+	 * @param columnIndex the index of the column to add
 	 */
 	void addColumn(int columnIndex);
 
@@ -43,22 +43,22 @@ public interface DataVisualizer {
 	/**
 	 * Clear column dataVisualizer values
 	 * 
-	 * @param columnIndex
+	 * @param columnIndex the index of the column to clear
 	 */
 	void clearColumn(int columnIndex);
 
 	/**
 	 * Clear rows dataVisualizer values
 	 * 
-	 * @param gridItem
+	 * @param gridItem the grid item whose row data should be cleared
 	 */
 	void clearRow(GridItem gridItem);
 
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return {@link Color}
 	 * @see GridItem#getBackground(int)
 	 */
@@ -67,8 +67,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return boolean
 	 * @see GridItem#getCheckable(int)
 	 */
@@ -77,8 +77,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return boolean
 	 * @see GridItem#getChecked(int)
 	 */
@@ -87,8 +87,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return int
 	 * @see GridItem#getColumnSpan(int)
 	 */
@@ -112,8 +112,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return {@link Font}
 	 * @see GridItem#getFont(int)
 	 */
@@ -122,8 +122,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return {@link Color}
 	 * @see GridItem#getForeground(int)
 	 */
@@ -132,8 +132,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return boolean
 	 * @see GridItem#getGrayed(int)
 	 */
@@ -142,8 +142,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return {@link Image}
 	 * @see GridItem#getImage(int)
 	 */
@@ -152,8 +152,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return int
 	 * @see GridItem#getRowSpan(int)
 	 */
@@ -162,8 +162,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return {@link String}
 	 * @see GridItem#getText(int)
 	 */
@@ -172,8 +172,8 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
 	 * @return String
 	 * @see GridItem#getToolTipText(int)
 	 */
@@ -182,9 +182,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param color
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param color the background color to set
 	 * @see GridItem#setBackground(int, Color)
 	 */
 	void setBackground(GridItem gridItem, int columnIndex, Color color);
@@ -192,9 +192,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param checked
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param checked true if the cell should be checkable, false otherwise
 	 * @see GridItem#setCheckable(int, boolean)
 	 */
 	void setCheckable(GridItem gridItem, int columnIndex, boolean checked);
@@ -202,9 +202,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param checked
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param checked true if the cell should be checked, false otherwise
 	 * @see GridItem#setChecked(int, boolean)
 	 */
 	void setChecked(GridItem gridItem, int columnIndex, boolean checked);
@@ -212,9 +212,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param span
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param span the number of columns to span
 	 * @see GridItem#setColumnSpan(int, int)
 	 */
 	void setColumnSpan(GridItem gridItem, int columnIndex, int span);
@@ -222,30 +222,30 @@ public interface DataVisualizer {
 	/**
 	 * set default background
 	 * 
-	 * @param defaultBackground
+	 * @param defaultBackground the default background color
 	 */
 	void setDefaultBackground(Color defaultBackground);
 
 	/**
 	 * set default font
 	 * 
-	 * @param defaultFont
+	 * @param defaultFont the default font
 	 */
 	void setDefaultFont(Font defaultFont);
 
 	/**
 	 * set default foreground
 	 * 
-	 * @param defaultForeground
+	 * @param defaultForeground the default foreground color
 	 */
 	void setDefaultForeground(Color defaultForeground);
 
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param font
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param font the font to set
 	 * @see GridItem#setFont(int, Font)
 	 */
 	void setFont(GridItem gridItem, int columnIndex, Font font);
@@ -253,9 +253,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param foreground
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param foreground the foreground color to set
 	 * @see GridItem#setForeground(int, Color)
 	 */
 	void setForeground(GridItem gridItem, int columnIndex, Color foreground);
@@ -263,9 +263,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param grayed
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param grayed true if the cell should be grayed, false otherwise
 	 * @see GridItem#setGrayed(int, boolean)
 	 */
 	void setGrayed(GridItem gridItem, int columnIndex, boolean grayed);
@@ -273,9 +273,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param image
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param image the image to set
 	 * @see GridItem#setImage(int, Image)
 	 */
 	void setImage(GridItem gridItem, int columnIndex, Image image);
@@ -283,9 +283,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param span
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param span the number of rows to span
 	 * @see GridItem#setRowSpan(int, int)
 	 */
 	void setRowSpan(GridItem gridItem, int columnIndex, int span);
@@ -293,9 +293,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param text
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param text the text to set
 	 * @see GridItem#setText(int, String)
 	 */
 	void setText(GridItem gridItem, int columnIndex, String text);
@@ -303,9 +303,9 @@ public interface DataVisualizer {
 	/**
 	 * Method substitute GridItem method
 	 * 
-	 * @param gridItem
-	 * @param columnIndex
-	 * @param tooltip
+	 * @param gridItem the grid item
+	 * @param columnIndex the column index
+	 * @param tooltip the tooltip text to set
 	 * @see GridItem#setToolTipText(int, String)
 	 */
 	void setToolTipText(GridItem gridItem, int columnIndex, String tooltip);

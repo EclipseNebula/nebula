@@ -53,7 +53,7 @@ import org.eclipse.swt.widgets.Widget;
 public class GridTreeViewer extends AbstractTreeViewer {
 	
 	/** This viewer's grid control. */
-	private Grid grid;
+	private final Grid grid;
 	
 	private GridViewerRow cachedRow;
 
@@ -118,11 +118,13 @@ public class GridTreeViewer extends AbstractTreeViewer {
 	}
 	
 	/** {@inheritDoc} */
+	@Override
 	protected Item getItemAt(Point point) {
 		return grid.getItem(point);
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected ColumnViewerEditor createViewerEditor() {
 		return new GridViewerEditor(this,
 				new ColumnViewerEditorActivationStrategy(this),
@@ -130,11 +132,13 @@ public class GridTreeViewer extends AbstractTreeViewer {
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected void addTreeListener(Control control, TreeListener listener) {
 		((Grid) control).addTreeListener(listener);
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected Item[] getChildren(Widget o) {
 		if (o instanceof GridItem) {
 			return ((GridItem) o).getItems();
@@ -146,36 +150,43 @@ public class GridTreeViewer extends AbstractTreeViewer {
 	}
 	
 	/** {@inheritDoc} */
+	@Override
 	protected boolean getExpanded(Item item) {
 		return ((GridItem) item).isExpanded();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected int getItemCount(Control control) {
 		return ((Grid) control).getItemCount();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected int getItemCount(Item item) {
 		return ((GridItem) item).getItemCount();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected Item[] getItems(Item item) {
 		return ((GridItem) item).getItems();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected Item getParentItem(Item item) {
 		return ((GridItem) item).getParentItem();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected Item[] getSelection(Control control) {
 		return ((Grid) control).getSelection();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected Item newItem(Widget parent, int style, int index) {
 		GridItem item;
 
@@ -219,16 +230,21 @@ public class GridTreeViewer extends AbstractTreeViewer {
 	}
 	
 	/** {@inheritDoc} */
+	@Override
+	@SuppressWarnings("deprecation")
 	protected void removeAll(Control control) {
 		((Grid) control).removeAll();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected void setExpanded(Item item, boolean expand) {
 		((GridItem) item).setExpanded(expand);
 	}
 	
 	/** {@inheritDoc} */
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void setSelection(List items) {
 		Item[] current = getSelection(getGrid());
 
@@ -237,24 +253,26 @@ public class GridTreeViewer extends AbstractTreeViewer {
 			return;
 		}
 
-		GridItem[] newItems = new GridItem[items.size()];
-		items.toArray(newItems);
-		getGrid().setSelection(newItems);
+		GridItem[] itemArray = (GridItem[]) items.toArray(GridItem[]::new);
+		getGrid().setSelection(itemArray);
 		getGrid().showSelection();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected void showItem(Item item) {
 		getGrid().showItem((GridItem) item);
 
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	public Control getControl() {
 		return getGrid();
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected ViewerRow getViewerRowFromItem(Widget item) {
 		if (cachedRow == null) {
 			cachedRow = new GridViewerRow((GridItem) item);
@@ -266,6 +284,7 @@ public class GridTreeViewer extends AbstractTreeViewer {
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected Widget getColumnViewerOwner(int columnIndex) {
 		if (columnIndex < 0
 				|| (columnIndex > 0 && columnIndex >= getGrid()
@@ -273,8 +292,9 @@ public class GridTreeViewer extends AbstractTreeViewer {
 			return null;
 		}
 
-		if (getGrid().getColumnCount() == 0)// Hang it off the table if it
+		if (getGrid().getColumnCount() == 0) { // Hang it off the table if it
 			return getGrid();
+		}
 
 		return getGrid().getColumn(columnIndex);
 	}
@@ -284,6 +304,7 @@ public class GridTreeViewer extends AbstractTreeViewer {
 	 *
 	 * @return the number of columns
 	 */
+	@Override
 	protected int doGetColumnCount() {
 		return grid.getColumnCount();
 	}
@@ -307,6 +328,8 @@ public class GridTreeViewer extends AbstractTreeViewer {
 	 * When this method is called, existing rows are not resized to their 
 	 * preferred height.  Therefore it is suggested that this method be called
 	 * before rows are populated (i.e. before setInput).
+	 * 
+	 * @param autoPreferredHeight true to enable automatic preferred height, false otherwise
 	 */
 	public void setAutoPreferredHeight(boolean autoPreferredHeight) {
 		this.autoPreferredHeight = autoPreferredHeight;
@@ -322,11 +345,13 @@ public class GridTreeViewer extends AbstractTreeViewer {
 	}
 
 	/** {@inheritDoc} */
+	@Override
 	protected void doUpdateItem(final Item item, Object element) {
 		super.doUpdateItem(item, element);
 		updateRowHeader(item);
-		if(autoPreferredHeight && !item.isDisposed())
+		if(autoPreferredHeight && !item.isDisposed()) {
 			((GridItem)item).pack();
+		}
 	}
 	
 	/**
@@ -336,12 +361,15 @@ public class GridTreeViewer extends AbstractTreeViewer {
 	 * @param index child index
 	 * @since 3.3
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void remove(final Object parentOrTreePath, final int index) {
-		if (checkBusy())
+		if (checkBusy()) {
 			return;
+		}
 		final List oldSelection = new LinkedList(Arrays
 				.asList(((TreeSelection) getSelection()).getPaths()));
 		preservingSelection(new Runnable() {
+			@Override
 			public void run() {
 				TreePath removedPath = null;
 				if (internalIsInputOrEmptyPath(parentOrTreePath)) {
@@ -358,8 +386,9 @@ public class GridTreeViewer extends AbstractTreeViewer {
 					Widget[] parentItems = internalFindItems(parentOrTreePath);
 					for (int i = 0; i < parentItems.length; i++) {
 						GridItem parentItem = (GridItem) parentItems[i];
-						if (parentItem.isDisposed())
+						if (parentItem.isDisposed()) {
 							continue;
+						}
 						if (index < parentItem.getItemCount()) {
 							GridItem item = parentItem.getItem(index);
 							if (item.getData() != null) {
@@ -381,10 +410,11 @@ public class GridTreeViewer extends AbstractTreeViewer {
 						}
 					}
 					if (removed) {
-						setSelection(new TreeSelection(
-								(TreePath[]) oldSelection
+						TreePath[] paths = (TreePath[]) oldSelection
 										.toArray(new TreePath[oldSelection
-												.size()]), getComparer()),
+												.size()]);
+						setSelection(new TreeSelection(
+								paths, getComparer()),
 								false);
 					}
 

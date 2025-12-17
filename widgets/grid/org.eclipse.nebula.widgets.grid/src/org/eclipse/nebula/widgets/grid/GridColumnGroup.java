@@ -329,7 +329,7 @@ public class GridColumnGroup extends Item
             Point[] selection = getParent().getCellSelection();
             for (int i = 0; i < selection.length; i++)
             {
-                if (collapsedCols.contains(new Integer(selection[i].x)))
+                if (collapsedCols.contains(Integer.valueOf(selection[i].x)))
                 {
                     getParent().deselectCell(selection[i]);
                 }
@@ -468,7 +468,7 @@ public class GridColumnGroup extends Item
 
     /**
      * Sets the Font to be used when displaying the Header text.
-     * @param font
+     * @param font the font to set for the header
      */
     public void setHeaderFont(Font font) {
     	checkWidget();
