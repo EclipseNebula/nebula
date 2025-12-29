@@ -41,8 +41,8 @@ class PWTabContainer extends Composite {
 	 * Constructor
 	 *
 	 * @param parent parent composite
-	 * @param style style (not used)
-	 * @param tabs list of tabs
+	 * @param style  style (not used)
+	 * @param tabs   list of tabs
 	 */
 	PWTabContainer(final Composite parent, final int style, final List<PWTab> tabs) {
 		super(parent, style);
@@ -107,8 +107,10 @@ class PWTabContainer extends Composite {
 			gc.setForeground(grey);
 			gc.drawLine(0, rect.height - 1, rect.width, rect.height - 1);
 			gc.dispose();
+			if (buttonContainer.getBackgroundImage() != null && !buttonContainer.getBackgroundImage().isDisposed()) {
+				buttonContainer.getBackgroundImage().dispose();
+			}
 			buttonContainer.setBackgroundImage(image);
-			image.dispose();
 		});
 	}
 
