@@ -19,13 +19,12 @@ Contributors:
 	<parent>
 		<groupId>org.eclipse.nebula</groupId>
 		<artifactId>multichoice</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>org.eclipse.nebula.widgets.opal.multichoice.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
 
 	<name>Multichoice Feature</name>
-	<version>1.0.0-SNAPSHOT</version>
 
 </project>
