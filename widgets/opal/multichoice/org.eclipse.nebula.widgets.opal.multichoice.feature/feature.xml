@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.nebula.widgets.opal.multichoice.feature"
       label="Nebula Opal Multichoice Widget"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       provider-name="Eclipse Nebula">
 
    <description url="http://eclipse.org/nebula">
@@ -16,18 +16,13 @@
    <requires>
       <import feature="org.eclipse.nebula.widgets.opal.commons.feature"/>
    </requires>
-   
+
    <plugin
          id="org.eclipse.nebula.widgets.opal.multichoice"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.nebula.widgets.opal.multichoice.source"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
+
 </feature>

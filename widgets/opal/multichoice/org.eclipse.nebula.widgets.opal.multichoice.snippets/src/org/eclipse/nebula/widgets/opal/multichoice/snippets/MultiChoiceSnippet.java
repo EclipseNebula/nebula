@@ -38,7 +38,9 @@ public class MultiChoiceSnippet {
 		shell.setText("MultiChoice Example");
 
 		// Data
-		final String[] euroZone = new String[] { "Austria", "Belgium", "Cyprus", "Estonia", "Finland", "France", "Germany", "Greece", "Ireland", "Italy", "Luxembourg", "Malta", "Netherlands", "Portugal", "Slovakia", "Slovenia", "Spain" };
+		final String[] euroZone = new String[] { "Austria", "Belgium", "Cyprus", "Estonia", "Finland", "France",
+				"Germany", "Greece", "Ireland", "Italy", "Luxembourg", "Malta", "Netherlands", "Portugal", "Slovakia",
+				"Slovenia", "Spain" };
 
 		final List<Country> membersOfEuropeanUnion = new ArrayList<>();
 		membersOfEuropeanUnion.add(new Country("Austria", 8372930));
@@ -84,7 +86,7 @@ public class MultiChoiceSnippet {
 		countryCodes.add(new Country("Spain", "ES"));
 		countryCodes.add(new Country("Portugal", "PT"));
 
-		// Draw the window
+		// Fill the content of the window
 		drawLabel(shell, "Simple Multichoice :");
 		final MultiChoice<String> mcSimple = new MultiChoice<>(shell, SWT.READ_ONLY);
 		mcSimple.setEditable(false);
@@ -114,10 +116,11 @@ public class MultiChoiceSnippet {
 		drawLabel(shell, "Selection listener :");
 		final MultiChoice<Country> mcSL = new MultiChoice<>(shell, SWT.READ_ONLY);
 		mcSL.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, true));
-		mcSL.setSelectionListener(new MultiChoiceSelectionListener<Country>(mcSL) {
+		mcSL.setSelectionListener(new MultiChoiceSelectionListener<>(mcSL) {
 
 			@Override
-			public void handle(final MultiChoice<Country> parent, final Country receiver, final boolean selection, final Shell popup) {
+			public void handle(final MultiChoice<Country> parent, final Country receiver, final boolean selection,
+					final Shell popup) {
 				if ("Select All".equals(receiver.toString())) {
 					if (selection) {
 						parent.deselectAll();
@@ -184,7 +187,6 @@ public class MultiChoiceSnippet {
 		mcNotEditable.setEditable(false);
 		addButons(mcNotEditable);
 
-
 		drawLabel(shell, "Not Enabled Multichoice :");
 		final MultiChoice<String> mcNotEnabled = new MultiChoice<>(shell, SWT.READ_ONLY);
 		final GridData gridDataNotEnabled = new GridData(GridData.FILL, GridData.BEGINNING, true, true);
@@ -194,7 +196,16 @@ public class MultiChoiceSnippet {
 		mcNotEnabled.setEditable(false);
 		addButons(mcNotEnabled);
 
-		// display the shell...
+		drawLabel(shell, "Multichoice with search panel :");
+		final MultiChoice<String> mcSearch = new MultiChoice<>(shell, SWT.READ_ONLY | SWT.SEARCH);
+		mcSearch.setEditable(false);
+		final GridData gridDataMcSearch = new GridData(GridData.FILL, GridData.BEGINNING, true, true);
+		gridDataMcSearch.widthHint = 200;
+		mcSearch.setLayoutData(gridDataMcSearch);
+		mcSearch.addAll(euroZone);
+		addButons(mcSearch);
+
+		// Open the shell
 		shell.open();
 		shell.pack();
 		while (!shell.isDisposed()) {
