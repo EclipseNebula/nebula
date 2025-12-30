@@ -80,6 +80,9 @@ class AnalogClockPainter implements IControlPainter {
 			angleH = cal.get(Calendar.HOUR) * 30 + cal.get(Calendar.MINUTE) / 2;
 		}
 
+		Transform o = new Transform(e.display);
+		e.gc.getTransform(o);
+
 		int lwidth = e.gc.getLineWidth();
 		e.gc.setLineWidth(1);
 
@@ -107,6 +110,7 @@ class AnalogClockPainter implements IControlPainter {
 			}
 
 			control.setAlpha(e.gc);
+			e.gc.setTransform(o);
 			e.gc.setBackground(e.display.getSystemColor(SWT.COLOR_GRAY));
 			e.gc.fillOval(picker.dialCenter.x + 1, picker.dialCenter.y + 1, 6,
 					6);
@@ -160,6 +164,8 @@ class AnalogClockPainter implements IControlPainter {
 			e.gc.setLineWidth(1);
 		}
 
+		e.gc.setTransform(o);
+
 		control.setAlpha(e.gc);
 
 		e.gc.setBackground(e.display.getSystemColor(SWT.COLOR_DARK_GRAY));
@@ -178,6 +184,7 @@ class AnalogClockPainter implements IControlPainter {
 
 		e.gc.setLineWidth(lwidth);
 		e.gc.setLineCap(lcap);
+		o.dispose();
 	}
 
 	protected void paintFace(VPanel panel, Event e) {
@@ -254,6 +261,7 @@ class AnalogClockPainter implements IControlPainter {
 		p.dispose();
 		c1.dispose();
 		c2.dispose();
+		o.dispose();
 	}
 
 	protected void paintHourHand(VPanel panel, Event e, int angle) {

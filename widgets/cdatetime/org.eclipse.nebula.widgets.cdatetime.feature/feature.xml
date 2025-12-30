@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.nebula.widgets.cdatetime.feature"
       label="Nebula CDateTime Widget"
-      version="1.5.0.qualifier"
+      version="1.5.1.qualifier"
       provider-name="Eclipse Nebula">
 
    <description url="http://www.eclipse.org/nebula/widgets/cdatetime">
@@ -19,30 +19,18 @@
 
    <plugin
          id="org.eclipse.nebula.widgets.cdatetime"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.nebula.widgets.cdatetime.source"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.nebula.jface.cdatetime.source"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.nebula.jface.cdatetime"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>
