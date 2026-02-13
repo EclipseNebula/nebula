@@ -4,7 +4,7 @@ Bundle-Name: Nebula Rich Text Widget
 Bundle-SymbolicName: org.eclipse.nebula.widgets.richtext
 Bundle-Version: 1.6.0.qualifier
 Bundle-Vendor: Eclipse Nebula
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.eclipse.core.runtime
 Eclipse-BundleShape: dir
 Export-Package: org.eclipse.nebula.widgets.richtext;version="1.5.0",

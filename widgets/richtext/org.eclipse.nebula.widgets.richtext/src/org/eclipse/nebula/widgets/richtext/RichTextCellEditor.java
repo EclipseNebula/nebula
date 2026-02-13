@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015, 2020 CEA LIST.
+ * Copyright (c) 2015, 2026 CEA LIST.
  *
  *
  * This program and the accompanying materials
@@ -66,6 +66,8 @@ public class RichTextCellEditor extends CellEditor {
 	protected RichTextEditorConfiguration editorConfiguration;
 
 	private ModifyListener modifyListener;
+	
+	private Composite parent;
 
 	/**
 	 * Create a resizable {@link RichTextCellEditor} with the default {@link RichTextEditorConfiguration}.
@@ -139,6 +141,9 @@ public class RichTextCellEditor extends CellEditor {
 	 */
 	public RichTextCellEditor(Composite parent, RichTextEditorConfiguration editorConfiguration, int style) {
 		super(parent, style | SWT.EMBEDDED);
+		
+		this.parent = parent;
+		
 		this.editorConfiguration = editorConfiguration;
 
 		// call super#create(Composite) now because we override it locally empty
@@ -219,8 +224,8 @@ public class RichTextCellEditor extends CellEditor {
 	 */
 	protected Point getMinimumDimension() {
 		return new Point(
-				ScalingHelper.convertHorizontalPixelToDpi(370),
-				ScalingHelper.convertVerticalPixelToDpi(200));
+				ScalingHelper.getZoomedValue(370, this.parent.getShell().getZoom()),
+				ScalingHelper.getZoomedValue(200, this.parent.getShell().getZoom()));
 	}
 
 	@Override
