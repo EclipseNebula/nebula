@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015, 2025 CEA LIST.
+ * Copyright (c) 2015, 2026 CEA LIST.
  *
  *
  * This program and the accompanying materials
@@ -20,7 +20,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.richtext.RichTextEditor;
 import org.eclipse.nebula.widgets.richtext.RichTextEditorConfiguration;
-import org.eclipse.nebula.widgets.richtext.ScalingHelper;
 import org.eclipse.nebula.widgets.richtext.toolbar.ToolbarButton;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -47,9 +46,7 @@ public class RichTextEditorExample {
 
 		final Shell shell = new Shell(display);
 		shell.setText("SWT Rich Text Editor example");
-		shell.setSize(
-				ScalingHelper.convertHorizontalPixelToDpi(800), 
-				ScalingHelper.convertVerticalPixelToDpi(600));
+		shell.setSize(800, 600);
 
 		shell.setLayout(new GridLayout(1, true));
 

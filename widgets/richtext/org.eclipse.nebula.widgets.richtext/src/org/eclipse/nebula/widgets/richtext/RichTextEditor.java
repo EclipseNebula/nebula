@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015, 2025 CEA LIST.
+ * Copyright (c) 2015, 2026 CEA LIST.
  *
  *
  * This program and the accompanying materials
@@ -87,10 +87,10 @@ public class RichTextEditor extends Composite {
 
 	private final List<BrowserFunction> browserFunctions = new ArrayList<>();
 
-	private final ListenerList modifyListener = new ListenerList(ListenerList.IDENTITY);
-	private final ListenerList keyListener = new ListenerList(ListenerList.IDENTITY);
-	private final ListenerList focusListener = new ListenerList(ListenerList.IDENTITY);
-	private final ListenerList javaCallbackListener = new ListenerList(ListenerList.IDENTITY);
+	private final ListenerList<ModifyListener> modifyListener = new ListenerList<>(ListenerList.IDENTITY);
+	private final ListenerList<KeyListener> keyListener = new ListenerList<>(ListenerList.IDENTITY);
+	private final ListenerList<FocusListener> focusListener = new ListenerList<>(ListenerList.IDENTITY);
+	private final ListenerList<JavaCallbackListener> javaCallbackListener = new ListenerList<>(ListenerList.IDENTITY);
 
 	private final RichTextEditorConfiguration editorConfig;
 
@@ -98,6 +98,8 @@ public class RichTextEditor extends Composite {
 	private Point mouseDragPosition;
 
 	private boolean handleFocusChanges = true;
+	
+	private int[] containerEdgeDiffs = null;
 
 	/**
 	 * Key of the system property to specify a fixed directory to unpack the ckeditor resources to.
@@ -219,6 +221,15 @@ public class RichTextEditor extends Composite {
 		if (embedded) {
 			embeddedShell = new Shell(parent.getShell(), SWT.MODELESS);
 			embeddedShell.setLayout(new FillLayout());
+			
+			// The Edge implementation is traversing the ESC key from the browser to the shell,
+			// which leads to closing the shell. We need to avoid this to be able to reuse the
+			// RichTextEditor control in embedded mode.
+			embeddedShell.addTraverseListener(e -> {
+				if (e.keyCode == SWT.ESC) {
+					e.doit = false;
+				}
+			});
 		}
 
 		// remove styles that are not relevant for the browser
@@ -272,13 +283,30 @@ public class RichTextEditor extends Composite {
 					browserFunctions.add(new BrowserFunction(browser, "updateDimensions") {
 						@Override
 						public Object function(final Object[] arguments) {
-							// width and height +2 because the editor is 1 pixel
+							
+							int argWidth = ((Double) arguments[0]).intValue();
+							int argHeight = ((Double) arguments[1]).intValue();
+							
+							// width and height + containerEdgeDiffs because the editor is
 							// smaller than the browser container on every side
+							int newWidth = argWidth + (containerEdgeDiffs != null ? containerEdgeDiffs[0] : 2);
+							int newHeight = argHeight + (containerEdgeDiffs != null ? containerEdgeDiffs[1] : 2);
+							
+							String updateOnRuntime = System.getProperty("swt.autoScale.updateOnRuntime", "false"); //$NON-NLS-1$ //$NON-NLS-2$
+					        if (!Boolean.parseBoolean(updateOnRuntime)) {
+					        	argWidth = ScalingHelper.getZoomedValue(argWidth, embeddedShell != null ? embeddedShell.getZoom() : 100);
+					        	argHeight = ScalingHelper.getZoomedValue(argHeight, embeddedShell != null ? embeddedShell.getZoom() : 100);
+
+					        	newWidth = ScalingHelper.getZoomedValue(newWidth, embeddedShell != null ? embeddedShell.getZoom() : 100);
+					        	newHeight = ScalingHelper.getZoomedValue(newHeight, embeddedShell != null ? embeddedShell.getZoom() : 100);
+					        }
+
+					        Rectangle currentBounds = getBounds();
 							setInlineContainerBounds(
-									getBounds().x,
-									getBounds().y,
-									((Double) arguments[0]).intValue() + 2,
-									((Double) arguments[1]).intValue() + 2);
+									currentBounds.x,
+									currentBounds.y,
+									newWidth,
+									newHeight);
 
 							// also repaint the parent control to avoid
 							// rendering glitches while resizing
@@ -287,6 +315,38 @@ public class RichTextEditor extends Composite {
 								getParent().update();
 							}
 
+							return super.function(arguments);
+						}
+					});
+
+					browserFunctions.add(new BrowserFunction(browser, "initialDimensions") {
+						@Override
+						public Object function(final Object[] arguments) {
+							if (embeddedShell != null && containerEdgeDiffs == null) {
+								int initialWidth = ((Double)arguments[0]).intValue();
+								int intialHeight = ((Double)arguments[1]).intValue();
+
+								Rectangle embeddedShellBounds = embeddedShell.getBounds();
+
+								String updateOnRuntime = System.getProperty("swt.autoScale.updateOnRuntime", "false"); //$NON-NLS-1$ //$NON-NLS-2$
+						        if (!Boolean.parseBoolean(updateOnRuntime)) {
+						        	initialWidth = ScalingHelper.getZoomedValue(initialWidth, embeddedShell.getZoom());
+						        	intialHeight = ScalingHelper.getZoomedValue(intialHeight, embeddedShell.getZoom());
+
+						        	int widthDiff = embeddedShellBounds.width - initialWidth;
+						        	int heightDiff = embeddedShellBounds.height - intialHeight;
+
+									containerEdgeDiffs = new int[] { 
+											ScalingHelper.getUnzoomedValue(widthDiff, embeddedShell.getZoom()), 
+											ScalingHelper.getUnzoomedValue(heightDiff, embeddedShell.getZoom()) };
+						        } else {
+						        	int widthDiff = embeddedShellBounds.width - initialWidth;
+						        	int heightDiff = embeddedShellBounds.height - intialHeight;
+						        	
+					        		containerEdgeDiffs = new int[] { widthDiff, heightDiff };
+						        }
+							}
+							
 							return super.function(arguments);
 						}
 					});
@@ -788,16 +848,14 @@ public class RichTextEditor extends Composite {
 	 *            the new height for the receiver
 	 */
 	void setInlineContainerBounds(final int x, final int y, int width, int height) {
-		width = ScalingHelper.convertHorizontalPixelToDpi(width);
-		height = ScalingHelper.convertVerticalPixelToDpi(height);
 		resizedBounds = new Rectangle(x, y, width, height);
 		if (embeddedShell != null) {
 			final Point shellLocation = embeddedShell.getLocation();
 			embeddedShell.setBounds(
 					shellLocation.x,
 					shellLocation.y,
-					width + 2,
-					height + 2);
+					width,
+					height);
 		}
 		else {
 			super.setBounds(x, y, width, height);
@@ -814,7 +872,7 @@ public class RichTextEditor extends Composite {
 	 *         editor resize minimum in case the editor was created with {@link SWT#MIN}
 	 */
 	protected int getMinimumHeight() {
-		return ScalingHelper.convertVerticalPixelToDpi(200);
+		return ScalingHelper.getZoomedValue(200, embeddedShell != null ? embeddedShell.getZoom() : 100);
 	}
 
 	/**
@@ -827,7 +885,7 @@ public class RichTextEditor extends Composite {
 	 *         editor resize minimum in case the editor was created with {@link SWT#MIN}
 	 */
 	protected int getMinimumWidth() {
-		return ScalingHelper.convertHorizontalPixelToDpi(370);
+		return ScalingHelper.getZoomedValue(370, embeddedShell != null ? embeddedShell.getZoom() : 100);
 	}
 
 	/**

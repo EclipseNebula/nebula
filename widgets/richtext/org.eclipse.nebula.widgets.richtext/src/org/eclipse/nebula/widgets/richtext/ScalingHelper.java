@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2020 Dirk Fauth and others.
+ * Copyright (c) 2020, 2026 Dirk Fauth and others.
  *
  *
  * This program and the accompanying materials
@@ -33,7 +33,9 @@ public final class ScalingHelper {
      * @param dpi
      *            The DPI for which the factor is requested.
      * @return The factor for dpi scaling calculations.
+     * @deprecated The factor can be retrieved via the zoom level of the shell.
      */
+	@Deprecated
     public static float getDpiFactor(int dpi) {
         return Math.max(0.1f, Math.round((dpi / 96f) * 100) / 100f);
     }
@@ -45,7 +47,9 @@ public final class ScalingHelper {
      * @param pixel
      *            the amount of pixels to convert.
      * @return The converted pixels.
+     * @deprecated Use {@link #getZoomedValue(int, int)} instead and pass the zoom level of the shell as second parameter.
      */
+    @Deprecated
     public static int convertHorizontalPixelToDpi(int pixel) {
         return Math.round(pixel * getDpiFactor(Display.getDefault().getDPI().x));
     }
@@ -57,7 +61,9 @@ public final class ScalingHelper {
      * @param dpi
      *            the DPI value to convert.
      * @return The pixel value related to the given DPI
+     * @deprecated Use {@link #getUnzoomedValue(int, int)} instead and pass the zoom level of the shell as second parameter.
      */
+    @Deprecated
     public static int convertHorizontalDpiToPixel(int dpi) {
         return Math.round(dpi / getDpiFactor(Display.getDefault().getDPI().x));
     }
@@ -69,7 +75,9 @@ public final class ScalingHelper {
      * @param pixel
      *            the amount of pixels to convert.
      * @return The converted pixels.
+     * @deprecated Use {@link #getZoomedValue(int, int)} instead and pass the zoom level of the shell as second parameter.
      */
+    @Deprecated
     public static int convertVerticalPixelToDpi(int pixel) {
         return Math.round(pixel * getDpiFactor(Display.getDefault().getDPI().y));
     }
@@ -81,9 +89,30 @@ public final class ScalingHelper {
      * @param dpi
      *            the DPI value to convert.
      * @return The pixel value related to the given DPI
+     * @deprecated Use {@link #getUnzoomedValue(int, int)} instead and pass the zoom level of the shell as second parameter.
      */
+    @Deprecated
     public static int convertVerticalDpiToPixel(int dpi) {
         return Math.round(dpi / getDpiFactor(Display.getDefault().getDPI().y));
     }
 
+    /**
+     * Converts the given amount of pixels to a scaled value using the zoom level of the shell.
+     * @param pixel the amount of pixels to convert.
+     * @param zoom the zoom level of the shell to use for the conversion.
+     * @return The scaled pixel value.
+     */
+    public static int getZoomedValue(int pixel, int zoom) {
+		return Math.round(pixel * (zoom / 100f));
+	}
+    
+    /**
+     * Converts the given scaled value to a pixel value using the zoom level of the shell.
+     * @param pixel the scaled amount of pixels to convert.
+     * @param zoom the zoom level of the shell to use for the conversion.
+     * @return The unscaled pixel value.
+     */
+    public static int getUnzoomedValue(int pixel, int zoom) {
+    	return Math.round(pixel / (zoom / 100f));
+    }
 }
