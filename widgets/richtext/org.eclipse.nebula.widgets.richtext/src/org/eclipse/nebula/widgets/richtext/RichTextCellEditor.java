@@ -142,9 +142,9 @@ public class RichTextCellEditor extends CellEditor {
 	public RichTextCellEditor(Composite parent, RichTextEditorConfiguration editorConfiguration, int style) {
 		super(parent, style | SWT.EMBEDDED);
 		
-		this.parent = parent;
-		
 		this.editorConfiguration = editorConfiguration;
+		
+		this.parent = parent;
 
 		// call super#create(Composite) now because we override it locally empty
 		// to be able to set member variables like the ToolbarConfiguration.
@@ -223,9 +223,29 @@ public class RichTextCellEditor extends CellEditor {
 	 * @return The minimum dimension used for the rich text editor control.
 	 */
 	protected Point getMinimumDimension() {
-		return new Point(
-				ScalingHelper.getZoomedValue(370, this.parent.getShell().getZoom()),
-				ScalingHelper.getZoomedValue(200, this.parent.getShell().getZoom()));
+		String autoScaleProperty = ScalingHelper.getAutoScaleProperty(this.parent.getDisplay());
+		
+		if ("false".equals(autoScaleProperty) || "integer".equals(autoScaleProperty)) {
+			// the browser returns the dimensions according to the display scaling and is not aware of the SWT auto scaling
+			// in case SWT auto scaling is disabled or set to integer, we need to manually increase the minimum dimensions
+			// according to the display scaling to ensure the shell is large enough for the browser content
+			return new Point(
+					ScalingHelper.getZoomedValue(370,  parent.getShell().getZoom()), 
+					ScalingHelper.getZoomedValue(230,  parent.getShell().getZoom()));
+		} else {
+			try {
+				int zoomLevel = Integer.parseInt(autoScaleProperty);
+				if (zoomLevel < parent.getShell().getZoom()) {
+					return new Point(
+							ScalingHelper.getZoomedValue(370,  parent.getShell().getZoom()), 
+							ScalingHelper.getZoomedValue(230,  parent.getShell().getZoom()));
+				}
+			} catch (NumberFormatException e) {
+				// in case of an invalid value, do nothing
+			}
+			
+		}
+		return new Point(370, 230);
 	}
 
 	@Override
