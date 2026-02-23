@@ -100,6 +100,7 @@ public class RichTextEditor extends Composite {
 	private boolean handleFocusChanges = true;
 	
 	private int[] containerEdgeDiffs = null;
+	private String autoScaleProperty;
 
 	/**
 	 * Key of the system property to specify a fixed directory to unpack the ckeditor resources to.
@@ -292,16 +293,27 @@ public class RichTextEditor extends Composite {
 							int newWidth = argWidth + (containerEdgeDiffs != null ? containerEdgeDiffs[0] : 2);
 							int newHeight = argHeight + (containerEdgeDiffs != null ? containerEdgeDiffs[1] : 2);
 							
-							String updateOnRuntime = System.getProperty("swt.autoScale.updateOnRuntime", "false"); //$NON-NLS-1$ //$NON-NLS-2$
-					        if (!Boolean.parseBoolean(updateOnRuntime)) {
-					        	argWidth = ScalingHelper.getZoomedValue(argWidth, embeddedShell != null ? embeddedShell.getZoom() : 100);
-					        	argHeight = ScalingHelper.getZoomedValue(argHeight, embeddedShell != null ? embeddedShell.getZoom() : 100);
-
+							if ("false".equals(autoScaleProperty) || "integer".equals(autoScaleProperty)) {
 					        	newWidth = ScalingHelper.getZoomedValue(newWidth, embeddedShell != null ? embeddedShell.getZoom() : 100);
 					        	newHeight = ScalingHelper.getZoomedValue(newHeight, embeddedShell != null ? embeddedShell.getZoom() : 100);
-					        }
+							} else {
+								try {
+									int zoomLevel = Integer.parseInt(autoScaleProperty);
+									// first we need to unapply the auto scale zoom, then apply the display zoom to the value 
+									// from the browser to get the real base value
+									int updateScaledWidth = ScalingHelper.getUnzoomedValue(argWidth, zoomLevel);
+									updateScaledWidth = ScalingHelper.getZoomedValue(updateScaledWidth, embeddedShell.getZoom());
+									int updateScaledHeight = ScalingHelper.getUnzoomedValue(argHeight, zoomLevel);
+									updateScaledHeight = ScalingHelper.getZoomedValue(updateScaledHeight, embeddedShell.getZoom());
+									
+									newWidth = updateScaledWidth + (containerEdgeDiffs != null ? containerEdgeDiffs[0] : 2);
+									newHeight = updateScaledHeight + (containerEdgeDiffs != null ? containerEdgeDiffs[1] : 2);
+								} catch (NumberFormatException e) {
+									// in case of an invalid value, do nothing
+								}
+							}
 
-					        Rectangle currentBounds = getBounds();
+					        Rectangle currentBounds = embeddedShell != null ? embeddedShell.getBounds() : getBounds();
 							setInlineContainerBounds(
 									currentBounds.x,
 									currentBounds.y,
@@ -323,28 +335,52 @@ public class RichTextEditor extends Composite {
 						@Override
 						public Object function(final Object[] arguments) {
 							if (embeddedShell != null && containerEdgeDiffs == null) {
+								
+								autoScaleProperty = ScalingHelper.getAutoScaleProperty(getParent().getDisplay());
+								
 								int initialWidth = ((Double)arguments[0]).intValue();
-								int intialHeight = ((Double)arguments[1]).intValue();
+								int initialHeight = ((Double)arguments[1]).intValue();
 
 								Rectangle embeddedShellBounds = embeddedShell.getBounds();
+								
+								int widthDiff = 0;
+					        	int heightDiff = 0;
 
-								String updateOnRuntime = System.getProperty("swt.autoScale.updateOnRuntime", "false"); //$NON-NLS-1$ //$NON-NLS-2$
-						        if (!Boolean.parseBoolean(updateOnRuntime)) {
-						        	initialWidth = ScalingHelper.getZoomedValue(initialWidth, embeddedShell.getZoom());
-						        	intialHeight = ScalingHelper.getZoomedValue(intialHeight, embeddedShell.getZoom());
+					        	switch (autoScaleProperty) {
+									case "false":
+									case "integer":
+										int shellBaseWidth = ScalingHelper.getUnzoomedValue(embeddedShellBounds.width, embeddedShell.getZoom());
+										int shellBaseHeight = ScalingHelper.getUnzoomedValue(embeddedShellBounds.height, embeddedShell.getZoom());
 
-						        	int widthDiff = embeddedShellBounds.width - initialWidth;
-						        	int heightDiff = embeddedShellBounds.height - intialHeight;
+										widthDiff = shellBaseWidth - initialWidth;
+							        	heightDiff = shellBaseHeight - initialHeight;
+							        	break;
+									case "quarter":
+									case "exact":
+									case "half":
+										// in this case the initial dimensions are already zoomed, so we can directly calculate the edge diffs
+										widthDiff = embeddedShellBounds.width - initialWidth;
+							        	heightDiff = embeddedShellBounds.height - initialHeight;
+										break;
+									default:
+										// none of the others, try to parse the value as integer zoom level
+										try {
+											int zoomLevel = Integer.parseInt(autoScaleProperty);
+											// first we need to unapply the auto scale zoom, then apply the display zoom to the value from the browser
+											// to get the real base value for calculating the edge diffs
+											int updateScaledWidth = ScalingHelper.getUnzoomedValue(initialWidth, zoomLevel);
+											updateScaledWidth = ScalingHelper.getZoomedValue(updateScaledWidth, embeddedShell.getZoom());
+											int updateScaledHeight = ScalingHelper.getUnzoomedValue(initialHeight, zoomLevel);
+											updateScaledHeight = ScalingHelper.getZoomedValue(updateScaledHeight, embeddedShell.getZoom());
+											
+											widthDiff = embeddedShellBounds.width - updateScaledWidth;
+								        	heightDiff = embeddedShellBounds.height - updateScaledHeight;
+										} catch (NumberFormatException e) {
+											// in case of an invalid value, do not apply any edge diffs
+										}
+								};
 
-									containerEdgeDiffs = new int[] { 
-											ScalingHelper.getUnzoomedValue(widthDiff, embeddedShell.getZoom()), 
-											ScalingHelper.getUnzoomedValue(heightDiff, embeddedShell.getZoom()) };
-						        } else {
-						        	int widthDiff = embeddedShellBounds.width - initialWidth;
-						        	int heightDiff = embeddedShellBounds.height - intialHeight;
-						        	
-					        		containerEdgeDiffs = new int[] { widthDiff, heightDiff };
-						        }
+								containerEdgeDiffs = new int[] { widthDiff, heightDiff };
 							}
 							
 							return super.function(arguments);
@@ -872,7 +908,25 @@ public class RichTextEditor extends Composite {
 	 *         editor resize minimum in case the editor was created with {@link SWT#MIN}
 	 */
 	protected int getMinimumHeight() {
-		return ScalingHelper.getZoomedValue(200, embeddedShell != null ? embeddedShell.getZoom() : 100);
+		String autoScaleProperty = ScalingHelper.getAutoScaleProperty(getParent().getDisplay());
+		
+		if ("false".equals(autoScaleProperty) || "integer".equals(autoScaleProperty)) {
+			// the browser returns the dimensions according to the display scaling and is not aware of the SWT auto scaling
+			// in case SWT auto scaling is disabled or set to integer, we need to manually increase the minimum dimensions
+			// according to the display scaling to ensure the shell is large enough for the browser content
+			return ScalingHelper.getZoomedValue(230,  getShell().getZoom());
+		} else {
+			try {
+				int zoomLevel = Integer.parseInt(autoScaleProperty);
+				if (zoomLevel < getShell().getZoom()) {
+					return ScalingHelper.getZoomedValue(230,  getShell().getZoom());
+				}
+			} catch (NumberFormatException e) {
+				// in case of an invalid value, do nothing
+			}
+			
+		}
+		return 230;
 	}
 
 	/**
@@ -885,7 +939,25 @@ public class RichTextEditor extends Composite {
 	 *         editor resize minimum in case the editor was created with {@link SWT#MIN}
 	 */
 	protected int getMinimumWidth() {
-		return ScalingHelper.getZoomedValue(370, embeddedShell != null ? embeddedShell.getZoom() : 100);
+		String autoScaleProperty = ScalingHelper.getAutoScaleProperty(getParent().getDisplay());
+		
+		if ("false".equals(autoScaleProperty) || "integer".equals(autoScaleProperty)) {
+			// the browser returns the dimensions according to the display scaling and is not aware of the SWT auto scaling
+			// in case SWT auto scaling is disabled or set to integer, we need to manually increase the minimum dimensions
+			// according to the display scaling to ensure the shell is large enough for the browser content
+			return ScalingHelper.getZoomedValue(370,  getShell().getZoom());
+		} else {
+			try {
+				int zoomLevel = Integer.parseInt(autoScaleProperty);
+				if (zoomLevel < getShell().getZoom()) {
+					return ScalingHelper.getZoomedValue(370,  getShell().getZoom());
+				}
+			} catch (NumberFormatException e) {
+				// in case of an invalid value, do nothing
+			}
+			
+		}
+		return 370;
 	}
 
 	/**

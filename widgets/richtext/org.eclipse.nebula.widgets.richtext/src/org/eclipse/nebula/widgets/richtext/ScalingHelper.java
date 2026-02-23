@@ -115,4 +115,21 @@ public final class ScalingHelper {
     public static int getUnzoomedValue(int pixel, int zoom) {
     	return Math.round(pixel / (zoom / 100f));
     }
+    
+    /**
+	 * Returns the value of the "swt.autoScale" property. If the property is not set, it returns
+	 * "quarter" if the display is rescaling at runtime, otherwise it returns "integer".
+	 * 
+	 * @param display
+	 *            The Display to check for rescaling at runtime.
+	 * @return The value of the "swt.autoScale" property or the default value based on the display's
+	 *         rescaling behavior.
+	 */
+    public static String getAutoScaleProperty(Display display) {
+		String autoScaleProperty = System.getProperty("swt.autoScale");
+		if (autoScaleProperty == null) {
+			autoScaleProperty = display.isRescalingAtRuntime() ? "quarter" : "integer";
+		}
+		return autoScaleProperty;
+    }
 }

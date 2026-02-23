@@ -647,7 +647,8 @@ public class RichTextPainter {
 							int pixel = Integer.valueOf(pixelValue.trim());
 							// the size in pixels specified in HTML
 							// so we need to convert it to point
-							int pointSize = Math.round((pixel * (this.zoomSupplier.get() / 100f)) * (72f / Display.getDefault().getDPI().x));
+							int dpi = Display.getCurrent() != null ? Display.getCurrent().getDPI().x : Display.getDefault().getDPI().x;
+							int pointSize = 72 * pixel / dpi;
 							styleInstruction.setFontSize(pointSize);
 						} catch (NumberFormatException e) {
 							e.printStackTrace();
