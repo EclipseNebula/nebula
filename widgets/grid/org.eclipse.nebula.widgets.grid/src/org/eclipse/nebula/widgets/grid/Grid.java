@@ -5477,7 +5477,7 @@ public class Grid extends Canvas {
 
 							column.getCellRenderer().paint(gc, item);
 
-							gc.setClipping((Rectangle) null);
+							gc.setClipping(originalClipping);
 
 							// collect the insertMark position
 							if (!insertMark.posFound && insertMarkItem == item
