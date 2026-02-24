@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015, 2023 CEA LIST.
+ * Copyright (c) 2015, 2026 CEA LIST.
  *
  *
  * This program and the accompanying materials
@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -123,6 +124,8 @@ public class RichTextPainter {
 	private EntityReplacer entityReplacer = new DefaultEntityReplacer();
 
 	private String wordSplitRegex = "\\s";
+	
+	private Supplier<Integer> zoomSupplier;
 
 	/**
 	 * Create a new {@link RichTextPainter} with disabled word wrapping.
@@ -139,9 +142,25 @@ public class RichTextPainter {
 	 *            if not.
 	 */
 	public RichTextPainter(boolean wordWrap) {
-		this.wordWrap = wordWrap;
+		this(wordWrap, () -> 100);
 	}
 
+
+	/**
+	 * Create a new {@link RichTextPainter}.
+	 *
+	 * @param wordWrap
+	 *            <code>true</code> if automatic word wrapping should be enabled, <code>false</code>
+	 *            if not.
+	 * @param zoomSupplier
+	 *            A supplier for the current zoom level in percent, e.g. 100 for 100%. This is used
+	 *            to calculate the font size in case of zooming.
+	 */
+	public RichTextPainter(boolean wordWrap, Supplier<Integer> zoomSupplier) {
+		this.wordWrap = wordWrap;
+		this.zoomSupplier = zoomSupplier;
+	}
+	
 	/**
 	 * Processes the HTML input to calculate the preferred size. Does not perform rendering.
 	 *
@@ -628,7 +647,8 @@ public class RichTextPainter {
 							int pixel = Integer.valueOf(pixelValue.trim());
 							// the size in pixels specified in HTML
 							// so we need to convert it to point
-							int pointSize = 72 * ScalingHelper.convertHorizontalPixelToDpi(pixel) / Display.getDefault().getDPI().x;
+							int dpi = Display.getCurrent() != null ? Display.getCurrent().getDPI().x : Display.getDefault().getDPI().x;
+							int pointSize = 72 * pixel / dpi;
 							styleInstruction.setFontSize(pointSize);
 						} catch (NumberFormatException e) {
 							e.printStackTrace();
@@ -711,9 +731,9 @@ public class RichTextPainter {
 	 *         <b>Note:</b> Between two paragraphs the paragraphSpace * 2 is added as space.
 	 */
 	public int getParagraphSpace() {
-		return ScalingHelper.convertVerticalPixelToDpi(this.paragraphSpace);
+		return ScalingHelper.getZoomedValue(this.paragraphSpace, this.zoomSupplier.get());
 	}
-
+	
 	/**
 	 * @param paragraphSpace
 	 *            The space that should be applied before and after a paragraph.<br>

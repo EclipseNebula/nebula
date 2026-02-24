@@ -23,7 +23,7 @@ Contributors:
 	</parent>
 
 	<artifactId>org.eclipse.nebula.widgets.richtext.example</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.7.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>
