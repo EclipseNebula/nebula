@@ -53,12 +53,8 @@ There are a number of ways you can contribute.
 * New widgets in the Nebula project.
 * Maintain existing widgets.
 
-If you choose any of these option contact the Nebula developers through the 
-[mailing list](https://dev.eclipse.org/mailman/listinfo/nebula-dev)
-and state your intentions, or open an issue.
+If you choose any of these options, just open an issue.
 
 ## New Widgets
-The 'New Widget' process is described here:
-
-[https://wiki.eclipse.org/Nebula/Contributions/New_Widgets](https://wiki.eclipse.org/Nebula/Contributions/New_Widgets)
+If you want to contribute a widget, just open an issue and state your intention. We will then guide you through the process.
 
