@@ -5804,6 +5804,7 @@ public class Grid extends Canvas {
 		int width = column.getWidth(extraFill);
 		if (group != null) {
 			if (group != previousPaintedGroup) {
+				int groupWidth = width;
 				GridColumn nextCol = null;
 				if (displayOrderedColumns.indexOf(column) + 1 < displayOrderedColumns.size()) {
 					nextCol = displayOrderedColumns.get(displayOrderedColumns.indexOf(column) + 1);
@@ -5814,7 +5815,7 @@ public class Grid extends Canvas {
 					if (nextCol.getColumnGroup().getExpanded() && !nextCol.isDetail()
 							|| !nextCol.getColumnGroup().getExpanded() && !nextCol.isSummary()) {
 					} else if (nextCol.isVisible()) {
-						width += nextCol.getWidth(extraFill);
+						groupWidth += nextCol.getWidth(extraFill);
 					}
 
 					if (displayOrderedColumns.indexOf(nextCol) + 1 < displayOrderedColumns.size()) {
@@ -5838,7 +5839,7 @@ public class Grid extends Canvas {
 				group.getHeaderRenderer().setHover(hoverColumnGroupHeader == group);
 				group.getHeaderRenderer().setHoverDetail(hoveringDetail);
 
-				group.getHeaderRenderer().setBounds(x, 0, width, groupHeaderHeight);
+				group.getHeaderRenderer().setBounds(x, 0, groupWidth, groupHeaderHeight);
 
 				group.getHeaderRenderer().paint(gc, group);
 
