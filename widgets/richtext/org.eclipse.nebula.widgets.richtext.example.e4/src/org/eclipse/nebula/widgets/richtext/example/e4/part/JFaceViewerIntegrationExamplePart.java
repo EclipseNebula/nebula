@@ -15,7 +15,7 @@
  *****************************************************************************/
 package org.eclipse.nebula.widgets.richtext.example.e4.part;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.eclipse.nebula.widgets.richtext.example.JFaceViewerIntegrationExample;
 import org.eclipse.swt.widgets.Composite;

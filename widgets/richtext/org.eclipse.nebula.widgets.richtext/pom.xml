@@ -24,6 +24,6 @@ Contributors:
 
 	<artifactId>org.eclipse.nebula.widgets.richtext</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<version>1.6.0-SNAPSHOT</version>
+	<version>1.7.0-SNAPSHOT</version>
 
 </project>

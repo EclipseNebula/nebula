@@ -36,8 +36,8 @@ Contributors:
 		<target-platform-gef>https://download.eclipse.org/tools/gef/classic/releases/latest</target-platform-gef>
 		<target-platform-swtbot>https://download.eclipse.org/technology/swtbot/releases/latest</target-platform-swtbot>
 
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
 
 		<tests.vmargs></tests.vmargs>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
@@ -92,7 +92,7 @@ Contributors:
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<executionEnvironment>JavaSE-17</executionEnvironment>
+					<executionEnvironment>JavaSE-21</executionEnvironment>
 					<pomDependencies>consider</pomDependencies>
 					<environments>
 						<environment>
