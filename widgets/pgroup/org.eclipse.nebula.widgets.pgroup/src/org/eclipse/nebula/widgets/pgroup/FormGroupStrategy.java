@@ -103,6 +103,9 @@ public class FormGroupStrategy extends AbstractGroupStrategy
     @Override
 	public void paint(GC gc)
     {
+        Region originalClip = new Region(gc.getDevice());
+        gc.getClipping(originalClip);
+        try {
         Color back = getGroup().internalGetBackground();
         if (back != null)
         {
@@ -121,11 +124,12 @@ public class FormGroupStrategy extends AbstractGroupStrategy
             reg.add(getGroup().getSize().x - 1, 3, 1, 1);
             reg.add(getGroup().getSize().x - 1, 4, 1, 1);
 
+            reg.intersect(originalClip);
             gc.setClipping(reg);
 
             getGroup().drawBackground(gc, 0, 0, getGroup().getSize().x,5);
 
-            gc.setClipping((Region)null);
+            gc.setClipping(originalClip);
             reg.dispose();
         }
 
@@ -164,6 +168,7 @@ public class FormGroupStrategy extends AbstractGroupStrategy
         reg.subtract(getGroup().getSize().x - 1, 3, 1, 1);
         reg.subtract(getGroup().getSize().x - 1, 4, 1, 1);
 
+        reg.intersect(originalClip);
         gc.setClipping(reg);
 
         back = gc.getBackground();
@@ -180,6 +185,7 @@ public class FormGroupStrategy extends AbstractGroupStrategy
         if (getGroup().getExpanded() && getGroup().getSize().x > 1)
         {
             reg.subtract(1,titleHeight -1,getGroup().getSize().x -2,1);
+            reg.intersect(originalClip);
             gc.setClipping(reg);
         }
 
@@ -188,7 +194,7 @@ public class FormGroupStrategy extends AbstractGroupStrategy
                                         true, false);
 
         reg.dispose();
-        gc.setClipping((Region)null);
+        gc.setClipping(originalClip);
 
         gc.setForeground(getGroup().getParent().getBackground());
 
@@ -283,6 +289,10 @@ public class FormGroupStrategy extends AbstractGroupStrategy
         gc.drawText(TextUtils.getShortString(gc, getGroup().getText(), textBounds.width),
                     textBounds.x, textBounds.y, true);
 
+        } finally {
+            gc.setClipping(originalClip);
+            originalClip.dispose();
+        }
     }
 
     @Override
