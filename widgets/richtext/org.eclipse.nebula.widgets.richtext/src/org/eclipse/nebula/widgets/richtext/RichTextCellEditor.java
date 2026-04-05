@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015, 2020 CEA LIST.
+ * Copyright (c) 2015, 2026 CEA LIST.
  *
  *
  * This program and the accompanying materials
@@ -66,6 +66,8 @@ public class RichTextCellEditor extends CellEditor {
 	protected RichTextEditorConfiguration editorConfiguration;
 
 	private ModifyListener modifyListener;
+	
+	private Composite parent;
 
 	/**
 	 * Create a resizable {@link RichTextCellEditor} with the default {@link RichTextEditorConfiguration}.
@@ -139,7 +141,10 @@ public class RichTextCellEditor extends CellEditor {
 	 */
 	public RichTextCellEditor(Composite parent, RichTextEditorConfiguration editorConfiguration, int style) {
 		super(parent, style | SWT.EMBEDDED);
+		
 		this.editorConfiguration = editorConfiguration;
+		
+		this.parent = parent;
 
 		// call super#create(Composite) now because we override it locally empty
 		// to be able to set member variables like the ToolbarConfiguration.
@@ -218,9 +223,29 @@ public class RichTextCellEditor extends CellEditor {
 	 * @return The minimum dimension used for the rich text editor control.
 	 */
 	protected Point getMinimumDimension() {
-		return new Point(
-				ScalingHelper.convertHorizontalPixelToDpi(370),
-				ScalingHelper.convertVerticalPixelToDpi(200));
+		String autoScaleProperty = ScalingHelper.getAutoScaleProperty(this.parent.getDisplay());
+		
+		if ("false".equals(autoScaleProperty) || "integer".equals(autoScaleProperty)) {
+			// the browser returns the dimensions according to the display scaling and is not aware of the SWT auto scaling
+			// in case SWT auto scaling is disabled or set to integer, we need to manually increase the minimum dimensions
+			// according to the display scaling to ensure the shell is large enough for the browser content
+			return new Point(
+					ScalingHelper.getZoomedValue(370,  parent.getShell().getZoom()), 
+					ScalingHelper.getZoomedValue(230,  parent.getShell().getZoom()));
+		} else {
+			try {
+				int zoomLevel = Integer.parseInt(autoScaleProperty);
+				if (zoomLevel < parent.getShell().getZoom()) {
+					return new Point(
+							ScalingHelper.getZoomedValue(370,  parent.getShell().getZoom()), 
+							ScalingHelper.getZoomedValue(230,  parent.getShell().getZoom()));
+				}
+			} catch (NumberFormatException e) {
+				// in case of an invalid value, do nothing
+			}
+			
+		}
+		return new Point(370, 230);
 	}
 
 	@Override

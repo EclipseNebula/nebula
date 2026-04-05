@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST.
+ * Copyright (c) 2015, 2026 CEA LIST.
  *
  *
  * This program and the accompanying materials
@@ -45,7 +45,7 @@ public class RichTextViewer extends Canvas {
 		super(parent, style | SWT.DOUBLE_BUFFERED);
 
 		final boolean wordWrap = (getStyle() & SWT.WRAP) != 0;
-		this.painter = new RichTextPainter(wordWrap);
+		this.painter = new RichTextPainter(wordWrap, () -> parent.getShell().getZoom());
 
 		addPaintListener(new PaintListener() {
 

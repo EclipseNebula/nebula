@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2015, 2020 CEA LIST.
+ * Copyright (c) 2015, 2026 CEA LIST.
  *
  *
  * This program and the accompanying materials
@@ -38,7 +38,6 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.widgets.richtext.RichTextCellEditor;
 import org.eclipse.nebula.widgets.richtext.RichTextCellLabelProvider;
 import org.eclipse.nebula.widgets.richtext.RichTextEditorConfiguration;
-import org.eclipse.nebula.widgets.richtext.ScalingHelper;
 import org.eclipse.nebula.widgets.richtext.toolbar.ToolbarButton;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -55,9 +54,7 @@ public class JFaceViewerIntegrationExample {
 
 		final Shell shell = new Shell(display);
 		shell.setText("Rich Text Editor JFace viewer integration example");
-		shell.setSize(
-				ScalingHelper.convertHorizontalPixelToDpi(800), 
-				ScalingHelper.convertVerticalPixelToDpi(600));
+		shell.setSize(800,  600);
 
 		shell.setLayout(new GridLayout(1, true));
 
@@ -281,8 +278,8 @@ public class JFaceViewerIntegrationExample {
 			LocalResourceManager resourceMgr = new LocalResourceManager(JFaceResources.getResources());
 			URL checked = JFaceViewerIntegrationExample.class.getResource("images/checked.gif");
 			URL unchecked = JFaceViewerIntegrationExample.class.getResource("images/unchecked.gif");
-			this.checkedImg = resourceMgr.createImage(ImageDescriptor.createFromURL(checked));
-			this.uncheckedImg = resourceMgr.createImage(ImageDescriptor.createFromURL(unchecked));
+			this.checkedImg = resourceMgr.create(ImageDescriptor.createFromURL(checked));
+			this.uncheckedImg = resourceMgr.create(ImageDescriptor.createFromURL(unchecked));
 		}
 
 		@Override

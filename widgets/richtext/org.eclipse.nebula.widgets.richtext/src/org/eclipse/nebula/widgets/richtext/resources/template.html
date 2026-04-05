@@ -1,6 +1,6 @@
 <!-- 
 /*****************************************************************************
- * Copyright (c) 2015 CEA LIST.
+ * Copyright (c) 2015, 2026 CEA LIST.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,8 +20,9 @@
         
         <style type="text/css"> 
         	body { 
-        		margin: 0; 
-        		padding: 0; 
+        	    margin: 0; 
+        	    padding: 0;
+            overflow: hidden;
         	}
         	
         	#moveAnchor {
@@ -159,6 +160,11 @@
         				'instanceReady' 	: function(event) { 
             				//maximize the editor after the editor instance is ready
         					maximizeEditorHeight(); 
+                            
+                            //store the initial dimensions
+                            var height = CKEDITOR.instances.editor.container.$.clientHeight;
+                            var width = CKEDITOR.instances.editor.container.$.clientWidth;
+                            initialDimensions(width, height);
         					
         					event.editor.on('resize', function(resizeEvent) { 
 								if ((prevHeight == null) || prevHeight != resizeEvent.editor.container.$.clientHeight) {
@@ -169,8 +175,7 @@
 										// e.g. toolbar expand/collapse
 										maximizeEditorHeight();
 									}
-									
-									if (resizeCallbackEnabled) {
+									else if (resizeCallbackEnabled) {
 										resizeParentContainer();
 									}
 								}
