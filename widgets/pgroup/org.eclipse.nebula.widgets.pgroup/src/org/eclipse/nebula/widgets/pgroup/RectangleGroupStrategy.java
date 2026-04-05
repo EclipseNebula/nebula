@@ -195,11 +195,12 @@ public class RectangleGroupStrategy extends AbstractGroupStrategy
 	                reg.add(new Rectangle(0,titleHeight,getGroup().getSize().x,regionHeight));
 	            }
 	
+	            reg.intersect(originalClip);
 	            gc.setClipping(reg);
 	
 	            getGroup().drawBackground(gc, 0, 0, getGroup().getSize().x,getGroup().getSize().y);
 	
-	            gc.setClipping((Region)null);
+	            gc.setClipping(originalClip);
 	            reg.dispose();
 	        }
 	
@@ -295,7 +296,7 @@ public class RectangleGroupStrategy extends AbstractGroupStrategy
 	
 	        if ((getGroup().getStyle() & SWT.SMOOTH) != 0)
 	        {
-	            gc.setClipping((Region)null);
+	            gc.setClipping(originalClip);
 	            reg.dispose();
 	        }
 	
@@ -448,7 +449,7 @@ public class RectangleGroupStrategy extends AbstractGroupStrategy
 	                                                true);
 	
 	                reg.dispose();
-	                gc.setClipping((Region)null);
+	                gc.setClipping(originalClip);
 	            }
 	            else
 	            {

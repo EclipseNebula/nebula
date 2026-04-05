@@ -17,6 +17,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Region;
 
 /**
  * SimpleGroupStrategy adds a seperator to the normal PGroup's image and text.
@@ -72,6 +73,9 @@ public class SimpleGroupStrategy extends AbstractGroupStrategy
      */
     public void paint(GC gc)
     {
+        Region originalClip = new Region(gc.getDevice());
+        gc.getClipping(originalClip);
+        try {
         Color back = getGroup().internalGetBackground();
         if (back != null)
         {
@@ -177,6 +181,10 @@ public class SimpleGroupStrategy extends AbstractGroupStrategy
         if (!getGroup().getExpanded())
         {
             gc.setBackground(getGroup().getParent().getBackground());
+        }
+        } finally {
+            gc.setClipping(originalClip);
+            originalClip.dispose();
         }
     }
 
