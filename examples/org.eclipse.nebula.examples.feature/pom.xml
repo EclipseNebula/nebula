@@ -25,7 +25,7 @@ Contributors:
 
 	<artifactId>org.eclipse.nebula.examples.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 
 	<name>Nebula Examples View Feature</name>
 

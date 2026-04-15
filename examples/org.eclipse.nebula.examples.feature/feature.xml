@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.nebula.examples.feature"
       label="Nebula Examples View"
-      version="1.0.4.qualifier"
+      version="1.1.0.qualifier"
       provider-name="Eclipse Nebula">
 
    <description url="%featureDescriptionURL">

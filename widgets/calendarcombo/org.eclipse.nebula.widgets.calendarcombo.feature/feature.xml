@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.nebula.widgets.calendarcombo.feature"
       label="Nebula Calendar Combo Widget - Incubating"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       provider-name="Eclipse Nebula">
 
    <description url="http://www.eclipse.org/nebula/widgets/calendarcombo/calendarcombo.php">

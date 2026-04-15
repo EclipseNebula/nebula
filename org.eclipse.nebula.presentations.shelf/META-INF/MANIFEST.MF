@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nebula PShelf-based Presentation
 Bundle-SymbolicName: org.eclipse.swt.nebula.presentations.shelf;singleton:=true
-Bundle-Version: 3.3.0.alpha
+Bundle-Version: 3.4.0.alpha
 Bundle-Vendor: Eclipse Nebula
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

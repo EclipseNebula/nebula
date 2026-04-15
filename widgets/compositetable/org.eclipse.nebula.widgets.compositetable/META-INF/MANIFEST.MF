@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nebula Compositetable
 Bundle-SymbolicName: org.eclipse.nebula.widgets.compositetable
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0.qualifier
 Export-Package: org.eclipse.nebula.widgets.compositetable,
  org.eclipse.nebula.widgets.compositetable.day,
  org.eclipse.nebula.widgets.compositetable.month,

@@ -19,6 +19,7 @@
 	</parent>
 
 	<artifactId>org.eclipse.nebula.widgets.compositetable.feature</artifactId>
+	<version>1.1.0-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 	<name>Nebula Composite Table Feature</name>

@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.nebula.widgets.cdatetime.feature"
       label="Nebula CDateTime Widget"
-      version="1.5.1.qualifier"
+      version="1.6.0.qualifier"
       provider-name="Eclipse Nebula">
 
    <description url="http://www.eclipse.org/nebula/widgets/cdatetime">

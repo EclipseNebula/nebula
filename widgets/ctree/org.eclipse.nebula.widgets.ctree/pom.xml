@@ -22,6 +22,7 @@ Contributors:
 	</parent>
 
 	<artifactId>org.eclipse.nebula.widgets.ctree</artifactId>
+	<version>0.9.0</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>
