@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nebula Collapsible Buttons - Incubating
 Bundle-SymbolicName: org.eclipse.nebula.widgets.collapsiblebuttons
-Bundle-Version: 1.0.0.qualifier
-Require-Bundle: org.eclipse.swt
+Bundle-Version: 1.1.0.qualifier
+Require-Bundle: org.eclipse.swt;bundle-version="[3.115.0,4.0.0)"
 Export-Package: org.eclipse.nebula.widgets.collapsiblebuttons
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: Eclipse Nebula

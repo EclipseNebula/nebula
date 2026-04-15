@@ -296,13 +296,13 @@ public class ToolbarItem extends Item
 
 		Color defaultForegroundColor = gc.getForeground();
 
-		Color darkBorder = new Color(gc.getDevice(), 179, 196, 216);
-		Color lightBorder = new Color(gc.getDevice(), 252, 253, 254);
+		Color darkBorder = new Color(179, 196, 216);
+		Color lightBorder = new Color(252, 253, 254);
 
 		if (pushedDown)
 		{
 			darkBorder.dispose();
-			darkBorder = new Color(gc.getDevice(), 181, 197, 217);
+			darkBorder = new Color(181, 197, 217);
 		}
 
 		if (pushedDown || hovered || selected)
@@ -327,17 +327,17 @@ public class ToolbarItem extends Item
 
 				if (pushedDown)
 				{
-					c1 = new Color(gc.getDevice(), 201, 212, 228);
-					c2 = new Color(gc.getDevice(), 216, 228, 241);
-					c3 = new Color(gc.getDevice(), 207, 219, 236);
-					c4 = new Color(gc.getDevice(), 207, 220, 237);
+					c1 = new Color(201, 212, 228);
+					c2 = new Color(216, 228, 241);
+					c3 = new Color(207, 219, 236);
+					c4 = new Color(207, 220, 237);
 				}
 				else
 				{
-					c1 = new Color(gc.getDevice(), 248, 251, 254);
-					c2 = new Color(gc.getDevice(), 237, 242, 250);
-					c3 = new Color(gc.getDevice(), 215, 228, 244);
-					c4 = new Color(gc.getDevice(), 193, 210, 232);
+					c1 = new Color(248, 251, 254);
+					c2 = new Color(237, 242, 250);
+					c3 = new Color(215, 228, 244);
+					c4 = new Color(193, 210, 232);
 				}
 
 				int middle = y + 12;

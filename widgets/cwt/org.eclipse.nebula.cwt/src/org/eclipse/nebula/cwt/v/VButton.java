@@ -49,10 +49,10 @@ public class VButton extends VControl {
 		addListener(SWT.MouseDown);
 		addListener(SWT.MouseUp);
 
-		defaultSelectedBorderColor = new Color(getDisplay(), 1, 85, 153);
-		defaultSelectedBackgroundColor = new Color(getDisplay(), 204, 228, 247);
-		defaultHoverBorderColor = new Color(getDisplay(), 1, 121, 215);
-		defaultHoverBackgroundColor = new Color(getDisplay(), 229, 241, 251);
+		defaultSelectedBorderColor = new Color(1, 85, 153);
+		defaultSelectedBackgroundColor = new Color(204, 228, 247);
+		defaultHoverBorderColor = new Color(1, 121, 215);
+		defaultHoverBackgroundColor = new Color(229, 241, 251);
 	}
 
 	public void dispose() {

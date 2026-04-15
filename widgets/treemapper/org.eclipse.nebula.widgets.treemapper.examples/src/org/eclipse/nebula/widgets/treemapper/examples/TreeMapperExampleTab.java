@@ -66,8 +66,8 @@ public class TreeMapperExampleTab extends AbstractExampleTab {
 
 	@Override
 	public Control createControl(Composite parent) {
-		Color defaultColor = new Color(parent.getShell().getDisplay(), new RGB(247, 206, 206));
-		Color selectedColor = new Color(parent.getShell().getDisplay(), new RGB(147, 86, 111));
+		Color defaultColor = new Color(new RGB(247, 206, 206));
+		Color selectedColor = new Color(new RGB(147, 86, 111));
 		TreeMapperUIConfigProvider uiConfig = new TreeMapperUIConfigProvider(defaultColor, 1, selectedColor, 3);
 		
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));

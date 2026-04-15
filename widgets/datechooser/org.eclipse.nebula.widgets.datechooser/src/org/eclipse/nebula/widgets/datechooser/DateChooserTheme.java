@@ -139,7 +139,7 @@ public class DateChooserTheme {
 		todayBackground = headerBackground;
 		todayForeground = headerForeground;
 		extraMonthForeground = gridLinesColor;
-		weekendForeground = new Color(display, 180, 0, 0);
+		weekendForeground = new Color(180, 0, 0);
 		focusColor = display.getSystemColor(SWT.COLOR_RED);
 	}
 
@@ -152,9 +152,9 @@ public class DateChooserTheme {
 		final Display display = Display.getCurrent();
 		final DateChooserTheme theme = new DateChooserTheme();
 
-		theme.headerBackground = new Color(display, 170, 190, 220);
+		theme.headerBackground = new Color(170, 190, 220);
 		theme.gridHeaderBackground = theme.headerBackground;
-		theme.dayCellBackground = new Color(display, 190, 220, 240);
+		theme.dayCellBackground = new Color(190, 220, 240);
 		theme.extraMonthForeground = display.getSystemColor(SWT.COLOR_DARK_GRAY);
 		theme.weekendForeground = display.getSystemColor(SWT.COLOR_RED);
 		theme.todayBackground = display.getSystemColor(SWT.COLOR_WHITE);
@@ -220,9 +220,9 @@ public class DateChooserTheme {
 		final Display display = Display.getCurrent();
 		final DateChooserTheme theme = new DateChooserTheme();
 
-		theme.headerBackground = new Color(display, 190, 180, 60);
+		theme.headerBackground = new Color(190, 180, 60);
 		theme.gridHeaderBackground = theme.headerBackground;
-		theme.dayCellBackground = new Color(display, 255, 255, 170);
+		theme.dayCellBackground = new Color(255, 255, 170);
 		theme.extraMonthForeground = display.getSystemColor(SWT.COLOR_DARK_GRAY);
 		theme.weekendForeground = display.getSystemColor(SWT.COLOR_RED);
 		theme.todayBackground = display.getSystemColor(SWT.COLOR_GRAY);

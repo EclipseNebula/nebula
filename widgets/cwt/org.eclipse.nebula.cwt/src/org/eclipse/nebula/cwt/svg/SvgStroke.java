@@ -30,7 +30,7 @@ class SvgStroke extends SvgPaint {
 		if(paintServer != null) {
 			paintServer.apply(true);
 		} else {
-			Color c = new Color(gc.getDevice(), color >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF);
+			Color c = new Color(color >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF);
 			gc.setForeground(c);
 			c.dispose();
 			gc.setLineWidth((int)Math.ceil(width));

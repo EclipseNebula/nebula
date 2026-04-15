@@ -90,11 +90,11 @@ public class PShelfStackPresentation extends StackPresentation
         RGB blendwith = new RGB(255,255,255);
         RGB blended = blend(sel,blendwith,20);
         
-        toolbarBackground = new Color(parent.getDisplay(),blended);
+        toolbarBackground = new Color(blended);
         
         blended = blend(sel,blendwith,60);
         
-        border = new Color(parent.getDisplay(),blended);
+        border = new Color(blended);
         
         URL imageURL = Platform.getBundle("org.eclipse.swt.nebula.presentations.shelf").getResource("icons/view_menu.gif");
         menuTBImage = ImageDescriptor.createFromURL(imageURL).createImage();

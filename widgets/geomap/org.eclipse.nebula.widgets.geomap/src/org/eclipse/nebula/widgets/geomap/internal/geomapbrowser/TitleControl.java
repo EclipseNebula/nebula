@@ -50,10 +50,10 @@ public class TitleControl extends Canvas {
 		addDisposeListener(e -> onDispose(e));
 
 		font = new Font(getDisplay(), "Tahoma", 10, SWT.BOLD);
-		gradient1Color = new Color(getDisplay(), 255, 255, 255);
-		gradient2Color = new Color(getDisplay(), 205, 224, 244);
-		bottomLineColor = new Color(getDisplay(), 200, 195, 216);
-		writingColor = new Color(getDisplay(), 60, 60, 60);
+		gradient1Color = new Color(255, 255, 255);
+		gradient2Color = new Color(205, 224, 244);
+		bottomLineColor = new Color(200, 195, 216);
+		writingColor = new Color(60, 60, 60);
 		this.image = image;
 
 		measureSize("M");

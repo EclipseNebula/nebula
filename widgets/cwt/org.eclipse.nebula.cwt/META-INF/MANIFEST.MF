@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.nebula.cwt
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -14,4 +14,4 @@ Export-Package: org.eclipse.nebula.cwt.animation,
  org.eclipse.nebula.cwt.svg,
  org.eclipse.nebula.cwt.v
 Automatic-Module-Name: org.eclipse.nebula.cwt
-Require-Bundle: org.eclipse.swt
+Require-Bundle: org.eclipse.swt;bundle-version="[3.115.0,4.0.0)"

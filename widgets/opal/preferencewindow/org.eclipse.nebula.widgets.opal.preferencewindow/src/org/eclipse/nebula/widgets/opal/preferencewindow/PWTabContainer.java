@@ -56,7 +56,7 @@ class PWTabContainer extends Composite {
 		gridLayout.horizontalSpacing = gridLayout.verticalSpacing = 0;
 		setLayout(gridLayout);
 
-		grey = new Color(getDisplay(), 204, 204, 204);
+		grey = new Color(204, 204, 204);
 		SWTGraphicUtil.addDisposer(this, grey);
 	}
 

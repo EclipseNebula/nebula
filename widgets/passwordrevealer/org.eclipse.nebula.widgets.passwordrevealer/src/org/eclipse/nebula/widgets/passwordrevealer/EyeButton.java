@@ -36,7 +36,7 @@ class EyeButton extends Canvas {
 		super(parent, SWT.DOUBLE_BUFFERED);
 		isPushMode = (style & SWT.PUSH) == SWT.PUSH;
 		addListeners();
-		color = new Color(parent.getDisplay(), 0, 127, 222);
+		color = new Color(0, 127, 222);
 		SWTGraphicUtil.addDisposer(this, color);
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		pushState = false;

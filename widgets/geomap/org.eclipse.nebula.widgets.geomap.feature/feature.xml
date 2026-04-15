@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.nebula.widgets.geomap.feature"
       label="Nebula GeoMap Widget and Viewer"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       provider-name="Eclipse Nebula">
 
    <description url="http://www.eclipse.org/nebula/widgets/geomap">

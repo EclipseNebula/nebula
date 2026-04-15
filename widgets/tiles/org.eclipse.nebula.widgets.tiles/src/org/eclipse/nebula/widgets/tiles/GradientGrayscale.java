@@ -32,9 +32,9 @@ public class GradientGrayscale extends Gradient{
 	 */
 	private static final Color[] getColors(final Tiles<?> tiles){
 		final Display device = tiles.getDisplay();
-		final Color[] colors = new Color[]{	new Color(device, 0, 0, 0),
-				new Color(device, 128, 128, 128),
-				new Color(device, 255, 255, 255)};
+		final Color[] colors = new Color[]{	new Color(0, 0, 0),
+				new Color(128, 128, 128),
+				new Color(255, 255, 255)};
 		tiles.addDisposeListener(arg0 -> {
 			for (final Color c : colors) {
 				if (!c.isDisposed()) {

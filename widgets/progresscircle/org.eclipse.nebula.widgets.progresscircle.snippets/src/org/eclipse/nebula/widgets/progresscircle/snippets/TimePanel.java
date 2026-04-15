@@ -91,7 +91,7 @@ class TimePanel extends BasePanel {
 		circle.setCircleSize(100);
 		circle.setShowText(true);
 
-		final Color red = new Color(shell.getDisplay(), 222, 80, 79);
+		final Color red = new Color(222, 80, 79);
 		shell.addDisposeListener((e) -> red.dispose());
 		circle.setHighlightColor(red);
 

@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.nebula.widgets.oscilloscope.feature"
       label="%featureName"
-      version="1.4.0.qualifier"
+      version="1.5.0.qualifier"
       provider-name="%provider">
 
    <description url="%featureDescriptionURL">

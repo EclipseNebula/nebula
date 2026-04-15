@@ -48,8 +48,8 @@ class RoundedSwitchConfiguration {
 
 	static RoundedSwitchConfiguration createCheckedDisabledConfiguration(RoundedSwitch parent) {
 		Display display = parent.getDisplay();
-		Color lightGrey = new Color(display, 233, 233, 233);
-		Color darkGrey = new Color(display, 208, 208, 208);
+		Color lightGrey = new Color(233, 233, 233);
+		Color darkGrey = new Color(208, 208, 208);
 		SWTGraphicUtil.addDisposer(parent, lightGrey, darkGrey);
 		RoundedSwitchConfiguration config = new RoundedSwitchConfiguration(lightGrey, darkGrey, lightGrey);
 		return config;
@@ -57,8 +57,8 @@ class RoundedSwitchConfiguration {
 
 	static RoundedSwitchConfiguration createUncheckedDisabledConfiguration(RoundedSwitch parent) {
 		Display display = parent.getDisplay();
-		Color lightGrey = new Color(display, 233, 233, 233);
-		Color darkGrey = new Color(display, 208, 208, 208);
+		Color lightGrey = new Color(233, 233, 233);
+		Color darkGrey = new Color(208, 208, 208);
 		SWTGraphicUtil.addDisposer(parent, lightGrey, darkGrey);
 		RoundedSwitchConfiguration config = new RoundedSwitchConfiguration(lightGrey, darkGrey, lightGrey);
 		return config;

@@ -111,7 +111,7 @@ public class ProgressCircle extends Canvas {
 	}
 
 	private Color getAndDisposeColor(int r, int g, int b) {
-		final Color color = new Color(getDisplay(), r, g, b);
+		final Color color = new Color(r, g, b);
 		addDisposeListener(e -> {
 			if (!color.isDisposed()) {
 				color.dispose();

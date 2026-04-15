@@ -31,12 +31,12 @@ public class GradientHeatscale extends Gradient{
 	 */
 	private static final Color[] getColors(final Tiles<?> tiles){
 		final Display device = tiles.getDisplay();
-		final Color[] colors = new Color[]{	new Color(device, 0, 0, 255),
-				new Color(device, 0, 255, 255),
-				new Color(device, 0, 200, 0),
-				new Color(device, 255, 255, 0),
-				new Color(device, 255, 69, 0),
-				new Color(device, 255, 0, 0)};
+		final Color[] colors = new Color[]{	new Color(0, 0, 255),
+				new Color(0, 255, 255),
+				new Color(0, 200, 0),
+				new Color(255, 255, 0),
+				new Color(255, 69, 0),
+				new Color(255, 0, 0)};
 
 		tiles.addDisposeListener(arg0 -> {
 			for (final Color c : colors) {

@@ -110,7 +110,7 @@ public class Gradient {
 		final Color[] result = new Color[steps];
 		for (int y=0; y<steps; y++){
 			final int rgb = legend.getRGB(0, y);
-			result[y] = new Color(tiles.getDisplay(), rgb >> 16 & 0x000000ff, rgb >> 8 & 0x000000ff, rgb & 0x000000ff);
+			result[y] = new Color(rgb >> 16 & 0x000000ff, rgb >> 8 & 0x000000ff, rgb & 0x000000ff);
 		}
 
 		// Return

@@ -102,7 +102,7 @@ public class ResourcePool {
 
 		Color color = colors.get(rgb);
 		if (color == null) {
-			color = new Color(device, rgb);
+			color = new Color(rgb);
 			colors.put(SWTUtil.copy(rgb), color);
 		}
 		return color;

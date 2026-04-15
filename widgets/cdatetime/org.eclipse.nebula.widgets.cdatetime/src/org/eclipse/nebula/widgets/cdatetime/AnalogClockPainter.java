@@ -192,8 +192,8 @@ class AnalogClockPainter implements IControlPainter {
 		int x = picker.dialCenter.x - picker.dialRadius;
 		int y = picker.dialCenter.y - picker.dialRadius;
 
-		Color c1 = new Color(e.display, 220, 220, 225);
-		Color c2 = new Color(e.display, 200, 200, 200);
+		Color c1 = new Color(220, 220, 225);
+		Color c2 = new Color(200, 200, 200);
 
 		Pattern p = new Pattern(e.display, 0, y, 0, y + dia,
 				e.display.getSystemColor(SWT.COLOR_WHITE), c1);

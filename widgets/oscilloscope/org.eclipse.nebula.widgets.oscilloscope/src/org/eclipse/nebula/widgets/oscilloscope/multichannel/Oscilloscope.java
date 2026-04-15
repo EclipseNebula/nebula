@@ -411,9 +411,9 @@ public class Oscilloscope extends Canvas {
 
 		gridSquareSize = 20;
 		gridLineWidth = 1;
-		final Color defaultGridBackground = new Color(getDisplay(), 57, 52, 56);
+		final Color defaultGridBackground = new Color(57, 52, 56);
 		gridBackground = defaultGridBackground;
-		final Color defaultGridForeground = new Color(getDisplay(), 81, 96, 77);
+		final Color defaultGridForeground = new Color(81, 96, 77);
 		gridForeground = defaultGridForeground;
 		addListener(SWT.Dispose, e-> {
 			defaultGridBackground.dispose();

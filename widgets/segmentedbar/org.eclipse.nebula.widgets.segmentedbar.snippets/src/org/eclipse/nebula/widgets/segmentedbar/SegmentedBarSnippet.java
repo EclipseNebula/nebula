@@ -41,11 +41,11 @@ public class SegmentedBarSnippet {
 		lbl1.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, false, false));
 		lbl1.setText("Simple bar");
 
-		Color blue = new Color(display, 70, 130, 180);
-		Color violet = new Color(display, 128, 0, 128);
-		Color lightGreen = new Color(display, 95, 158, 60);
-		Color pink = new Color(display, 240, 128, 180);
-		Color orange = new Color(display, 255, 165, 0);
+		Color blue = new Color(70, 130, 180);
+		Color violet = new Color(128, 0, 128);
+		Color lightGreen = new Color(95, 158, 60);
+		Color pink = new Color(240, 128, 180);
+		Color orange = new Color(255, 165, 0);
 
 		SegmentedBar sb1 = new SegmentedBar(shell, SWT.NONE);
 		sb1.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false));

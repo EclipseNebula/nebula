@@ -63,7 +63,7 @@ class AbsolutePanel extends BasePanel {
 		circle.setCircleSize(100);
 		circle.setShowText(true);
 
-		final Color green = new Color(shell.getDisplay(), 113, 178, 123);
+		final Color green = new Color(113, 178, 123);
 		shell.addDisposeListener((e) -> green.dispose());
 		circle.setHighlightColor(green);
 

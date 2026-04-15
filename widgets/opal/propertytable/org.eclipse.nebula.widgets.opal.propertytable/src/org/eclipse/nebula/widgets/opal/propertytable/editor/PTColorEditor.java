@@ -85,7 +85,7 @@ public class PTColorEditor extends PTChooserEditor {
 			return null;
 		}
 		final RGB rgb = (RGB) property.getValue();
-		return new Color(Display.getDefault(), rgb);
+		return new Color(rgb);
 	}
 
 }

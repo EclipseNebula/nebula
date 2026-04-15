@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nebula PShelf
 Bundle-SymbolicName: org.eclipse.nebula.widgets.pshelf
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: Eclipse Nebula
 Require-Bundle: org.eclipse.swt;bundle-version="[3.126.0,4.0.0)",
  org.eclipse.jface,

@@ -138,8 +138,8 @@ public class GeoMapHelper implements GeoMapPositioned, GeoMapHelperListener {
 				super.clear();
 			}
 		});
-		waitBackground = new Color(display, 0x88, 0x88, 0x88);
-		waitForeground = new Color(display, 0x77, 0x77, 0x77);
+		waitBackground = new Color(0x88, 0x88, 0x88);
+		waitForeground = new Color(0x77, 0x77, 0x77);
 
 		setZoom(zoom);
 		setMapPosition(mapPosition.x, mapPosition.y);

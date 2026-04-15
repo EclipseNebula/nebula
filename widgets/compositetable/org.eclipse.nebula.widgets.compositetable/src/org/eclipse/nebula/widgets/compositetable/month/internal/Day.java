@@ -78,11 +78,11 @@ public class Day extends Canvas implements PaintListener, DisposeListener {
 		super(parent, style);
 
 		Display display = Display.getCurrent();
-		FOCUS_RUBBERBAND = new Color(display, lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND).getRGB(), .85f), -.333f));
-		NONACTIVE_FOCUS_RUBBERBAND = new Color(display, lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND).getRGB(), .0f), -.333f));
+		FOCUS_RUBBERBAND = new Color(lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND).getRGB(), .85f), -.333f));
+		NONACTIVE_FOCUS_RUBBERBAND = new Color(lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND).getRGB(), .0f), -.333f));
 		CURRENT_MONTH = display.getSystemColor(SWT.COLOR_WHITE);
-		OTHER_MONTH = new Color(display, new RGB(230, 230, 230));
-		CELL_BACKGROUND_LIGHT = new Color(display, new RGB(248, 248, 248));
+		OTHER_MONTH = new Color(new RGB(230, 230, 230));
+		CELL_BACKGROUND_LIGHT = new Color(new RGB(248, 248, 248));
 
 		initialize();
 

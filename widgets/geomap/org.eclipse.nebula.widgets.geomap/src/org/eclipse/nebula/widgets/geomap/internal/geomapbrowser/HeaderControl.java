@@ -52,7 +52,7 @@ public class HeaderControl extends Canvas {
 		addDisposeListener(e -> onDispose(e));
 
 		font = new Font(getDisplay(), "Tahoma", 10, SWT.BOLD);
-		foreground = new Color(getDisplay(), 87, 166, 212);
+		foreground = new Color(87, 166, 212);
 		measureString("M");
 	}
 

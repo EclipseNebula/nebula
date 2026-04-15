@@ -304,7 +304,7 @@ public class ColorCache {
         Color color = mColorTable.get(rgb);
 
         if (color == null) {
-            color = new Color(Display.getCurrent(), rgb);
+            color = new Color(rgb);
             mColorTable.put(rgb, color);
         }
 

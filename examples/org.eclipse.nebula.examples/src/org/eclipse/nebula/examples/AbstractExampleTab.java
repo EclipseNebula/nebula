@@ -252,7 +252,7 @@ public abstract class AbstractExampleTab {
 			ColorDialog cd = new ColorDialog(Display.getCurrent().getActiveShell());
 			RGB newRGB = cd.open();
 			if (newRGB != null) {
-				Color newColor = new Color(Display.getCurrent(), newRGB);
+				Color newColor = new Color(newRGB);
 				controlExample.setBackground(newColor);
 				if (modifiedBack != null) {
 					modifiedBack.dispose();
@@ -266,7 +266,7 @@ public abstract class AbstractExampleTab {
 			ColorDialog cd = new ColorDialog(Display.getCurrent().getActiveShell());
 			RGB newRGB = cd.open();
 			if (newRGB != null) {
-				Color newColor = new Color(Display.getCurrent(), newRGB);
+				Color newColor = new Color(newRGB);
 				controlExample.setForeground(newColor);
 				if (modifiedFore != null) {
 					modifiedFore.dispose();

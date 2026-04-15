@@ -141,9 +141,9 @@ class FlatButton extends Canvas {
 
 	private void initializeDefaultColors() {
 		backgroundColor = getDisplay().getSystemColor(SWT.COLOR_WHITE);
-		selectedColor = new Color(getDisplay(), 0, 112, 192);
+		selectedColor = new Color(0, 112, 192);
 		selectedTextColor = getDisplay().getSystemColor(SWT.COLOR_WHITE);
-		mouseOverColor = new Color(getDisplay(), 235, 234, 226);
+		mouseOverColor = new Color(235, 234, 226);
 
 		SWTGraphicUtil.addDisposer(this, selectedColor);
 		SWTGraphicUtil.addDisposer(this, mouseOverColor);

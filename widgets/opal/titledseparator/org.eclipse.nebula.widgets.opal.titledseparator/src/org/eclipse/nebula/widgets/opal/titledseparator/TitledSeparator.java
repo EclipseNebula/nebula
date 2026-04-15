@@ -74,7 +74,7 @@ public class TitledSeparator extends Composite {
 		super(parent, style);
 		alignment = SWT.LEFT;
 
-		final Color originalColor = new Color(getDisplay(), 0, 88, 150);
+		final Color originalColor = new Color(0, 88, 150);
 		setForeground(originalColor);
 
 		final Font originalFont;

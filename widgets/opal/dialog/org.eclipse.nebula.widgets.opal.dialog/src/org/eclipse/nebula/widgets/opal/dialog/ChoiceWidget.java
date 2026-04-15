@@ -121,7 +121,7 @@ public class ChoiceWidget extends Composite {
 	 * Build the instruction
 	 */
 	private void buildInstruction() {
-		final Color color = new Color(Display.getCurrent(), 35, 107, 178);
+		final Color color = new Color(35, 107, 178);
 		SWTGraphicUtil.addDisposer(this, color);
 
 		instruction = new Label(this, SWT.NONE);
@@ -218,8 +218,8 @@ public class ChoiceWidget extends Composite {
 			gc.drawRectangle(rect.x, rect.y, rect.width, rect.height);
 		} else {
 			// The mouse is over OR the item is selected
-			final Color gradientColor = inside ? new Color(getDisplay(), 220, 231, 243) : new Color(getDisplay(), 241, 241, 241);
-			final Color borderColor = inside ? new Color(getDisplay(), 35, 107, 178) : new Color(getDisplay(), 192, 192, 192);
+			final Color gradientColor = inside ? new Color(220, 231, 243) : new Color(241, 241, 241);
+			final Color borderColor = inside ? new Color(35, 107, 178) : new Color(192, 192, 192);
 
 			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			gc.setBackground(gradientColor);

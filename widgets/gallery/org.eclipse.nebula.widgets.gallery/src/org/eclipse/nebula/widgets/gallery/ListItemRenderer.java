@@ -272,7 +272,7 @@ public class ListItemRenderer extends AbstractGalleryItemRenderer {
 			// Create new colors
 			for (int i = dropShadowsSize - 1; i >= 0; i--) {
 				int value = 255 - i * step;
-				Color c = new Color(Display.getDefault(), value, value, value);
+				Color c = new Color(value, value, value);
 				dropShadowsColors.add(c);
 			}
 		}

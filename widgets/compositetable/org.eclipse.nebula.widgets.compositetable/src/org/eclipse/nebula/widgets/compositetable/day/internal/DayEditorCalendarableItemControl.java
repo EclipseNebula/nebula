@@ -83,10 +83,10 @@ public class DayEditorCalendarableItemControl extends Canvas implements ICalenda
 		super(parent, style);
 		Display display = parent.getDisplay();
 
-		BACKGROUND_COLOR = new Color(display, lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT).getRGB(), .08f), .3f));
-		BORDER_COLOR = new Color(display, lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND).getRGB(), .18f), .1f));
+		BACKGROUND_COLOR = new Color(lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT).getRGB(), .08f), .3f));
+		BORDER_COLOR = new Color(lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND).getRGB(), .18f), .1f));
 		SELECTED_BACKGROUND_COLOR = display.getSystemColor(SWT.COLOR_WHITE);
-		SELECTED_BORDER_COLOR = new Color(display, saturate(BORDER_COLOR.getRGB(), .4f));
+		SELECTED_BORDER_COLOR = new Color(saturate(BORDER_COLOR.getRGB(), .4f));
 
 		initialize();
 	}

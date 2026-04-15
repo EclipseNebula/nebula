@@ -53,7 +53,7 @@ public class PWColorChooser extends PWWidget {
 		if (rgb == null) {
 			color = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
 		} else {
-			color = new Color(Display.getDefault(), rgb);
+			color = new Color(rgb);
 		}
 
 		buildLabel(parent, GridData.CENTER);
@@ -72,7 +72,7 @@ public class PWColorChooser extends PWWidget {
 			final RGB result = dialog.open();
 			if (result != null) {
 				SWTGraphicUtil.safeDispose(color);
-				color = new Color(button.getDisplay(), result);
+				color = new Color(result);
 				drawButton(button);
 				PreferenceWindow.getInstance().setValue(getPropertyKey(), result);
 			}

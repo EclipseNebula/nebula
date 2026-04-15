@@ -72,11 +72,11 @@ public abstract class BaseLED extends Canvas {
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		addListener(SWT.Paint, e -> onPaint(e));
 
-		Color defaultIdleColor = new Color(getDisplay(), 0, 29, 29);
+		Color defaultIdleColor = new Color(0, 29, 29);
 		SWTGraphicUtil.addDisposer(this, defaultIdleColor);
 		idleColor = defaultIdleColor;
 
-		Color defaultSelectedColor = new Color(getDisplay(), 148, 237, 147);
+		Color defaultSelectedColor = new Color(148, 237, 147);
 		SWTGraphicUtil.addDisposer(this, defaultSelectedColor);
 		selectedColor = defaultSelectedColor;
 	}

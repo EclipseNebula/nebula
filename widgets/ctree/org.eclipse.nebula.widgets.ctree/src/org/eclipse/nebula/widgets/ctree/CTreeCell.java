@@ -1232,7 +1232,7 @@ public class CTreeCell {
 					pointsWidth,
 					pointsWidth,
 					3, 3);
-			Color color = new Color(ctree.getDisplay(), 223, 229, 234);
+			Color color = new Color(223, 229, 234);
 			gc.setForeground(color);
 			gc.drawLine(
 					(int) x,
@@ -1253,7 +1253,7 @@ public class CTreeCell {
 					(int) y + pointsWidth-3
 			);
 			color.dispose();
-			color = new Color(ctree.getDisplay(), 196, 206, 216);
+			color = new Color(196, 206, 216);
 			gc.setForeground(color);
 			color.dispose();
 			gc.drawLine(

@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.nebula.widgets.compositetable.feature"
       label="Nebula Composite Table Widget"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       provider-name="Eclipse Nebula">
 
    <description url="http://www.eclipse.org/nebula/widgets/compositetable/compositetable.php">

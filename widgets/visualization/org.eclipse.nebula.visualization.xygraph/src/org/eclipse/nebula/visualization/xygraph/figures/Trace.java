@@ -381,7 +381,7 @@ public class Trace extends Figure implements IDataProviderListener, IAxisListene
 			graphics.setAlpha(areaAlpha);
 		} else {
 			final float[] hsb = errorBarColor.getRGB().getHSB();
-			lighter = new Color(Display.getCurrent(), new RGB(hsb[0], hsb[1] * areaAlpha / 255, 1.0f));
+			lighter = new Color(new RGB(hsb[0], hsb[1] * areaAlpha / 255, 1.0f));
 			graphics.setBackgroundColor(lighter);
 		}
 

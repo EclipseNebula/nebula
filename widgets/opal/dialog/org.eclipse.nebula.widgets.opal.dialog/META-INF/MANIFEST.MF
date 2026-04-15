@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nebula Opal Dialog
 Bundle-SymbolicName: org.eclipse.nebula.widgets.opal.dialog
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: Eclipse Nebula
 Require-Bundle: org.eclipse.nebula.widgets.opal.commons;bundle-version="1.0.0";visibility:=reexport,
- org.eclipse.swt
+ org.eclipse.swt;bundle-version="[3.115.0,4.0.0)"
 Export-Package: org.eclipse.nebula.widgets.opal.dialog
 Automatic-Module-Name: org.eclipse.nebula.widgets.opal.dialog
