@@ -1,6 +1,6 @@
 pipeline {
   agent {
-    label "centos-latest"
+    label "ubuntu-latest"
   }
 
   options {
