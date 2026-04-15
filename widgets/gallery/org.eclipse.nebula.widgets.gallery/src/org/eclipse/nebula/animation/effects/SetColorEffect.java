@@ -111,7 +111,7 @@ public class SetColorEffect extends AbstractEffect {
 
 		if (currentColor == null || !nextRGB.equals(currentColor.getRGB())) {
 
-			Color nextColor = new Color(Display.getCurrent(), nextRed,
+			Color nextColor = new Color(nextRed,
 					nextGreen, nextBlue);
 
 			// If this is the destination color, dispose the newly created color

@@ -46,7 +46,7 @@ public class SingleSourceHelperImpl extends SingleSourceHelper2 {
 		Image image = new Image(Display.getCurrent(), w, h);
 
 		final GC gc = GraphicsUtil.createGC(image);
-		final Color titleColor = new Color(Display.getCurrent(), color);
+		final Color titleColor = new Color(color);
 		RGB transparentRGB = new RGB(240, 240, 240);
 
 		gc.setBackground(XYGraphMediaFactory.getInstance().getColor(transparentRGB));

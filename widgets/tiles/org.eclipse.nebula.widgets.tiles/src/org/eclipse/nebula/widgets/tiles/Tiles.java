@@ -99,7 +99,7 @@ public class Tiles<T> extends Canvas {
 		addMouseListener(mouseListener);
 		addMouseMoveListener(mouseMoveListener);
 		addControlListener(resizeListener);
-		this.black = new Color(getDisplay(), 0, 0, 0);
+		this.black = new Color(0, 0, 0);
 		getDisplay().timerExec(settings.getDelta(), animation);
 	}
 

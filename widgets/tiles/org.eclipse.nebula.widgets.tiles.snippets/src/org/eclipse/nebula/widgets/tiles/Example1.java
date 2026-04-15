@@ -163,7 +163,7 @@ public class Example1 {
 	 */
 	private static DecoratorColor<Integer> getDecoratorForegroundColor(final Tiles<Integer> tiles) {
 		
-		final Color black = new Color(tiles.getDisplay(), 0, 0, 0);
+		final Color black = new Color(0, 0, 0);
 		
 		final DecoratorColor<Integer> decorator = new DecoratorColor<Integer>() {
 			@Override
@@ -198,8 +198,8 @@ public class Example1 {
 	 */
 	private static DecoratorColor<Integer> getDecoratorLineColor(final Tiles<Integer> tiles) {
 		
-		final Color black = new Color(tiles.getDisplay(), 0, 0, 0);
-		final Color blue = new Color(tiles.getDisplay(), 0, 0, 255);
+		final Color black = new Color(0, 0, 0);
+		final Color blue = new Color(0, 0, 255);
 		
 		final DecoratorColor<Integer> decorator = new DecoratorColor<Integer>() {
 			@Override

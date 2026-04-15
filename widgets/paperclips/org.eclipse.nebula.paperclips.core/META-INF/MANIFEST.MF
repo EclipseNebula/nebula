@@ -4,7 +4,7 @@ Bundle-Name: Nebula Paperclips Core
 Bundle-SymbolicName: org.eclipse.nebula.paperclips.core
 Bundle-Version: 2.1.0.qualifier
 Bundle-Vendor: Eclipse Nebula
-Require-Bundle: org.eclipse.swt;bundle-version="[3.2.0,4.0.0)"
+Require-Bundle: org.eclipse.swt;bundle-version="[3.115.0,4.0.0)"
 Export-Package: org.eclipse.nebula.paperclips.core,
  org.eclipse.nebula.paperclips.core.border,
  org.eclipse.nebula.paperclips.core.border.internal,

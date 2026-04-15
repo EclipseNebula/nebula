@@ -482,7 +482,7 @@ public class GridItem_Test {
   @Test
   public void testGetBackground() {
     GridItem item = new GridItem( grid, SWT.NONE );
-    Color background = new Color( display, 0, 0, 255 );
+    Color background = new Color(0, 0, 255 );
     item.setBackground( background );
     assertSame( background, item.getBackground() );
   }
@@ -490,7 +490,7 @@ public class GridItem_Test {
   @Test( expected = IllegalArgumentException.class )
   public void testSetBackground_DisposedFont() {
     GridItem item = new GridItem( grid, SWT.NONE );
-    Color background = new Color( display, 0, 0, 255 );
+    Color background = new Color(0, 0, 255 );
     background.dispose();
     item.setBackground( background );
   }
@@ -499,7 +499,7 @@ public class GridItem_Test {
   public void testGetBackgroundByIndex() {
     createGridColumns( grid, 3, SWT.NONE );
     GridItem item = new GridItem( grid, SWT.NONE );
-    Color background = new Color( display, 0, 0, 255 );
+    Color background = new Color(0, 0, 255 );
     item.setBackground( 1, background );
     assertSame( grid.getBackground(), item.getBackground( 0 ) );
     assertSame( background, item.getBackground( 1 ) );
@@ -517,7 +517,7 @@ public class GridItem_Test {
   public void testSetBackgroundByIndex_DisposedFont() {
     createGridColumns( grid, 3, SWT.NONE );
     GridItem item = new GridItem( grid, SWT.NONE );
-    Color background = new Color( display, 0, 0, 255 );
+    Color background = new Color(0, 0, 255 );
     background.dispose();
     item.setBackground( 1, background );
   }
@@ -531,7 +531,7 @@ public class GridItem_Test {
   @Test
   public void testGetForeground() {
     GridItem item = new GridItem( grid, SWT.NONE );
-    Color foreground = new Color( display, 0, 0, 255 );
+    Color foreground = new Color(0, 0, 255 );
     item.setForeground( foreground );
     assertSame( foreground, item.getForeground() );
   }
@@ -539,7 +539,7 @@ public class GridItem_Test {
   @Test( expected = IllegalArgumentException.class )
   public void testSetForeground_DisposedFont() {
     GridItem item = new GridItem( grid, SWT.NONE );
-    Color foreground = new Color( display, 0, 0, 255 );
+    Color foreground = new Color(0, 0, 255 );
     foreground.dispose();
     item.setForeground( foreground );
   }
@@ -548,7 +548,7 @@ public class GridItem_Test {
   public void testGetForegroundByIndex() {
     createGridColumns( grid, 3, SWT.NONE );
     GridItem item = new GridItem( grid, SWT.NONE );
-    Color foreground = new Color( display, 0, 0, 255 );
+    Color foreground = new Color(0, 0, 255 );
     item.setForeground( 1, foreground );
     assertSame( grid.getForeground(), item.getForeground( 0 ) );
     assertSame( foreground, item.getForeground( 1 ) );
@@ -566,7 +566,7 @@ public class GridItem_Test {
   public void testSetForegroundByIndex_DisposedFont() {
     createGridColumns( grid, 3, SWT.NONE );
     GridItem item = new GridItem( grid, SWT.NONE );
-    Color foreground = new Color( display, 0, 0, 255 );
+    Color foreground = new Color(0, 0, 255 );
     foreground.dispose();
     item.setForeground( 1, foreground );
   }
@@ -575,8 +575,8 @@ public class GridItem_Test {
   public void testClear() {
     GridItem item = new GridItem( grid, SWT.NONE );
     Font font = new Font( display, "Arial", 20, SWT.BOLD );
-    Color background = new Color( display, 0, 255, 0 );
-    Color foreground = new Color( display, 0, 0, 255 );
+    Color background = new Color(0, 255, 0 );
+    Color foreground = new Color(0, 0, 255 );
     item.setFont( font );
     item.setBackground( background );
     item.setForeground( foreground );

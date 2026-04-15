@@ -106,7 +106,7 @@ public class SColors {
 	
 	public void setBorder(RGB rgb) {
 		if((display != null) && !display.isDisposed()) {
-			Color color = new Color(display, rgb);
+			Color color = new Color(rgb);
 			border = color;
 			disposable.add(color);
 		}
@@ -123,7 +123,7 @@ public class SColors {
 	
 	public void setGrid(RGB rgb) {
 		if((display != null) && !display.isDisposed()) {
-			Color color = new Color(display, rgb);
+			Color color = new Color(rgb);
 			grid = color;
 			disposable.add(color);
 		}
@@ -140,7 +140,7 @@ public class SColors {
 	
 	public void setItemBackgroundNormal(RGB rgb) {
 		if((display != null) && !display.isDisposed()) {
-			Color color = new Color(display, rgb);
+			Color color = new Color(rgb);
 			itemBackgroundNormal = color;
 			disposable.add(color);
 		}
@@ -157,7 +157,7 @@ public class SColors {
 	
 	public void setItemBackgroundSelected(RGB rgb) {
 		if((display != null) && !display.isDisposed()) {
-			Color color = new Color(display, rgb);
+			Color color = new Color(rgb);
 			itemBackgroundSelected = color;
 			disposable.add(color);
 		}
@@ -174,7 +174,7 @@ public class SColors {
 	
 	public void setItemBackgroundSelectedNoFocus(RGB rgb) {
 		if((display != null) && !display.isDisposed()) {
-			Color color = new Color(display, rgb);
+			Color color = new Color(rgb);
 			itemBackgroundSelectedNoFocus = color;
 			disposable.add(color);
 		}
@@ -191,7 +191,7 @@ public class SColors {
 	
 	public void setItemForegroundNormal(RGB rgb) {
 		if((display != null) && !display.isDisposed()) {
-			Color color = new Color(display, rgb);
+			Color color = new Color(rgb);
 			itemForegroundNormal = color;
 			disposable.add(color);
 		}
@@ -208,7 +208,7 @@ public class SColors {
 	
 	public void setItemForegroundSelected(RGB rgb) {
 		if((display != null) && !display.isDisposed()) {
-			Color color = new Color(display, rgb);
+			Color color = new Color(rgb);
 			itemForegroundSelected = color;
 			disposable.add(color);
 		}
@@ -225,7 +225,7 @@ public class SColors {
 	
 	public void setTableBackground(RGB rgb) {
 		if((display != null) && !display.isDisposed()) {
-			Color color = new Color(display, rgb);
+			Color color = new Color(rgb);
 			listBackground = color;
 			disposable.add(color);
 		}

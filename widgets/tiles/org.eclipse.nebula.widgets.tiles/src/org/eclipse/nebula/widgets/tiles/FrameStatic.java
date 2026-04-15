@@ -150,9 +150,9 @@ class FrameStatic<T> extends Frame<T> implements Cloneable  {
 		this.tiles = tiles;
 
 		// Prepare resources
-		final Color backgroundColor = new Color(tiles.getDisplay(), 255, 255, 255);
-		final Color lineColor = new Color(tiles.getDisplay(), 0, 0, 0);
-		final Color foregroundColor = new Color(tiles.getDisplay(), 0, 0, 0);
+		final Color backgroundColor = new Color(255, 255, 255);
+		final Color lineColor = new Color(0, 0, 0);
+		final Color foregroundColor = new Color(0, 0, 0);
 
 		// Initial settings
 		this.background = tiles.getBackground();

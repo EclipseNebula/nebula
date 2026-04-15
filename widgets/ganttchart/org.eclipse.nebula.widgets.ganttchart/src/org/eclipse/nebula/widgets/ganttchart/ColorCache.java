@@ -112,7 +112,7 @@ public final class ColorCache {
         Color color = (Color) _cache.get(rgb);
 
         if (color == null) {
-            color = new Color(Display.getCurrent(), rgb);
+            color = new Color(rgb);
             _cache.put(rgb, color);
         }
 

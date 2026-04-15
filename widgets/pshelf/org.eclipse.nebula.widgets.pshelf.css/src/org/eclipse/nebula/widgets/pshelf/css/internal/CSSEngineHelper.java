@@ -147,12 +147,12 @@ public class CSSEngineHelper {
 					Integer.parseInt(rgbValue.getRed().getCssText()), 
 					Integer.parseInt(rgbValue.getGreen().getCssText()),
 					Integer.parseInt(rgbValue.getBlue().getCssText()));
-			return new Color(control.getDisplay(), rgb);
+			return new Color(rgb);
 		} else if( value != null ) {
 			try {
 				Color c = (Color) cssEngine.convert(value, Color.class, control.getDisplay());
 				// Create a copy because we are disposing this colors!!!
-				return new Color(control.getDisplay(),c.getRed(),c.getGreen(),c.getBlue());
+				return new Color(c.getRed(),c.getGreen(),c.getBlue());
 			} catch (Exception e) {
 			}
 		}

@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.eclipse.swt.nebula.presentations.shelf;singleton:=true
 Bundle-Version: 3.3.0.alpha
 Bundle-Vendor: Eclipse Nebula
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.swt;bundle-version="[3.115.0,4.0.0)"
 Bundle-ClassPath: .,
  nebula_pshelf_ALPHA.jar,
  nebula_pgroup_ALPHA.jar

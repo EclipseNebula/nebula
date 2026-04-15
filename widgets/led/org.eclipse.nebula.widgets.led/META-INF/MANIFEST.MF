@@ -7,5 +7,5 @@ Bundle-Vendor: Eclipse Nebula
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.nebula.widgets.led
 Require-Bundle: org.eclipse.nebula.widgets.opal.commons;visibility:=reexport,
- org.eclipse.swt
+ org.eclipse.swt;bundle-version="[3.115.0,4.0.0)"
 Automatic-Module-Name: org.eclipse.nebula.widgets.led

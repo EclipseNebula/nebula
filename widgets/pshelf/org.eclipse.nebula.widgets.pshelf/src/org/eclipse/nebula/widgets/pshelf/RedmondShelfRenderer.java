@@ -445,13 +445,13 @@ public class RedmondShelfRenderer extends AbstractRenderer {
 	}
 
 	private static Color createNewBlendedColor(Color c1, Color c2, int ratio) {
-		Color newColor = new Color(Display.getCurrent(), blend(c1.getRGB(), c2.getRGB(), ratio));
+		Color newColor = new Color(blend(c1.getRGB(), c2.getRGB(), ratio));
 
 		return newColor;
 	}
 
 	private static Color createNewReverseColor(Color c) {
-		Color newColor = new Color(Display.getCurrent(), 255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue());
+		Color newColor = new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue());
 		return newColor;
 	}
 
@@ -481,7 +481,7 @@ public class RedmondShelfRenderer extends AbstractRenderer {
 
 	private static Color createNewSaturatedColor(Color c, float saturation) {
 		RGB newRGB = saturate(c.getRGB(), saturation);
-		return new Color(Display.getCurrent(), newRGB);
+		return new Color(newRGB);
 	}
 
 }

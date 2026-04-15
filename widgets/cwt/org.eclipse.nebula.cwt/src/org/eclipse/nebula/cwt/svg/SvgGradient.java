@@ -99,7 +99,7 @@ class SvgGradient extends SvgElement {
 	}
 
 	private Color createColor(GC gc, int color) {
-		return new Color(gc.getDevice(), color >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF);
+		return new Color(color >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF);
 	}
 
 	public void dispose() {

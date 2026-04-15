@@ -66,11 +66,11 @@ public class LEDSnippet {
 		LED led = new LED(top, SWT.ICON);
 		led.setLayoutData(new GridData(GridData.END, GridData.FILL, true, true, 1, 2));
 		led.setCharacter(LEDCharacter.CLEAR);
-		Color idleColor = new Color(shell.getDisplay(), 60, 60, 60);
+		Color idleColor = new Color(60, 60, 60);
 		led.setIdleColor(idleColor);
 		SWTGraphicUtil.addDisposer(led, idleColor);
 
-		Color selectedColor = new Color(shell.getDisplay(), 255, 0, 0);
+		Color selectedColor = new Color(255, 0, 0);
 		led.setSelectedColor(selectedColor);
 		SWTGraphicUtil.addDisposer(led, selectedColor);
 

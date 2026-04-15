@@ -831,13 +831,13 @@ public class NebulaToolbar extends Canvas
 		Rectangle rect = getClientArea();
 		Device device = gc.getDevice();
 
-		Color c1 = new Color(device, 249, 252, 255);
-		Color c2 = new Color(device, 230, 240, 250);
-		Color c3 = new Color(device, 220, 230, 244);
-		Color c4 = new Color(device, 221, 233, 247);
+		Color c1 = new Color(249, 252, 255);
+		Color c2 = new Color(230, 240, 250);
+		Color c3 = new Color(220, 230, 244);
+		Color c4 = new Color(221, 233, 247);
 
-		Color ca = new Color(device, 205, 218, 234);
-		Color cb = new Color(device, 160, 175, 195);
+		Color ca = new Color(205, 218, 234);
+		Color cb = new Color(160, 175, 195);
 
 		int middle = (int) Math.ceil(rect.height / 2);
 
@@ -883,9 +883,9 @@ public class NebulaToolbar extends Canvas
 		Rectangle rect = getClientArea();
 		Device device = gc.getDevice();
 
-		Color c1 = new Color(device, 5, 72, 117);
-		Color c2 = new Color(device, 25, 108, 119);
-		Color c3 = new Color(device, 28, 122, 134);
+		Color c1 = new Color(5, 72, 117);
+		Color c2 = new Color(25, 108, 119);
+		Color c3 = new Color(28, 122, 134);
 		Color wh = getDisplay().getSystemColor(SWT.COLOR_WHITE);
 
 		int middle = (int) Math.ceil(rect.height / 2);

@@ -75,7 +75,7 @@ public class PGroupStackPresentation extends StackPresentation
         RGB blendwith = new RGB(255,255,255);
         RGB blended = blend(sel,blendwith,20);
         
-        toolbarBackground = new Color(parent.getDisplay(),blended);
+        toolbarBackground = new Color(blended);
         
         group.addExpandListener(new ExpandListener()
         {        

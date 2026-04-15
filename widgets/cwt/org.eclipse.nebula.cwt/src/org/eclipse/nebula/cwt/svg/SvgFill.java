@@ -27,7 +27,7 @@ class SvgFill extends SvgPaint {
 		if(paintServer != null) {
 			paintServer.apply(false);
 		} else {
-			Color c = new Color(gc.getDevice(), color >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF);
+			Color c = new Color(color >> 16, (color & 0x00FF00) >> 8, color & 0x0000FF);
 			gc.setBackground(c);
 			c.dispose();
 			gc.setFillRule(rule);

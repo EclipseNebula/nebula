@@ -141,9 +141,9 @@ public class LoginDialog {
 	 */
 	private Image createDefaultImage(final int w, final int h) {
 		final Display display = Display.getCurrent();
-		final Color backgroundColor = new Color(display, 49, 121, 242);
-		final Color gradientColor1 = new Color(display, 155, 185, 245);
-		final Color gradientColor2 = new Color(display, 53, 123, 242);
+		final Color backgroundColor = new Color(49, 121, 242);
+		final Color gradientColor1 = new Color(155, 185, 245);
+		final Color gradientColor2 = new Color(53, 123, 242);
 
 		final Image img = new Image(display, w, h);
 		final GC gc = new GC(img);

@@ -113,14 +113,14 @@ public class BadgedLabel extends Canvas {
 		textColor = getDisplay().getSystemColor(SWT.COLOR_BLACK);
 		SWTGraphicUtil.addDisposer(this, textColor);
 
-		backgroundColor = new Color(getDisplay(), 247, 247, 247);
+		backgroundColor = new Color(247, 247, 247);
 		SWTGraphicUtil.addDisposer(this, backgroundColor);
 
-		borderColor = new Color(getDisplay(), 204, 204, 204);
+		borderColor = new Color(204, 204, 204);
 		SWTGraphicUtil.addDisposer(this, borderColor);
 
 		badgeForeground = getDisplay().getSystemColor(SWT.COLOR_WHITE);
-		badgeBackground = new Color(getDisplay(), 0, 123, 255);
+		badgeBackground = new Color(0, 123, 255);
 		SWTGraphicUtil.addDisposer(this, badgeBackground);
 	}
 
@@ -306,26 +306,26 @@ public class BadgedLabel extends Canvas {
 		badgeForeground = getDisplay().getSystemColor(SWT.COLOR_WHITE);
 		switch (color) {
 		case SWT.COLOR_BLUE:
-			badgeBackground = new Color(getDisplay(), 0, 123, 255);
+			badgeBackground = new Color(0, 123, 255);
 			break;
 		case SWT.COLOR_GRAY:
-			badgeBackground = new Color(getDisplay(), 108, 117, 125);
+			badgeBackground = new Color(108, 117, 125);
 			break;
 		case SWT.COLOR_GREEN:
-			badgeBackground = new Color(getDisplay(), 40, 167, 69);
+			badgeBackground = new Color(40, 167, 69);
 			break;
 		case SWT.COLOR_RED:
-			badgeBackground = new Color(getDisplay(), 220, 53, 69);
+			badgeBackground = new Color(220, 53, 69);
 			break;
 		case SWT.COLOR_YELLOW:
 			badgeForeground = getDisplay().getSystemColor(SWT.COLOR_BLACK);
-			badgeBackground = new Color(getDisplay(), 255, 193, 7);
+			badgeBackground = new Color(255, 193, 7);
 			break;
 		case SWT.COLOR_CYAN:
-			badgeBackground = new Color(getDisplay(), 23, 162, 184);
+			badgeBackground = new Color(23, 162, 184);
 			break;
 		default: // BLACK
-			badgeBackground = new Color(getDisplay(), 52, 58, 64);
+			badgeBackground = new Color(52, 58, 64);
 		}
 
 		SWTGraphicUtil.addDisposer(this, badgeBackground);

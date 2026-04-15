@@ -107,19 +107,19 @@ public class Header extends Composite {
 		titleFont = defaultFont;
 		SWTGraphicUtil.addDisposer(this, defaultFont);
 
-		final Color defaultTitleColor = new Color(getDisplay(), 0, 88, 150);
+		final Color defaultTitleColor = new Color(0, 88, 150);
 		titleColor = defaultTitleColor;
 		SWTGraphicUtil.addDisposer(this, defaultTitleColor);
 
-		final Color defaultGradientEndColor = new Color(getDisplay(), 239, 239, 239);
+		final Color defaultGradientEndColor = new Color(239, 239, 239);
 		gradientEnd = defaultGradientEndColor;
 		SWTGraphicUtil.addDisposer(this, defaultGradientEndColor);
 
-		final Color defaultGradientStartColor = new Color(getDisplay(), 255, 255, 255);
+		final Color defaultGradientStartColor = new Color(255, 255, 255);
 		gradientStart = defaultGradientStartColor;
 		SWTGraphicUtil.addDisposer(this, defaultGradientStartColor);
 
-		final Color defaultSeparatorColor = new Color(getDisplay(), 229, 229, 229);
+		final Color defaultSeparatorColor = new Color(229, 229, 229);
 		separatorColor = defaultSeparatorColor;
 		SWTGraphicUtil.addDisposer(this, defaultSeparatorColor);
 	}

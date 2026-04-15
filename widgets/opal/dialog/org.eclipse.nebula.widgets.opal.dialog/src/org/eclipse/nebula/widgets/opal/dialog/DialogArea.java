@@ -101,7 +101,7 @@ abstract class DialogArea {
 	 * @return the title's color (blue)
 	 */
 	protected Color getTitleColor() {
-		final Color color = new Color(Display.getCurrent(), 35, 107, 178);
+		final Color color = new Color(35, 107, 178);
 		SWTGraphicUtil.addDisposer(parent.shell, color);
 		return color;
 	}
@@ -110,7 +110,7 @@ abstract class DialogArea {
 	 * @return the grey color
 	 */
 	protected Color getGreyColor() {
-		final Color color = new Color(Display.getCurrent(), 240, 240, 240);
+		final Color color = new Color(240, 240, 240);
 		SWTGraphicUtil.addDisposer(parent.shell, color);
 		return color;
 	}

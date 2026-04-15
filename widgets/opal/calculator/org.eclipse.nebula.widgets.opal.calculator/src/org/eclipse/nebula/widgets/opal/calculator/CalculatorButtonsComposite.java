@@ -58,8 +58,8 @@ class CalculatorButtonsComposite extends Composite {
 	CalculatorButtonsComposite(final Composite parent, final int style) {
 		super(parent, style);
 		setLayout(new GridLayout(5, false));
-		darkRedColor = new Color(getDisplay(), 139, 0, 0);
-		darkBlueColor = new Color(getDisplay(), 0, 0, 139);
+		darkRedColor = new Color(139, 0, 0);
+		darkBlueColor = new Color(0, 0, 139);
 		createButtons();
 
 		SWTGraphicUtil.addDisposer(this, darkBlueColor);

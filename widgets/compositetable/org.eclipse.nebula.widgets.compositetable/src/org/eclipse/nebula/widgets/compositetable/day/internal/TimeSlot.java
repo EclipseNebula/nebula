@@ -91,10 +91,10 @@ public class TimeSlot extends Canvas {
 
 		CELL_BACKGROUND_WHITE = display.getSystemColor(SWT.COLOR_WHITE);
 		CELL_BORDER_EMPHASIZED = display.getSystemColor(SWT.COLOR_LIST_SELECTION);
-		CELL_BACKGROUND_LIGHT = new Color(display, new RGB(248, 248, 248));
-		CELL_BORDER_LIGHT = new Color(display, saturate(CELL_BORDER_EMPHASIZED.getRGB(), .2f));
-		TIME_BAR_COLOR = new Color(display, saturate(CELL_BORDER_EMPHASIZED.getRGB(), .1f));
-		FOCUS_RUBBERBAND = new Color(display, lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND).getRGB(), .85f), -.333f));
+		CELL_BACKGROUND_LIGHT = new Color(new RGB(248, 248, 248));
+		CELL_BORDER_LIGHT = new Color(saturate(CELL_BORDER_EMPHASIZED.getRGB(), .2f));
+		TIME_BAR_COLOR = new Color(saturate(CELL_BORDER_EMPHASIZED.getRGB(), .1f));
+		FOCUS_RUBBERBAND = new Color(lighten(saturate(display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND).getRGB(), .85f), -.333f));
 
 		setBackground(CELL_BACKGROUND_LIGHT);
 	}
