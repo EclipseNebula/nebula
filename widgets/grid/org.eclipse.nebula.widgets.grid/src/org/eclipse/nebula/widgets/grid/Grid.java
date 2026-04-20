@@ -29,8 +29,10 @@ package org.eclipse.nebula.widgets.grid;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
@@ -117,7 +119,8 @@ public class Grid extends Canvas {
 	// TODO: need to alter how column drag selection works to allow selection of
 	// spanned cells
 	// TODO: JAVADOC!
-	// TODO: column freezing
+	// Column freezing: the supported case is a single frozen first column
+	// via GridColumn#setFixed(true). See GridFrozenFirstColumnSnippet.
 
 	// TODO: Performance - need to cache top index
 
@@ -421,6 +424,12 @@ public class Grid extends Canvas {
 	 * Height of each column footer
 	 */
 	private int footerHeight = 0;
+
+	/**
+	 * Tracks column groups already warned about spanning the fixed/scrollable
+	 * boundary, so we only emit the warning once per group.
+	 */
+	private final Set<GridColumnGroup> warnedFixedGroups = new HashSet<>();
 
 	/**
 	 * True if mouse is hover on a column boundary and can resize the column.
@@ -1277,19 +1286,41 @@ public class Grid extends Canvas {
 			x2 += rowHeaderWidth;
 		}
 
+		// When the fixed-column overlay is active, hits inside the overlay
+		// rectangle resolve to the fixed column on top, not the scrolled
+		// column underneath.
+		if (isFixedOverlayActive()) {
+			int fx = rowHeaderVisible ? rowHeaderWidth : 0;
+			for (final GridColumn column : displayOrderedColumns) {
+				if (!column.isVisible()) {
+					continue;
+				}
+				if (!column.isFixed()) {
+					break;
+				}
+				if (point.x >= fx && point.x < fx + column.getWidth()) {
+					overThis = column;
+					break;
+				}
+				fx += column.getWidth();
+			}
+		}
+
 		x2 -= getHScrollSelectionInPixels();
 
-		for (final GridColumn column : displayOrderedColumns) {
-			if (!column.isVisible()) {
-				continue;
-			}
+		if (overThis == null) {
+			for (final GridColumn column : displayOrderedColumns) {
+				if (!column.isVisible()) {
+					continue;
+				}
 
-			if (point.x >= x2 && point.x < x2 + column.getWidth()) {
-				overThis = column;
-				break;
-			}
+				if (point.x >= x2 && point.x < x2 + column.getWidth()) {
+					overThis = column;
+					break;
+				}
 
-			x2 += column.getWidth();
+				x2 += column.getWidth();
+			}
 		}
 
 		if (overThis == null) {
@@ -4555,7 +4586,8 @@ public class Grid extends Canvas {
 
 	/**
 	 * Returns the x position of the given column. Takes into account scroll
-	 * position.
+	 * position. Fixed columns always return their unscrolled on-screen x so
+	 * they sit on top of the scrollable area when overlaid.
 	 *
 	 * @param column given column
 	 * @return x position
@@ -4567,7 +4599,11 @@ public class Grid extends Canvas {
 
 		int x = 0;
 
-		x -= getHScrollSelectionInPixels();
+		// Fixed columns are always painted at their unscrolled position so the
+		// frozen overlay aligns with mouse hits, editors, and drag indicators.
+		if (!column.isFixed()) {
+			x -= getHScrollSelectionInPixels();
+		}
 
 		if (rowHeaderVisible) {
 			x += rowHeaderWidth;
@@ -4582,10 +4618,48 @@ public class Grid extends Canvas {
 				break;
 			}
 
+			// When laying out a fixed column, only sum widths of preceding
+			// fixed columns; preceding scrollable columns sit behind it.
+			if (column.isFixed() && !column2.isFixed()) {
+				continue;
+			}
+
 			x += column2.getWidth();
 		}
 
 		return x;
+	}
+
+	/**
+	 * Returns the total on-screen width occupied by the leading fixed columns
+	 * (excluding the row header). Used by hit testing and overlay clipping.
+	 *
+	 * @return width in pixels of the fixed-column overlay region; 0 if none
+	 */
+	private int getFixedColumnsWidth() {
+		int width = 0;
+		for (final GridColumn column : displayOrderedColumns) {
+			if (!column.isVisible()) {
+				continue;
+			}
+			if (!column.isFixed()) {
+				break;
+			}
+			width += column.getWidth();
+		}
+		return width;
+	}
+
+	/**
+	 * Returns whether the fixed-column overlay is currently visible (i.e. the
+	 * grid has at least one fixed column AND the user has scrolled past where
+	 * the unscrolled fixed columns would naturally sit).
+	 *
+	 * @return true if the overlay is being painted on top of scrolled content
+	 */
+	private boolean isFixedOverlayActive() {
+		final FixedGridColumns fixed = getFixedGridColumns();
+		return fixed.hasColumns() && getHScrollSelectionInPixels() > fixed.offset();
 	}
 
 	/**
@@ -5343,8 +5417,23 @@ public class Grid extends Canvas {
 		}
 		final FixedGridColumns fixed = getFixedGridColumns();
 		if (fixed.hasColumns() && hscroll > fixed.offset()) {
-			paintRows(fixed.columns(), true, firstItemToDraw, visibleRows, 0, cellSpanManager, gc, originalClipping, y,
-					clientArea, firstVisibleIndex, insertMark, extraFill);
+			// Clip the entire fixed-overlay pass to the on-screen rectangle of
+			// the frozen columns so cell rendering can never bleed into the
+			// scrolled area, even if a renderer paints outside its bounds.
+			final int fixedX = rowHeaderVisible ? rowHeaderWidth : 0;
+			final int fixedTop = columnHeadersVisible ? headerHeight : 0;
+			final int fixedBottom = columnFootersVisible ? footerHeight : 0;
+			final Rectangle fixedRect = new Rectangle(fixedX, fixedTop, getFixedColumnsWidth(),
+					Math.max(0, clientArea.height - fixedTop - fixedBottom));
+			final Rectangle fixedClipping = originalClipping.intersection(fixedRect);
+			final Rectangle priorClipping = gc.getClipping();
+			gc.setClipping(fixedClipping);
+			try {
+				paintRows(fixed.columns(), true, firstItemToDraw, visibleRows, 0, cellSpanManager, gc, fixedClipping, y,
+						clientArea, firstVisibleIndex, insertMark, extraFill);
+			} finally {
+				gc.setClipping(priorClipping);
+			}
 		}
 
 		// draw insertion mark
@@ -5554,6 +5643,12 @@ public class Grid extends Canvas {
 							int focusX = 0;
 							if (rowHeaderVisible) {
 								focusX = rowHeaderWidth;
+							}
+							// Start the focus rectangle to the right of the
+							// fixed-column overlay so its left edge stays
+							// visible instead of being hidden underneath.
+							if (!fixed && isFixedOverlayActive()) {
+								focusX += getFixedColumnsWidth();
 							}
 							focusRenderer.setBounds(focusX, focusY - 1, clientArea.width - focusX - 1,
 									item.getHeight() + 1);
@@ -5768,9 +5863,77 @@ public class Grid extends Canvas {
 				if (!column.isVisible() || !column.isFixed()) {
 					continue;
 				}
-				previousPaintedGroup = paintColumnHeaderWithGroup(column, x, gc, previousPaintedGroup, extraFill);
+				if (groupSpansFreezeBoundary(column)) {
+					// Frozen column shares a column group with one or more
+					// scrollable siblings. Painting the group header would
+					// produce a wide overlay floating above the scrolled
+					// content; instead paint just the column header.
+					warnFixedGroupSpanningOnce(column.getColumnGroup());
+					paintFixedColumnHeaderWithoutGroup(column, x, gc, extraFill);
+					previousPaintedGroup = null;
+				} else {
+					previousPaintedGroup = paintColumnHeaderWithGroup(column, x, gc, previousPaintedGroup, extraFill);
+				}
 				x += column.getWidth();
 			}
+		}
+	}
+
+	/**
+	 * Returns true when the given fixed column belongs to a {@link GridColumnGroup}
+	 * that also contains at least one non-fixed (scrollable) column. Such a
+	 * configuration is unsupported for the frozen-overlay rendering.
+	 */
+	private boolean groupSpansFreezeBoundary(final GridColumn column) {
+		final GridColumnGroup group = column.getColumnGroup();
+		if (group == null) {
+			return false;
+		}
+		for (final GridColumn member : group.getColumns()) {
+			if (!member.isFixed()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Logs a one-time warning to stderr about a column group that spans the
+	 * frozen/scrollable boundary, so developers notice without spamming the
+	 * paint cycle.
+	 */
+	private void warnFixedGroupSpanningOnce(final GridColumnGroup group) {
+		if (group == null || !warnedFixedGroups.add(group)) {
+			return;
+		}
+		System.err.println("[nebula.grid] Fixed column belongs to column group '" + group.getText()
+				+ "' that also contains scrollable columns; the group header is omitted from the frozen overlay. "
+				+ "Place the fixed column outside any multi-column group.");
+	}
+
+	/**
+	 * Paints just the column-area portion of a fixed column header (skipping the
+	 * group header band) at the given x.
+	 */
+	private void paintFixedColumnHeaderWithoutGroup(final GridColumn column, final int x, final GC gc,
+			final int extraFill) {
+		final int width = column.getWidth(extraFill);
+		final int y = column.getColumnGroup() != null ? groupHeaderHeight : 0;
+		final int height = column.getColumnGroup() != null ? headerHeight - groupHeaderHeight : headerHeight;
+
+		final GridHeaderRenderer renderer = column.getHeaderRenderer();
+		if (pushingColumn) {
+			renderer.setHover(columnBeingPushed == column && pushingAndHovering);
+		} else {
+			renderer.setHover(hoveringColumnHeader == column);
+		}
+		renderer.setHoverDetail(hoveringDetail);
+		renderer.setBounds(x, y, width, height);
+		if (cellSelectionEnabled) {
+			renderer.setSelected(selectedColumns.contains(column));
+		}
+		if (x + width >= 0) {
+			renderer.paint(gc, column);
 		}
 	}
 
@@ -5919,6 +6082,23 @@ public class Grid extends Canvas {
 			bottomLeftRenderer.setBounds(0, getClientArea().height - footerHeight, rowHeaderWidth, footerHeight);
 			bottomLeftRenderer.paint(gc, this);
 			x += rowHeaderWidth;
+		}
+
+		// Fixed-column footer overlay. Paint after the scrolled footer pass so
+		// the frozen footer cells sit on top when the user has scrolled past
+		// where they would otherwise sit.
+		final FixedGridColumns fixed = getFixedGridColumns();
+		if (fixed.hasColumns() && getHScrollSelectionInPixels() > fixed.offset()) {
+			int fx = rowHeaderVisible ? rowHeaderWidth : 0;
+			final int fy = getClientArea().height - footerHeight;
+			for (final GridColumn column : fixed.columns()) {
+				if (!column.isVisible()) {
+					continue;
+				}
+				column.getFooterRenderer().setBounds(fx, fy, column.getWidth(), footerHeight);
+				column.getFooterRenderer().paint(gc, column);
+				fx += column.getWidth();
+			}
 		}
 	}
 
@@ -7551,7 +7731,11 @@ public class Grid extends Canvas {
 			x += rowHeaderWidth;
 		}
 
-		x -= getHScrollSelectionInPixels();
+		// Fixed columns are pinned to their unscrolled position so cell
+		// editors and bounds queries align with the painted overlay.
+		if (column == null || !column.isFixed()) {
+			x -= getHScrollSelectionInPixels();
+		}
 
 		for (final GridColumn colIter : displayOrderedColumns) {
 
@@ -7560,6 +7744,11 @@ public class Grid extends Canvas {
 			}
 
 			if (colIter.isVisible()) {
+				// When laying out a fixed column, only sum widths of
+				// preceding fixed columns; scrollable ones sit behind it.
+				if (column != null && column.isFixed() && !colIter.isFixed()) {
+					continue;
+				}
 				x += colIter.getWidth();
 			}
 		}
@@ -8143,6 +8332,7 @@ public class Grid extends Canvas {
 			}
 		}
 		columnGroups = newColumnGroups;
+		warnedFixedGroups.remove(group);
 
 		if (columnGroups.length == 0) {
 			computeHeaderHeight();

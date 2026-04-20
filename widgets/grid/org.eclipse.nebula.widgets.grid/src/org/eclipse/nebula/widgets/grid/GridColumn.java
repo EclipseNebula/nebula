@@ -1599,11 +1599,23 @@ public class GridColumn extends Item {
 	}
 
 	/**
-	 * Set this column as a fixed column, fixed columns are always drawn at the
-	 * front of the grid regardless of other columns and the current scrolling
-	 * position.
-	 * 
+	 * Set this column as a fixed (frozen) column. Fixed columns are always
+	 * drawn at the front of the grid regardless of the current horizontal
+	 * scrolling position; the scrollable columns slide behind them.
+	 *
+	 * <p>The fully-supported and quality-tested case is a <b>single frozen
+	 * first column</b> (the first column in display order). Marking
+	 * additional or non-leading columns as fixed will render but is not
+	 * guaranteed to handle every grid feature (cell spanning across the
+	 * boundary, complex column groups, etc.).</p>
+	 *
+	 * <p>A frozen column should not belong to a multi-column
+	 * {@link GridColumnGroup} that also contains scrollable members. If it
+	 * does, the grid logs a one-time warning and omits the group header
+	 * from the frozen overlay (the column header itself is still drawn).</p>
+	 *
 	 * @param fixed if the column should be fixed or not
+	 * @see GridColumn#isFixed()
 	 */
 	public void setFixed(boolean fixed) {
 		checkWidget();
