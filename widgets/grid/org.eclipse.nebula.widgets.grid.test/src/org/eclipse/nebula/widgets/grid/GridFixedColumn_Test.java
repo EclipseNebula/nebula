@@ -24,6 +24,7 @@ import java.io.PrintStream;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.junit.After;
@@ -80,7 +81,7 @@ public class GridFixedColumn_Test {
     GridItem[] items = createGridItems( grid, 20, 0 );
     columns[ 0 ].setFixed( true );
 
-    horizontalBar.setSelection( 150 );
+    scrollHorizontallyTo( 150 );
 
     Point origin = grid.getOrigin( columns[ 0 ], items[ 0 ] );
 
@@ -92,13 +93,16 @@ public class GridFixedColumn_Test {
     GridColumn[] columns = createGridColumns( grid, 10, SWT.NONE );
     GridItem[] items = createGridItems( grid, 20, 0 );
     columns[ 0 ].setFixed( true );
+    flushPaint();
 
     Point unscrolled = grid.getOrigin( columns[ 3 ], items[ 0 ] );
-    horizontalBar.setSelection( 150 );
+    int actualScroll = scrollHorizontallyTo( 150 );
     Point scrolled = grid.getOrigin( columns[ 3 ], items[ 0 ] );
 
+    assertTrue( "scrollbar must accept some non-zero selection for this test to be meaningful",
+                actualScroll > 0 );
     assertEquals( "Non-frozen column origin must shift by scroll delta",
-                  unscrolled.x - 150, scrolled.x );
+                  unscrolled.x - actualScroll, scrolled.x );
   }
 
   @Test
@@ -109,7 +113,9 @@ public class GridFixedColumn_Test {
     frozen.setFixed( true );
 
     // Force the overlay to be active by scrolling past the frozen offset.
-    horizontalBar.setSelection( 150 );
+    int actualScroll = scrollHorizontallyTo( 150 );
+    assertTrue( "scrollbar must accept some non-zero selection for the overlay to be active",
+                actualScroll > 0 );
 
     // The frozen column has width 20 (col_0 -> 20 * (0+1)), so a hit at x=5
     // falls inside the overlay region.
@@ -124,12 +130,87 @@ public class GridFixedColumn_Test {
     createGridItems( grid, 20, 0 );
     columns[ 0 ].setFixed( true );
 
-    horizontalBar.setSelection( 150 );
+    int actualScroll = scrollHorizontallyTo( 150 );
+    assertTrue( "scrollbar must accept some non-zero selection for this test to be meaningful",
+                actualScroll > 0 );
 
     GridColumn hit = grid.getColumn( new Point( 100, 5 ) );
     assertNotNull( hit );
     assertFalse( "Hit outside the frozen overlay must resolve to a scrolled column",
                  hit == columns[ 0 ] );
+  }
+
+  /**
+   * Drains pending paint events so {@link Grid#updateScrollbars()} runs at
+   * least once; otherwise {@code horizontalBar.getMaximum()} is still SWT's
+   * default of 100 and any larger {@code setSelection} call is silently
+   * clipped to roughly 0.
+   */
+  private void flushPaint() {
+    grid.redraw();
+    grid.update();
+    while( display.readAndDispatch() ) {
+      // drain
+    }
+  }
+
+  /**
+   * Programmatically scrolls horizontally to {@code targetPixels}, returning
+   * the actual selection the scrollbar settled on after clipping. Tests
+   * should treat the returned value as the source of truth, since SWT may
+   * clip {@code targetPixels} based on the current maximum/thumb.
+   */
+  private int scrollHorizontallyTo( int targetPixels ) {
+    flushPaint();
+    horizontalBar.setSelection( targetPixels );
+    flushPaint();
+    return horizontalBar.getSelection();
+  }
+
+  @Test
+  public void testTreeToggle_OnFrozenColumn_RespondsWhenScrolled() {
+    grid.setHeaderVisible( true );
+
+    GridColumn frozen = new GridColumn( grid, SWT.NONE );
+    frozen.setText( "tree" );
+    frozen.setWidth( 160 );
+    frozen.setTree( true );
+    frozen.setFixed( true );
+
+    for( int c = 1; c < 6; c++ ) {
+      GridColumn other = new GridColumn( grid, SWT.NONE );
+      other.setText( "c" + c );
+      other.setWidth( 120 );
+    }
+
+    GridItem root = new GridItem( grid, SWT.NONE );
+    root.setText( 0, "root" );
+    GridItem child = new GridItem( root, SWT.NONE );
+    child.setText( 0, "child" );
+    root.setExpanded( false );
+
+    shell.setSize( 320, 300 );
+    shell.layout();
+    int actualScroll = scrollHorizontallyTo( 200 );
+    assertTrue( "scrollbar must accept some non-zero selection so the overlay is active",
+                actualScroll > 0 );
+
+    assertFalse( "precondition: root should be collapsed", root.isExpanded() );
+
+    // Click roughly where the toggle is rendered: a few pixels in from the
+    // left edge of the frozen overlay, vertically centred on the first row.
+    int toggleX = 8;
+    int rowY = grid.getHeaderHeight() + ( root.getHeight() / 2 );
+    Event mouseDown = new Event();
+    mouseDown.type = SWT.MouseDown;
+    mouseDown.button = 1;
+    mouseDown.x = toggleX;
+    mouseDown.y = rowY;
+    mouseDown.widget = grid;
+    grid.notifyListeners( SWT.MouseDown, mouseDown );
+
+    assertTrue( "Clicking the toggle on the frozen column while scrolled should expand the row",
+                root.isExpanded() );
   }
 
   @Test
@@ -154,23 +235,15 @@ public class GridFixedColumn_Test {
     }
     createGridItems( grid, 5, 0 );
 
-    horizontalBar.setSelection( 150 );
+    scrollHorizontallyTo( 150 );
 
     PrintStream originalErr = System.err;
     ByteArrayOutputStream captured = new ByteArrayOutputStream();
     System.setErr( new PrintStream( captured ) );
     try {
-      grid.redraw();
-      grid.update();
-      while( display.readAndDispatch() ) {
-        // drain
-      }
+      flushPaint();
       // Trigger a second paint to ensure the warning only fires once.
-      grid.redraw();
-      grid.update();
-      while( display.readAndDispatch() ) {
-        // drain
-      }
+      flushPaint();
     } finally {
       System.setErr( originalErr );
     }

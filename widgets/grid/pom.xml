@@ -21,6 +21,7 @@
 		<module>org.eclipse.nebula.widgets.grid.css</module>
 		<module>org.eclipse.nebula.widgets.grid.css.feature</module>
 		<module>org.eclipse.nebula.widgets.grid.example.e4</module>
+		<module>org.eclipse.nebula.widgets.grid.test</module>
 	</modules>
 
 </project>
