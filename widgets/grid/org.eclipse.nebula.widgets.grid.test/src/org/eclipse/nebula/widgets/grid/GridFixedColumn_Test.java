@@ -141,10 +141,12 @@ public class GridFixedColumn_Test {
   }
 
   /**
-   * Drains pending paint events so {@link Grid#updateScrollbars()} runs at
-   * least once; otherwise {@code horizontalBar.getMaximum()} is still SWT's
-   * default of 100 and any larger {@code setSelection} call is silently
-   * clipped to roughly 0.
+   * Drains pending paint events so {@link Grid#updateScrollbars()} has a
+   * chance to run on platforms where the widget is realized during event
+   * dispatch. This is enough on Windows; on headless Linux GTK the widget
+   * is never realized here, so tests cannot rely on it —
+   * {@link #scrollHorizontallyTo} compensates by writing scroll state
+   * atomically via {@link ScrollBar#setValues}.
    */
   private void flushPaint() {
     grid.redraw();
@@ -159,11 +161,26 @@ public class GridFixedColumn_Test {
    * the actual selection the scrollbar settled on after clipping. Tests
    * should treat the returned value as the source of truth, since SWT may
    * clip {@code targetPixels} based on the current maximum/thumb.
+   *
+   * <p>On headless Linux GTK (the Nebula CI environment) the SWT widget is
+   * never realized during the synthetic {@code redraw/update/readAndDispatch}
+   * cycle used here, so {@code Grid.updateScrollbars()} never runs and the
+   * horizontal scrollbar stays at its defaults ({@code visible=false,
+   * max=1, thumb=1}). GTK treats {@code setSelection} on an invisible
+   * scrollbar as a silent no-op, which is what caused the three
+   * frozen-column tests to fail on CI while passing everywhere else.
+   *
+   * <p>{@link ScrollBar#setValues} atomically assigns selection, max and
+   * thumb, so the requested selection cannot be clipped by a stale max;
+   * {@link ScrollBar#setVisible} first makes the scrollbar writable on
+   * GTK. This gives the test a deterministic scroll state regardless of
+   * whether Grid's paint machinery has had a chance to run.
    */
   private int scrollHorizontallyTo( int targetPixels ) {
     flushPaint();
-    horizontalBar.setSelection( targetPixels );
-    flushPaint();
+    horizontalBar.setVisible( true );
+    int max = Math.max( targetPixels * 4, 2000 );
+    horizontalBar.setValues( targetPixels, 0, max, 100, 10, 100 );
     return horizontalBar.getSelection();
   }
 
