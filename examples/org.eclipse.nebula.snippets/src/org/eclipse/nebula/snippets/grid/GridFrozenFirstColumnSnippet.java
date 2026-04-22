@@ -23,17 +23,26 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 /**
  * Demonstrates a frozen first column in {@link Grid}.
  *
- * <p>Two scenarios are shown side by side:</p>
+ * <p>Three scenarios are shown stacked top-to-bottom:</p>
  * <ul>
  *   <li><b>Plain frozen column</b> &mdash; the first column stays visible while
  *       horizontal scrolling moves the rest of the columns behind it. The first
  *       column is also editable to verify {@link GridEditor} positioning.</li>
+ *   <li><b>Frozen tree column with expand/collapse toggles</b> &mdash; the
+ *       frozen first column is also the tree column. Scroll horizontally so
+ *       the rest of the grid moves behind the frozen column, then click the
+ *       toggle on a parent row: the row should still expand or collapse. This
+ *       is the case that motivated the original bug report &mdash; without
+ *       the freeze-aware hit-testing, toggle clicks were routed to the
+ *       scrolled column underneath the overlay and the toggle appeared
+ *       unresponsive.</li>
  *   <li><b>Frozen column inside a column group</b> &mdash; the frozen first
  *       column shares a {@link GridColumnGroup} with scrollable columns. This
  *       configuration is unsupported; the grid logs a one-time warning to
@@ -51,9 +60,10 @@ public class GridFrozenFirstColumnSnippet {
 		Shell shell = new Shell(display);
 		shell.setText("Grid - Frozen First Column");
 		shell.setLayout(new GridLayout(1, false));
-		shell.setSize(700, 500);
+		shell.setSize(800, 720);
 
 		createSimpleSection(shell);
+		createTreeSection(shell);
 		createGroupSection(shell);
 
 		shell.open();
@@ -95,6 +105,52 @@ public class GridFrozenFirstColumnSnippet {
 		}
 
 		attachFirstColumnEditor(grid);
+	}
+
+	private static void createTreeSection(Composite parent) {
+		Composite section = new Composite(parent, SWT.NONE);
+		section.setLayout(new GridLayout(1, false));
+		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		Label caption = new Label(section, SWT.WRAP);
+		caption.setText("Frozen tree column: scroll horizontally with the bottom scrollbar, "
+				+ "then click an expand/collapse toggle on the frozen column. "
+				+ "Without freeze-aware hit-testing, the click would land on the column "
+				+ "underneath the overlay and the toggle would appear unresponsive.");
+		caption.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false));
+
+		Grid grid = new Grid(section, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		grid.setHeaderVisible(true);
+		grid.setLinesVisible(true);
+		grid.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+
+		GridColumn frozen = new GridColumn(grid, SWT.NONE);
+		frozen.setText("Tree (frozen)");
+		frozen.setWidth(180);
+		frozen.setTree(true);
+		frozen.setFixed(true);
+
+		for (int c = 1; c < COLUMN_COUNT; c++) {
+			GridColumn column = new GridColumn(grid, SWT.NONE);
+			column.setText("Column " + c);
+			column.setWidth(120);
+		}
+
+		for (int p = 0; p < 5; p++) {
+			GridItem parentItem = new GridItem(grid, SWT.NONE);
+			parentItem.setText(0, "Parent " + (p + 1));
+			for (int c = 1; c < COLUMN_COUNT; c++) {
+				parentItem.setText(c, "p" + (p + 1) + "c" + c);
+			}
+			for (int ch = 0; ch < 3; ch++) {
+				GridItem child = new GridItem(parentItem, SWT.NONE);
+				child.setText(0, "Child " + (ch + 1));
+				for (int c = 1; c < COLUMN_COUNT; c++) {
+					child.setText(c, "p" + (p + 1) + "ch" + (ch + 1) + "c" + c);
+				}
+			}
+			parentItem.setExpanded(p == 0);
+		}
 	}
 
 	private static void createGroupSection(Composite parent) {
