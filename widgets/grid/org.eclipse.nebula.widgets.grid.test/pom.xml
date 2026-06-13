@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.eclipse.nebula</groupId>
+		<artifactId>grid</artifactId>
+		<version>1.1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>org.eclipse.nebula.widgets.grid.test</artifactId>
+	<version>0.4.0-SNAPSHOT</version>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<!--
+		The other *_Test classes in this bundle (Grid_Test, GridItem_Test,
+		GridColumn_Test, GridColumnGroup_Test) date back to ~2010 and have
+		been bit-rotting in the IDE-only .launch configuration ever since:
+		they target an old SWT/JFace, an old Mockito (1.8.4), and assert
+		behaviour that has changed multiple times upstream. Restoring them
+		is a worthy effort but orthogonal to the frozen-first-column work
+		this bundle was wired into Maven for. Until that stabilisation
+		happens, only the freeze tests are run from the build so the
+		feature gets real CI protection without lighting up unrelated rot.
+	-->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<includes>
+						<include>**/GridFixedColumn_Test.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
