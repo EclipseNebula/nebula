@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Shell;
 public class AdvancedTooltipDialog {
 
 	private static Shell _shell;
+	private static Region _region;
 
 	public static void makeDialog(final AdvancedTooltip toolTip, final IColorManager colorManager, final Point location) {
 		makeDialog(toolTip, colorManager, location, null, null, null);
@@ -52,6 +53,14 @@ public class AdvancedTooltipDialog {
 
 		_shell = new Shell(Display.getDefault().getActiveShell(), SWT.ON_TOP | SWT.TOOL | SWT.NO_TRIM | SWT.NO_FOCUS);
 		_shell.setLayout(new FillLayout());
+		_shell.addListener(SWT.Dispose, new Listener() {
+			public void handleEvent(final Event event) {
+				if (_region != null && !_region.isDisposed()) {
+					_region.dispose();
+				}
+				_region = null;
+			}
+		});
 
 		final Composite comp = new Composite(_shell, SWT.NO_BACKGROUND | SWT.DOUBLE_BUFFERED | SWT.NO_FOCUS);
 
@@ -210,11 +219,19 @@ public class AdvancedTooltipDialog {
 				// bug fix #240164 - Macs redraw when you set a region, guess OS X will just have
 				// square shells instead, no big deal
 				if (GanttComposite._osType != Constants.OS_MAC) {
+					final Region oldRegion = _region;
 					_shell.setRegion(region);
+					_region = region;
+					if (oldRegion != null && !oldRegion.isDisposed()) {
+						oldRegion.dispose();
+					}
 				}
 		
 				final Rectangle size = region.getBounds();
 				_shell.setSize(size.width, size.height);
+				if (GanttComposite._osType == Constants.OS_MAC) {
+					region.dispose();
+				}
 				if (bold != null) {
 					bold.dispose();
 				}
