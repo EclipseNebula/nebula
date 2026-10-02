@@ -14,7 +14,7 @@ package org.eclipse.nebula.widgets.cdatetime.css;
 import org.eclipse.e4.ui.css.core.css2.CSS2FontHelper;
 import org.eclipse.e4.ui.css.core.dom.properties.ICSSPropertyHandler;
 import org.eclipse.e4.ui.css.core.engine.CSSEngine;
-import org.eclipse.e4.ui.css.core.impl.dom.Measure;
+import org.eclipse.e4.ui.css.core.impl.dom.CssValues;
 import org.eclipse.e4.ui.css.swt.dom.ControlElement;
 import org.eclipse.nebula.widgets.cdatetime.CDateTime;
 import org.eclipse.swt.SWT;
@@ -29,8 +29,9 @@ import org.w3c.dom.css.CSSValueList;
 @SuppressWarnings("restriction")
 public class CDateTimePropertyHandler implements ICSSPropertyHandler {
 	@Override
-	public boolean applyCSSProperty(final Object element, final String property, final CSSValue value, final String pseudo, final CSSEngine engine) throws Exception {
-		final CDateTime cdt =(CDateTime) ((ControlElement) element).getNativeWidget();
+	public boolean applyCSSProperty(final Object element, final String property, final CSSValue value,
+			final String pseudo, final CSSEngine engine) throws Exception {
+		final CDateTime cdt = (CDateTime) ((ControlElement) element).getNativeWidget();
 
 		// General properties
 		if ("cdt-background-color".equals(property)) {
@@ -122,7 +123,7 @@ public class CDateTimePropertyHandler implements ICSSPropertyHandler {
 			final Color newColor = (Color) engine.convert(value, Color.class, cdt.getDisplay());
 			cdt.setButtonSelectedBackgroundColor(newColor);
 		}
-		
+
 		// Ok, Cancel & clear buttons
 		if ("cdt-ok-color".equals(property)) {
 			final Color newColor = (Color) engine.convert(value, Color.class, cdt.getDisplay());
@@ -156,21 +157,24 @@ public class CDateTimePropertyHandler implements ICSSPropertyHandler {
 	}
 
 	// CSS Font
-	private void applyCSSPropertyFont(final Control widget, final CSSValue value, final boolean picker) throws Exception {
+	private void applyCSSPropertyFont(final Control widget, final CSSValue value, final boolean picker)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_VALUE_LIST) {
 			final CSSValueList valueList = (CSSValueList) value;
 			final int length = valueList.getLength();
 			for (int i = 0; i < length; i++) {
 				final CSSValue value2 = valueList.item(i);
 				if (value2.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-					final String cssProp = CSS2FontHelper.getCSSFontPropertyName((CSSPrimitiveValue) value2);
+					final String cssProp = CSS2FontHelper.getCSSFontPropertyName((CssValues.CssPrimitive) value2);
 					if (cssProp.equals("font-family")) {
 						applyCSSPropertyFamily(widget, value2, picker);
 					} else if (cssProp.equals("font-size")) {
 						applyCSSPropertySize(widget, value2, picker);
-					} else if (cssProp.equals("font-weight") && ("bold".equals(value2.getCssText()) || "bolder".equals(value2.getCssText()))) {
+					} else if (cssProp.equals("font-weight")
+							&& ("bold".equals(value2.getCssText()) || "bolder".equals(value2.getCssText()))) {
 						applyCSSPropertyWeight(widget, value2, picker);
-					} else if (cssProp.equals("font-style") && ("italic".equals(value2.getCssText()) || "oblique".equals(value2.getCssText()))) {
+					} else if (cssProp.equals("font-style")
+							&& ("italic".equals(value2.getCssText()) || "oblique".equals(value2.getCssText()))) {
 						applyCSSPropertyStyle(widget, value2, picker);
 					}
 				}
@@ -178,7 +182,8 @@ public class CDateTimePropertyHandler implements ICSSPropertyHandler {
 		}
 	}
 
-	private void applyCSSPropertyStyle(final Control widget, final CSSValue value, final boolean picker) throws Exception {
+	private void applyCSSPropertyStyle(final Control widget, final CSSValue value, final boolean picker)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(widget, picker);
 			boolean modified = false;
@@ -230,10 +235,12 @@ public class CDateTimePropertyHandler implements ICSSPropertyHandler {
 		});
 	}
 
-	private void applyCSSPropertySize(final Control widget, final CSSValue value, final boolean picker) throws Exception {
+	private void applyCSSPropertySize(final Control widget, final CSSValue value, final boolean picker)
+			throws Exception {
+
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(widget, picker);
-			final Measure m = (Measure) value;
+			final CSSPrimitiveValue m = (CSSPrimitiveValue) value;
 
 			final int newSize = Math.round(m.getFloatValue((short) 0));
 			final boolean modified = fd.getHeight() != newSize;
@@ -248,7 +255,8 @@ public class CDateTimePropertyHandler implements ICSSPropertyHandler {
 		}
 	}
 
-	private void applyCSSPropertyWeight(final Control widget, final CSSValue value, final boolean picker) throws Exception {
+	private void applyCSSPropertyWeight(final Control widget, final CSSValue value, final boolean picker)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(widget, picker);
 			boolean modified = false;
@@ -274,7 +282,8 @@ public class CDateTimePropertyHandler implements ICSSPropertyHandler {
 		}
 	}
 
-	private void applyCSSPropertyFamily(final Control widget, final CSSValue value, final boolean picker) throws Exception {
+	private void applyCSSPropertyFamily(final Control widget, final CSSValue value, final boolean picker)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(widget, picker);
 			final boolean modified = !fd.getName().equals(value.getCssText());
@@ -290,7 +299,8 @@ public class CDateTimePropertyHandler implements ICSSPropertyHandler {
 	}
 
 	@Override
-	public String retrieveCSSProperty(final Object element, final String property, final String pseudo, final CSSEngine engine) throws Exception {
+	public String retrieveCSSProperty(final Object element, final String property, final String pseudo,
+			final CSSEngine engine) throws Exception {
 		return null;
 	}
 }

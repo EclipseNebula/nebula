@@ -6,20 +6,15 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.swt,
  org.eclipse.nebula.cwt.tests;bundle-version="0.9.0",
- org.eclipse.e4.ui.services;bundle-version="0.10.0",
  org.eclipse.e4.ui.css.core;bundle-version="0.10.0",
  org.eclipse.e4.ui.css.swt,
- org.eclipse.e4.ui.css.swt.theme;bundle-version="0.11.0",
- org.apache.batik.css;bundle-version="1.8.0",
- org.apache.batik.util;bundle-version="1.8.0",
  org.eclipse.ui;bundle-version="3.109.0",
- org.eclipse.nebula.widgets.cdatetime.css
+ org.eclipse.nebula.widgets.cdatetime.css;bundle-version="[1.0.0,2.0.0)"
 Import-Package: org.eclipse.e4.ui.css.core.engine,
- org.w3c.css.sac,
  org.w3c.dom,
  org.w3c.dom.css
 Automatic-Module-Name: org.eclipse.nebula.widgets.cdatetime.tests

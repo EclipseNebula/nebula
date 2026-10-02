@@ -13,3 +13,4 @@ class/
 releng/org.eclipse.nebula.site/updates/
 build.log
 .tycho.*
+.polyglot*
