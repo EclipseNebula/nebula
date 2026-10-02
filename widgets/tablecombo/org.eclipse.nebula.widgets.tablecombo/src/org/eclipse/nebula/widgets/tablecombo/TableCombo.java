@@ -1498,6 +1498,7 @@ public class TableCombo extends Composite {
 	 * @param closeDropDown
 	 */
 	private void internalLayout(final boolean changed, final boolean closeDropDown) {
+		final boolean reopenDropDown = !closeDropDown && popup != null && !popup.isDisposed() && popup.getVisible();
 		if (closeDropDown && isDropped()) {
 			dropDown(false);
 		}
@@ -1546,6 +1547,9 @@ public class TableCombo extends Composite {
 			text.setBounds(imageWidth, textYPos, textWidth, textSize.y);
 			arrow.setBounds(imageWidth + textWidth + (hasBorder ? 1 : 0), hasBorder ? 1 : 0,
 					arrowSize.x - (hasBorder ? 2 : 0), arrowSize.y - (hasBorder ? 2 : 0));
+		}
+		if (reopenDropDown) {
+			dropDown(true);
 		}
 	}
 

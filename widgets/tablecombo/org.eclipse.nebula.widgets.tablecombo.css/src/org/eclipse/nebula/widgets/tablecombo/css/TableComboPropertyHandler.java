@@ -14,14 +14,13 @@ package org.eclipse.nebula.widgets.tablecombo.css;
 import org.eclipse.e4.ui.css.core.css2.CSS2FontHelper;
 import org.eclipse.e4.ui.css.core.dom.properties.ICSSPropertyHandler;
 import org.eclipse.e4.ui.css.core.engine.CSSEngine;
-import org.eclipse.e4.ui.css.core.impl.dom.Measure;
+import org.eclipse.e4.ui.css.core.impl.dom.CssValues;
 import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Control;
-import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.CSSValue;
 import org.w3c.dom.css.CSSValueList;
 
@@ -106,9 +105,8 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 		}
 
 		if ("tablecombo-table-width-percentage".equals(property)) {
-			if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-				final Measure m = (Measure) value;
-				final int width = Math.round(m.getFloatValue((short) 0));
+			if (value instanceof CssValues.CssNumeric numeric) {
+				final int width = (int) Math.round(numeric.value());
 				tc.setTableWidthPercentage(width);
 			}
 		}
@@ -141,8 +139,8 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 			final int length = valueList.getLength();
 			for (int i = 0; i < length; i++) {
 				final CSSValue value2 = valueList.item(i);
-				if (value2.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-					final String cssProp = CSS2FontHelper.getCSSFontPropertyName((CSSPrimitiveValue) value2);
+				if (value2 instanceof CssValues.CssPrimitive primitive) {
+					final String cssProp = CSS2FontHelper.getCSSFontPropertyName(primitive);
 					if (cssProp.equals("font-family")) {
 						applyCSSPropertyFamily(element, widget, value2);
 					} else if (cssProp.equals("font-size")) {
@@ -195,11 +193,10 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 	}
 
 	private boolean applyCSSPropertySize(final Object element, final Control widget, final CSSValue value) throws Exception {
-		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if (value instanceof CssValues.CssNumeric numeric) {
 			final FontData fd = CSSEngineHelper.getFontData(widget);
-			final Measure m = (Measure) value;
 
-			final int newSize = Math.round(m.getFloatValue((short) 0));
+			final int newSize = (int) Math.round(numeric.value());
 			final boolean modified = fd.getHeight() != newSize;
 			if (modified) {
 				fd.setHeight(newSize);
