@@ -13,7 +13,7 @@ package org.eclipse.nebula.widgets.roundedswitch.css;
 
 import org.eclipse.e4.ui.css.core.dom.properties.ICSSPropertyHandler;
 import org.eclipse.e4.ui.css.core.engine.CSSEngine;
-import org.eclipse.e4.ui.css.core.impl.dom.Measure;
+import org.eclipse.e4.ui.css.core.impl.dom.CssValues;
 import org.eclipse.nebula.widgets.roundedswitch.RoundedSwitch;
 import org.eclipse.swt.graphics.Color;
 import org.w3c.dom.css.CSSValue;
@@ -27,11 +27,10 @@ public class RoundedSwitchPropertyHandler implements ICSSPropertyHandler {
 		boolean checked = isEmpty(pseudo) || pseudo.equals("checkedEnabled") || pseudo.equals("checkedDisabled");
 
 		if ("switch-border-width".equals(property)) {
-			if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-				final Measure m = (Measure) value;
-				final int width = Math.round(m.getFloatValue((short) 0));
-				rs.setBorderWidth(width);
-			}
+		    if (value instanceof CssValues.CssNumeric numeric) {
+		        final int width = Math.round((float) numeric.value());
+		        rs.setBorderWidth(width);
+		    }
 		}
 
 		if ("switch-border-color".equals(property)) {

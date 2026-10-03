@@ -13,7 +13,7 @@ package org.eclipse.nebula.widgets.oscilloscope.css;
 
 import org.eclipse.e4.ui.css.core.dom.properties.ICSSPropertyHandler;
 import org.eclipse.e4.ui.css.core.engine.CSSEngine;
-import org.eclipse.e4.ui.css.core.impl.dom.Measure;
+import org.eclipse.e4.ui.css.core.impl.dom.CssValues;
 import org.eclipse.nebula.widgets.oscilloscope.multichannel.Oscilloscope;
 import org.eclipse.swt.graphics.Color;
 import org.w3c.dom.css.CSSValue;
@@ -21,24 +21,23 @@ import org.w3c.dom.css.CSSValue;
 @SuppressWarnings("restriction")
 public class OscilloscopePropertyHandler implements ICSSPropertyHandler {
 	@Override
-	public boolean applyCSSProperty(final Object element, final String property, final CSSValue value, final String pseudo, final CSSEngine engine) throws Exception {
+	public boolean applyCSSProperty(final Object element, final String property, final CSSValue value,
+			final String pseudo, final CSSEngine engine) throws Exception {
 
 		final Oscilloscope osc = (Oscilloscope) ((OscilloscopeElement) element).getNativeWidget();
 
 		// General properties
 		if ("grid-square-size".equals(property)) {
-			if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-				final Measure m = (Measure) value;
-				final int size = Math.round(m.getFloatValue((short) 0));
+			if (value instanceof CssValues.CssNumeric numeric) {
+				final int size = Math.round(Math.round((float) numeric.value()));
 				osc.setGridSquareSize(size);
 			}
 		}
 
 		if ("grid-line-width".equals(property)) {
-			if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-				final Measure m = (Measure) value;
-				final int size = Math.round(m.getFloatValue((short) 0));
-				osc.setGridLineWidth(size);
+			if (value instanceof CssValues.CssNumeric numeric) {
+				final int width = Math.round(Math.round((float) numeric.value()));
+				osc.setGridLineWidth(width);
 			}
 		}
 
@@ -53,17 +52,20 @@ public class OscilloscopePropertyHandler implements ICSSPropertyHandler {
 		}
 
 		// Channel properties
-		if (property != null && property.startsWith("channel-color-") && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if (property != null && property.startsWith("channel-color-")
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, osc.getDisplay());
 			osc.setForeground(extractChannel(property), newColor);
 		}
 
-		if (property != null && property.startsWith("channel-active-color-") && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if (property != null && property.startsWith("channel-active-color-")
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, osc.getDisplay());
 			osc.getDispatcher(extractChannel(property)).setActiveForegoundColor(newColor);
 		}
 
-		if (property != null && property.startsWith("channel-inactive-color-") && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if (property != null && property.startsWith("channel-inactive-color-")
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, osc.getDisplay());
 			osc.getDispatcher(extractChannel(property)).setInactiveForegoundColor(newColor);
 		}
@@ -86,7 +88,8 @@ public class OscilloscopePropertyHandler implements ICSSPropertyHandler {
 	}
 
 	@Override
-	public String retrieveCSSProperty(final Object element, final String property, final String pseudo, final CSSEngine engine) throws Exception {
+	public String retrieveCSSProperty(final Object element, final String property, final String pseudo,
+			final CSSEngine engine) throws Exception {
 		return null;
 	}
 }
