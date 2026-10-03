@@ -27,7 +27,8 @@ import org.w3c.dom.css.CSSValueList;
 @SuppressWarnings("restriction")
 public class TableComboPropertyHandler implements ICSSPropertyHandler {
 	@Override
-	public boolean applyCSSProperty(final Object element, final String property, final CSSValue value, final String pseudo, final CSSEngine engine) throws Exception {
+	public boolean applyCSSProperty(final Object element, final String property, final CSSValue value,
+			final String pseudo, final CSSEngine engine) throws Exception {
 		final TableCombo tc = (TableCombo) ((TableComboElement) element).getNativeWidget();
 		// General properties
 		if ("tablecombo-show-table-lines".equals(property)) {
@@ -44,7 +45,8 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 		}
 
 		// Text styling
-		if ("tablecombo-text-background-color".equals(property) && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if ("tablecombo-text-background-color".equals(property)
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, tc.getDisplay());
 			tc.getTextControl().setBackground(newColor);
 		}
@@ -74,7 +76,8 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 			final Color newColor = (Color) engine.convert(value, Color.class, tc.getDisplay());
 			tc.getArrowControl().setForeground(newColor);
 		}
-		if ("tablecombo-button-background-color".equals(property) && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if ("tablecombo-button-background-color".equals(property)
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, tc.getDisplay());
 			tc.getArrowControl().setBackground(newColor);
 		}
@@ -84,7 +87,8 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 			final Color newColor = (Color) engine.convert(value, Color.class, tc.getDisplay());
 			tc.getTable().setForeground(newColor);
 		}
-		if ("tablecombo-table-background-color".equals(property) && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if ("tablecombo-table-background-color".equals(property)
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, tc.getDisplay());
 			tc.getTable().setBackground(newColor);
 		}
@@ -106,48 +110,56 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 
 		if ("tablecombo-table-width-percentage".equals(property)) {
 			if (value instanceof CssValues.CssNumeric numeric) {
-				final int width = (int) Math.round(numeric.value());
+				final int width = Math.round((float) numeric.value());
 				tc.setTableWidthPercentage(width);
 			}
 		}
 
 		// Odd line styling
-		if ("tablecombo-table-odd-lines-color".equals(property) && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if ("tablecombo-table-odd-lines-color".equals(property)
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, tc.getDisplay());
 			tc.setOddLinesForegroundColor(newColor);
 		}
-		if ("tablecombo-table-odd-lines-background-color".equals(property) && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if ("tablecombo-table-odd-lines-background-color".equals(property)
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, tc.getDisplay());
 			tc.setOddLinesBackgroundColor(newColor);
 		}
 
 		// Even line styling
-		if ("tablecombo-table-even-lines-color".equals(property) && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if ("tablecombo-table-even-lines-color".equals(property)
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, tc.getDisplay());
 			tc.setEvenLinesForegroundColor(newColor);
 		}
-		if ("tablecombo-table-even-lines-background-color".equals(property) && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if ("tablecombo-table-even-lines-background-color".equals(property)
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, tc.getDisplay());
 			tc.setEvenLinesBackgroundColor(newColor);
 		}
 		return true;
 	}
 
-	private void applyCSSPropertyFont(final Object element, final Control widget, final CSSValue value) throws Exception {
-		if (value.getCssValueType() == CSSValue.CSS_VALUE_LIST) {
-			final CSSValueList valueList = (CSSValueList) value;
-			final int length = valueList.getLength();
-			for (int i = 0; i < length; i++) {
+	private void applyCSSPropertyFont(final Object element, final Control widget, final CSSValue value)
+			throws Exception {
+
+		if (value instanceof CSSValueList valueList) {
+			for (int i = 0; i < valueList.getLength(); i++) {
 				final CSSValue value2 = valueList.item(i);
+
 				if (value2 instanceof CssValues.CssPrimitive primitive) {
 					final String cssProp = CSS2FontHelper.getCSSFontPropertyName(primitive);
-					if (cssProp.equals("font-family")) {
+
+					if ("font-family".equals(cssProp)) {
 						applyCSSPropertyFamily(element, widget, value2);
-					} else if (cssProp.equals("font-size")) {
+					} else if ("font-size".equals(cssProp)) {
 						applyCSSPropertySize(element, widget, value2);
-					} else if (cssProp.equals("font-weight") && ("bold".equals(value2.getCssText()) || "bolder".equals(value2.getCssText()))) {
+					} else if ("font-weight".equals(cssProp)
+							&& ("bold".equals(value2.getCssText()) || "bolder".equals(value2.getCssText()))) {
 						applyCSSPropertyWeight(element, widget, value2);
-					} else if (cssProp.equals("font-style") && ("italic".equals(value2.getCssText()) || "oblique".equals(value2.getCssText()))) {
+					} else if ("font-style".equals(cssProp)
+							&& ("italic".equals(value2.getCssText()) || "oblique".equals(value2.getCssText()))) {
 						applyCSSPropertyStyle(element, widget, value2);
 					}
 				}
@@ -155,7 +167,8 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 		}
 	}
 
-	private boolean applyCSSPropertyStyle(final Object element, final Control widget, final CSSValue value) throws Exception {
+	private boolean applyCSSPropertyStyle(final Object element, final Control widget, final CSSValue value)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(widget);
 			boolean modified = false;
@@ -192,22 +205,23 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 
 	}
 
-	private boolean applyCSSPropertySize(final Object element, final Control widget, final CSSValue value) throws Exception {
+	private boolean applyCSSPropertySize(final Object element, final Control widget, final CSSValue value)
+			throws Exception {
+
 		if (value instanceof CssValues.CssNumeric numeric) {
 			final FontData fd = CSSEngineHelper.getFontData(widget);
+			final int newSize = Math.round((float) numeric.value());
 
-			final int newSize = (int) Math.round(numeric.value());
-			final boolean modified = fd.getHeight() != newSize;
-			if (modified) {
+			if (fd.getHeight() != newSize) {
 				fd.setHeight(newSize);
 				applyFont(widget, fd);
 			}
 		}
-
 		return true;
 	}
 
-	private boolean applyCSSPropertyWeight(final Object element, final Control widget, final CSSValue value) throws Exception {
+	private boolean applyCSSPropertyWeight(final Object element, final Control widget, final CSSValue value)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(widget);
 			boolean modified = false;
@@ -230,7 +244,8 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 		return true;
 	}
 
-	private boolean applyCSSPropertyFamily(final Object element, final Control widget, final CSSValue value) throws Exception {
+	private boolean applyCSSPropertyFamily(final Object element, final Control widget, final CSSValue value)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(widget);
 			final boolean modified = !fd.getName().equals(value.getCssText());
@@ -243,7 +258,8 @@ public class TableComboPropertyHandler implements ICSSPropertyHandler {
 	}
 
 	@Override
-	public String retrieveCSSProperty(final Object element, final String property, final String pseudo, final CSSEngine engine) throws Exception {
+	public String retrieveCSSProperty(final Object element, final String property, final String pseudo,
+			final CSSEngine engine) throws Exception {
 		return null;
 	}
 }

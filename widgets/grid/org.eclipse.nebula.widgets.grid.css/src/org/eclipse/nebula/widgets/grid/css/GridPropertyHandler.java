@@ -14,7 +14,7 @@ package org.eclipse.nebula.widgets.grid.css;
 import org.eclipse.e4.ui.css.core.css2.CSS2FontHelper;
 import org.eclipse.e4.ui.css.core.dom.properties.ICSSPropertyHandler;
 import org.eclipse.e4.ui.css.core.engine.CSSEngine;
-import org.eclipse.e4.ui.css.core.impl.dom.Measure;
+import org.eclipse.e4.ui.css.core.impl.dom.CssValues;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.Win7RendererSupport;
@@ -22,7 +22,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.CSSValue;
 import org.w3c.dom.css.CSSValueList;
 
@@ -32,10 +31,13 @@ public class GridPropertyHandler implements ICSSPropertyHandler {
 	private static final String HEADER = "header";
 
 	/**
-	 * @see org.eclipse.e4.ui.css.core.dom.properties.ICSSPropertyHandler#applyCSSProperty(java.lang.Object, java.lang.String, org.w3c.dom.css.CSSValue, java.lang.String, org.eclipse.e4.ui.css.core.engine.CSSEngine)
+	 * @see org.eclipse.e4.ui.css.core.dom.properties.ICSSPropertyHandler#applyCSSProperty(java.lang.Object,
+	 *      java.lang.String, org.w3c.dom.css.CSSValue, java.lang.String,
+	 *      org.eclipse.e4.ui.css.core.engine.CSSEngine)
 	 */
 	@Override
-	public boolean applyCSSProperty(final Object element, final String property, final CSSValue value, final String pseudo, final CSSEngine engine) throws Exception {
+	public boolean applyCSSProperty(final Object element, final String property, final CSSValue value,
+			final String pseudo, final CSSEngine engine) throws Exception {
 
 		final Grid grid = (Grid) ((GridElement) element).getNativeWidget();
 
@@ -47,7 +49,8 @@ public class GridPropertyHandler implements ICSSPropertyHandler {
 		}
 
 		// General
-		if ("grid-cell-header-selection-background-color".equals(property) && value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
+		if ("grid-cell-header-selection-background-color".equals(property)
+				&& value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final Color newColor = (Color) engine.convert(value, Color.class, grid.getDisplay());
 			grid.setCellHeaderSelectionBackground(newColor);
 		}
@@ -64,17 +67,15 @@ public class GridPropertyHandler implements ICSSPropertyHandler {
 
 		// Items
 		if ("grid-item-height".equals(property)) {
-			if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-				final Measure m = (Measure) value;
-				final int width = Math.round(m.getFloatValue((short) 0));
+			if (value instanceof CssValues.CssNumeric numeric) {
+				final int width = Math.round(Math.round((float) numeric.value()));
 				grid.setItemHeight(width);
 			}
 		}
 
 		if ("grid-item-header-width".equals(property)) {
-			if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-				final Measure m = (Measure) value;
-				final int width = Math.round(m.getFloatValue((short) 0));
+			if (value instanceof CssValues.CssNumeric numeric) {
+				final int width = Math.round(Math.round((float) numeric.value()));
 				grid.setItemHeaderWidth(width);
 			}
 		}
@@ -148,21 +149,27 @@ public class GridPropertyHandler implements ICSSPropertyHandler {
 		return true;
 	}
 
-	private void applyCSSPropertyFont(final Object element, final Grid grid, final CSSValue value, String target) throws Exception {
-		if (value.getCssValueType() == CSSValue.CSS_VALUE_LIST) {
-			final CSSValueList valueList = (CSSValueList) value;
+	private void applyCSSPropertyFont(final Object element, final Grid grid, final CSSValue value, String target)
+			throws Exception {
+
+		if (value instanceof CSSValueList valueList) {
 			final int length = valueList.getLength();
+
 			for (int i = 0; i < length; i++) {
 				final CSSValue value2 = valueList.item(i);
-				if (value2.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-					final String cssProp = CSS2FontHelper.getCSSFontPropertyName((CSSPrimitiveValue) value2);
-					if (cssProp.equals("font-family")) {
+
+				if (value2 instanceof CssValues.CssPrimitive primitive) {
+					final String cssProp = CSS2FontHelper.getCSSFontPropertyName(primitive);
+
+					if ("font-family".equals(cssProp)) {
 						applyCSSPropertyFamily(element, grid, value2, target);
-					} else if (cssProp.equals("font-size")) {
+					} else if ("font-size".equals(cssProp)) {
 						applyCSSPropertySize(element, grid, value2, target);
-					} else if (cssProp.equals("font-weight") && ("bold".equals(value2.getCssText()) || "bolder".equals(value2.getCssText()))) {
+					} else if ("font-weight".equals(cssProp)
+							&& ("bold".equals(value2.getCssText()) || "bolder".equals(value2.getCssText()))) {
 						applyCSSPropertyWeight(element, grid, value2, target);
-					} else if (cssProp.equals("font-style") && ("italic".equals(value2.getCssText()) || "oblique".equals(value2.getCssText()))) {
+					} else if ("font-style".equals(cssProp)
+							&& ("italic".equals(value2.getCssText()) || "oblique".equals(value2.getCssText()))) {
 						applyCSSPropertyStyle(element, grid, value2, target);
 					}
 				}
@@ -170,7 +177,8 @@ public class GridPropertyHandler implements ICSSPropertyHandler {
 		}
 	}
 
-	private boolean applyCSSPropertyStyle(final Object element, final Grid grid, final CSSValue value, String target) throws Exception {
+	private boolean applyCSSPropertyStyle(final Object element, final Grid grid, final CSSValue value, String target)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(grid);
 			boolean modified = false;
@@ -223,12 +231,13 @@ public class GridPropertyHandler implements ICSSPropertyHandler {
 		});
 	}
 
-	private boolean applyCSSPropertySize(final Object element, final Grid grid, final CSSValue value, String target) throws Exception {
-		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
-			final FontData fd = CSSEngineHelper.getFontData(grid);
-			final Measure m = (Measure) value;
+	private boolean applyCSSPropertySize(final Object element, final Grid grid, final CSSValue value, String target)
+			throws Exception {
 
-			final int newSize = Math.round(m.getFloatValue((short) 0));
+		if (value instanceof CssValues.CssNumeric numeric) {
+			final FontData fd = CSSEngineHelper.getFontData(grid);
+			final int newSize = Math.round((float) numeric.value());
+
 			final boolean modified = fd.getHeight() != newSize;
 			if (modified) {
 				fd.setHeight(newSize);
@@ -239,7 +248,8 @@ public class GridPropertyHandler implements ICSSPropertyHandler {
 		return true;
 	}
 
-	private boolean applyCSSPropertyWeight(final Object element, final Grid grid, final CSSValue value, String target) throws Exception {
+	private boolean applyCSSPropertyWeight(final Object element, final Grid grid, final CSSValue value, String target)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(grid);
 			boolean modified = false;
@@ -262,7 +272,8 @@ public class GridPropertyHandler implements ICSSPropertyHandler {
 		return true;
 	}
 
-	private boolean applyCSSPropertyFamily(final Object element, final Grid grid, final CSSValue value, String target) throws Exception {
+	private boolean applyCSSPropertyFamily(final Object element, final Grid grid, final CSSValue value, String target)
+			throws Exception {
 		if (value.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE) {
 			final FontData fd = CSSEngineHelper.getFontData(grid);
 			final boolean modified = !fd.getName().equals(value.getCssText());
@@ -275,10 +286,13 @@ public class GridPropertyHandler implements ICSSPropertyHandler {
 	}
 
 	/**
-	 * @see org.eclipse.e4.ui.css.core.dom.properties.ICSSPropertyHandler#retrieveCSSProperty(java.lang.Object, java.lang.String, java.lang.String, org.eclipse.e4.ui.css.core.engine.CSSEngine)
+	 * @see org.eclipse.e4.ui.css.core.dom.properties.ICSSPropertyHandler#retrieveCSSProperty(java.lang.Object,
+	 *      java.lang.String, java.lang.String,
+	 *      org.eclipse.e4.ui.css.core.engine.CSSEngine)
 	 */
 	@Override
-	public String retrieveCSSProperty(final Object element, final String property, final String pseudo, final CSSEngine engine) throws Exception {
+	public String retrieveCSSProperty(final Object element, final String property, final String pseudo,
+			final CSSEngine engine) throws Exception {
 		return null;
 	}
 }

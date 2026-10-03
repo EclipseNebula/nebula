@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotArrowButton;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 import org.junit.Before;
 import org.junit.Test;
@@ -137,7 +136,6 @@ public class TableComboTests {
 
 	@Test
 	public void testClosePopupAfterSelectionFalseKeepsPopupOpen() {
-
 		createTableCombo(shell, 1, 5);
 		shell.open();
 
@@ -145,9 +143,10 @@ public class TableComboTests {
 		final TableCombo tableComboWidget = shellBot.widget(WidgetMatcherFactory.widgetOfType(TableCombo.class));
 		final SWTBotTable tableBot = new SWTBotTable(tableComboWidget.getTable());
 		tableComboWidget.setClosePopupAfterSelection(false);
-		tableComboWidget.dropDown(true);
-		consumeEvents();
-		assertTrue("Expected the popup to be visible after opening it", tableComboWidget.getTable().getShell().isVisible());
+
+		tableComboWidget.getArrowControl().notifyListeners(SWT.Selection, new org.eclipse.swt.widgets.Event());
+		waitUntilPopupVisible(tableComboWidget);
+
 		tableBot.click(0, 0);
 		consumeEvents();
 
@@ -158,23 +157,42 @@ public class TableComboTests {
 
 	@Test
 	public void testClosePopupAfterSelectionTrueClosesPopup() {
-
 		createTableCombo(shell, 1, 5);
 		shell.open();
 
 		final SWTBot shellBot = new SWTBot(shell);
 		final TableCombo tableComboWidget = shellBot.widget(WidgetMatcherFactory.widgetOfType(TableCombo.class));
 		final SWTBotTable tableBot = new SWTBotTable(tableComboWidget.getTable());
-		tableComboWidget.dropDown(true);
-		consumeEvents();
-		assertTrue("Expected the popup to be visible after opening it", tableComboWidget.getTable().getShell().isVisible());
+
+		tableComboWidget.getArrowControl().notifyListeners(SWT.Selection, new org.eclipse.swt.widgets.Event());
+		waitUntilPopupVisible(tableComboWidget);
+
 		tableBot.click(0, 0);
 		consumeEvents();
 
 		assertFalse("Expected the popup to close after selecting an item when closePopupAfterSelection is true",
 				tableComboWidget.getTable().getShell().isVisible());
 	}
-
+	
+	private void waitUntilPopupVisible(final TableCombo tableComboWidget) {
+		for (int i = 0; i < 50; i++) {
+			consumeEvents();
+			if (!tableComboWidget.isDisposed()
+					&& !tableComboWidget.getTable().isDisposed()
+					&& tableComboWidget.getTable().getShell().isVisible()) {
+				return;
+			}
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+		}
+		assertTrue("Expected the popup to be visible after opening it",
+				tableComboWidget.getTable().getShell().isVisible());
+	}
+	
 	private TableCombo createTableCombo(final Composite parent, final int noOfColumns, final int noOfItems) {
 		final TableCombo result = new TableCombo(parent, SWT.NONE);
 		result.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
