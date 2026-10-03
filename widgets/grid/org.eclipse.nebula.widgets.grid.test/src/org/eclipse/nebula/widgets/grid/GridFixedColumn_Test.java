@@ -17,6 +17,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -27,6 +28,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -270,5 +272,31 @@ public class GridFixedColumn_Test {
     int lastOccurrence = stderr.lastIndexOf( "[nebula.grid]" );
     assertEquals( "Warning should be emitted exactly once across multiple paints",
                   firstOccurrence, lastOccurrence );
+  }
+
+  @Test
+  public void testDisposeItem_WithEditorAndScrollbarRemoval_DoesNotThrow() {
+    createGridColumns( grid, 1, SWT.NONE );
+    grid.setItemHeight( 40 );
+    GridItem[] items = createGridItems( grid, 3, 0 );
+
+    shell.setSize( 220, 95 );
+    shell.layout();
+    flushPaint();
+
+    ScrollBar verticalBar = grid.getVerticalBar();
+    verticalBar.setVisible( true );
+    verticalBar.setValues( 10, 0, 100, 10, 1, 10 );
+
+    GridEditor editor = new GridEditor( grid );
+    Text editorControl = new Text( grid, SWT.NONE );
+    editor.setEditor( editorControl, items[ 2 ], 0 );
+
+    try {
+      items[ 2 ].dispose();
+      flushPaint();
+    } catch( IllegalArgumentException e ) {
+      fail( "Disposing an edited item while vertical scrollbar is removed must not throw: " + e.getMessage() );
+    }
   }
 }

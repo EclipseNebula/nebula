@@ -585,12 +585,14 @@ public class GridItem extends Item {
 
 		/* height */
 		int indexOfCurrentItem = parent.getIndexOfItem(this);
-
-		GridItem item = parent.getItem(indexOfCurrentItem);
-		int height = item.getHeight();
-		span = getRowSpan(columnIndex);
-
 		int itemCount = parent.getItemCount();
+		int height = getHeight();
+		if (indexOfCurrentItem < 0 || indexOfCurrentItem >= itemCount) {
+			return new Point(width, height);
+		}
+
+		span = getRowSpan(columnIndex);
+		GridItem item;
 
 		for (int i = 1; i <= span; i++) {
 			/* We will probably need another escape condition here */
