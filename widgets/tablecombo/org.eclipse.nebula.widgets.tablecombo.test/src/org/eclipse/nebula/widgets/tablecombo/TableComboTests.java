@@ -11,6 +11,8 @@
 package org.eclipse.nebula.widgets.tablecombo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -132,6 +134,65 @@ public class TableComboTests {
 
 	}
 
+	@Test
+	public void testClosePopupAfterSelectionFalseKeepsPopupOpen() {
+		createTableCombo(shell, 1, 5);
+		shell.open();
+
+		final SWTBot shellBot = new SWTBot(shell);
+		final TableCombo tableComboWidget = shellBot.widget(WidgetMatcherFactory.widgetOfType(TableCombo.class));
+		final SWTBotTable tableBot = new SWTBotTable(tableComboWidget.getTable());
+		tableComboWidget.setClosePopupAfterSelection(false);
+
+		tableComboWidget.getArrowControl().notifyListeners(SWT.Selection, new org.eclipse.swt.widgets.Event());
+		waitUntilPopupVisible(tableComboWidget);
+
+		tableBot.click(0, 0);
+		consumeEvents();
+
+		assertTrue(
+				"Expected the popup to remain open after selecting an item when closePopupAfterSelection is false",
+				tableComboWidget.getTable().getShell().isVisible());
+	}
+
+	@Test
+	public void testClosePopupAfterSelectionTrueClosesPopup() {
+		createTableCombo(shell, 1, 5);
+		shell.open();
+
+		final SWTBot shellBot = new SWTBot(shell);
+		final TableCombo tableComboWidget = shellBot.widget(WidgetMatcherFactory.widgetOfType(TableCombo.class));
+		final SWTBotTable tableBot = new SWTBotTable(tableComboWidget.getTable());
+
+		tableComboWidget.getArrowControl().notifyListeners(SWT.Selection, new org.eclipse.swt.widgets.Event());
+		waitUntilPopupVisible(tableComboWidget);
+
+		tableBot.click(0, 0);
+		consumeEvents();
+
+		assertFalse("Expected the popup to close after selecting an item when closePopupAfterSelection is true",
+				tableComboWidget.getTable().getShell().isVisible());
+	}
+	
+	private void waitUntilPopupVisible(final TableCombo tableComboWidget) {
+		for (int i = 0; i < 50; i++) {
+			consumeEvents();
+			if (!tableComboWidget.isDisposed()
+					&& !tableComboWidget.getTable().isDisposed()
+					&& tableComboWidget.getTable().getShell().isVisible()) {
+				return;
+			}
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+		}
+		assertTrue("Expected the popup to be visible after opening it",
+				tableComboWidget.getTable().getShell().isVisible());
+	}
+	
 	private TableCombo createTableCombo(final Composite parent, final int noOfColumns, final int noOfItems) {
 		final TableCombo result = new TableCombo(parent, SWT.NONE);
 		result.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
@@ -153,6 +214,12 @@ public class TableComboTests {
 	private void createTableItem(final TableCombo tableCombo, final String text) {
 		final TableItem tableItem = new TableItem(tableCombo.getTable(), SWT.NONE);
 		tableItem.setText(text);
+	}
+
+	private void consumeEvents() {
+		while (Display.getCurrent().readAndDispatch()) {
+			// drain UI queue
+		}
 	}
 
 }
